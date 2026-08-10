@@ -329,7 +329,7 @@ class Song {
     constructor(type) {
         this.id = Math.random();
         this.type = type;
-        wwr_req_recur("_RS6747275e2945cca65c84677cb862713cab506225", 5000);
+        wwr_req_recur("_RS2db92f0a1ab88f79fafb683fb9116d1ab6c097c7", 5000);
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
         wwr_req("GET/EXTSTATE/reachords/chords");
         wwr_req_recur("TRANSPORT", 2000);
