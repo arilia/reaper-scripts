@@ -1,0 +1,319 @@
+.song {
+    width: 70%;
+    margin: 20px auto;
+}
+
+
+.clock {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    padding: 1em;
+    
+    z-index: 30;
+    font-weight: bold;
+    background-color:  rgba(100,100,100,.5);
+    border-radius: 4px;
+}
+.chords_table {
+    background-color: black;
+    font-size: 150%;
+    /* border-collapse: collapse; */
+    transform: translateY(-1px);
+
+}
+
+/* Ogni riga usa la stessa griglia globale */
+.bar_row {
+    display: grid;
+    <!-- gap: 6px;
+    -->
+    justify-content: start;
+    grid-template-columns: repeat(var(--maxbeats), 1fr);
+    padding:2px;
+}
+
+
+
+/* Ogni bar occupa tante colonne quanti sono i suoi beat */
+.bar {
+    position: relative;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(var(--beats), 1fr);
+    grid-column: span var(--beats);
+    border-right: 6px solid black;
+    border-bottom: 4px solid black;
+    <!-- border-radius: 6px;
+    -->
+
+}
+
+.bar.playing {
+    border-bottom-color: darkorange;
+}
+
+/* Ogni beat è una cella della griglia → tutti identici */
+.beat {
+    box-sizing: border-box;
+    background: #444;
+    border-right: 1px solid #333;
+    border-left: 1px solid #333;
+
+    height: 3.6em;
+    margin: 0;
+    position: relative;
+}
+
+.chord {
+    color: black;
+    box-sizing: border-box;
+    border: 1px solid gray;
+    border-radius: 4px;
+    display: inline-block;
+    padding: .1em;
+    margin-top: 1em;
+    margin-bottom: .1em;
+    margin-left: 2px;
+    /* margin-right: 8px; */
+    background-color: gray;
+    font-weight: bold;
+    position: absolute;
+    top: 0em;
+    height: 2.2em;
+    opacity: 80%;
+    z-index: 10;
+}
+
+
+
+
+.bar.playing {
+    border-bottom: 4px solid darkorange;
+}
+
+.position_row {
+    background-color: rgba(100,100,100,.5);
+    box-sizing: border-box;
+    border: 1px solid rgba(100,100,100,.2);
+    padding:.3em;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: bold;
+    position: absolute;
+    width: 7%;
+    height: .5em;
+    top: 40%;
+    left: 5%;
+
+}
+
+/* .bar_row { */
+/* box-sizing: border-box; */
+
+/* } */
+
+
+
+.time {
+    padding: .3em;
+    margin-top: .2em;
+    margin-bottom: .3em;
+    margin-left: 0px;
+    color: light;
+    font-size: 50%;
+    position: absolute;
+    top: 0;
+    opacity: 80%;
+    z-index: 20;
+}
+
+
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .song {
+        width: 90%;
+    }
+}
+
+.bar_cell {
+    background: #333;
+    position: relative;
+    border: 4px solid black;
+    /*padding: .6em;*/
+    height: 4em;
+
+}
+
+.line {
+    display: inline-block;
+    overflow: hidden;
+    width: 8px;
+}
+
+.bar_count {
+    color:white;
+    text-align: right;
+    padding: .3em;
+}
+/* .chord { */
+/* color: black; */
+/* box-sizing: border-box; */
+/* border: 2px solid #333; */
+/* border-radius: 4px; */
+/* display: inline-block; */
+/* padding: .1em; */
+/* margin-top: 1em; */
+/* margin-bottom: .1em; */
+/* margin-left: 0; */
+/* margin-right: 0; */
+/* background-color: gray; */
+/* font-weight: bold; */
+/* position: absolute; */
+/* top: 0em; */
+/* height: 2.2em; */
+/* opacity: 80%; */
+/* z-index: 10; */
+/* } */
+
+.lyric {
+    color: white;
+    border: none;
+    text-align: center;
+    padding: .5em;
+    background-color: black;
+    font-weight: bold;
+    height: 1.2em;
+    /*opacity: 80%;*/
+    z-index: 10;
+    /*margin-left:2em;*/
+    /*margin-right:2em;*/
+    margin-top: 2px;
+    border-radius: 4px;
+    /*transition: all 2s ease;*/
+}
+
+.bottom_curtain {
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1));
+
+    margin: auto;
+    width: 100%;
+    height: 30%;
+    padding-top: .5em;
+    padding-bottom: 2em;
+    padding-left: 17%;
+    color: #bbb;
+    left: 0;
+    bottom: 0;
+    z-index: 30;
+    position: absolute;
+    font-size: 3em;
+
+}
+
+.bar1_4 {
+    width:21%;
+}
+
+.bar2_4 {
+    width:46%;
+}
+
+.bar4_4 {
+    width:96%;
+}
+
+.bar8_4 {
+    width:196%;
+}
+
+.bar1_3 {
+    width:29.3%;
+}
+
+.bar2_3 {
+    width:62.6%;
+}
+
+.bar3_3 {
+    width:96%;
+}
+
+.bar6_3 {
+    width:196%;
+}
+
+
+.marker_row {
+    grid-row: span 1;
+    grid-column: 1 / -1;
+}
+.marker {
+    margin: .2em;
+    margin-top: .5em;
+    background: black;
+    border-radius: 4px;
+    display: inline-block;
+
+    color: white;
+    text-align: left;
+    font-size: .8em;
+    /*//font-weight: bold;*/
+    padding: .2em;
+    border: 1px solid white;
+}
+
+.command-button {
+    position: absolute;
+    z-index: 30;
+}
+
+.lyric_marker_row .marker {
+    top:-1.2em;
+    left:0;
+    /*position: absolute;*/
+}
+
+.lyric_marker_row {
+    /*position: relative;*/
+/*    border-bottom: 1px solid #050505;*/
+    
+}
+
+.chord_playing {
+    border-color: darkgreen;
+    background-color: lightgreen;
+}
+
+.lyric_playing {
+    background-color: #222;
+}
+
+.song_title {
+
+    background-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+    margin: auto;
+    width: 100%;
+    padding-top: .5em;
+    padding-bottom: 2em;
+    padding-left: 17%;
+    color: #bbb;
+    left: 0;
+    top: 0;
+    z-index: 20;
+    position: absolute;
+    font-size: 3em;
+
+}
+body {
+    background-color: black;
+    font-family: arial;
+    color: #bbb;
+}
+h1   {
+    color: blue;
+}
+p    {
+    color: red;
+}
+
