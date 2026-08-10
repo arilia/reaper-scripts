@@ -1,0 +1,17 @@
+# REAPER
+*.RPP-bak
+*.reapeaks
+*.reaper-backup
+
+# NetBeans
+nbproject/private/
+build/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor backups
+*~
+*.swp
