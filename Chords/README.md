@@ -1,62 +1,60 @@
 # Reachords
 
-Interfaccia web per REAPER che mostra a schermo, in tempo reale, gli accordi
-e i testi di un brano mentre viene suonato — pensata per essere aperta da un
-tablet durante le prove o un concerto.
+A web interface for REAPER that displays chords and lyrics in real time as a
+song is played — designed to be opened on a tablet during rehearsals or a
+live show.
 
-## Come funziona
+## How it works
 
-1. Nel progetto REAPER crei una traccia chiamata `Chords` con degli item; il
-   testo di ogni item (note dell'item) è il nome dell'accordo. Opzionalmente
-   una traccia `Lyrics` funziona allo stesso modo per i testi.
-2. Lo script `scripts/arilia_Reachords Export.lua` legge il progetto ed
-   esporta accordi, testi, marker e misure in JSON tramite `ExtState`.
-3. La pagina web (`web/`) legge questi dati tramite il web server integrato
-   di REAPER e li mostra, scorrendo in sincrono con il playhead.
+1. In the REAPER project, create a track named `Chords` containing items;
+   each item's notes field holds the chord name. Optionally, a `Lyrics`
+   track works the same way for song lyrics.
+2. The script `scripts/arilia_Reachords Export.lua` reads the project and
+   exports chords, lyrics, markers, and measures as JSON via `ExtState`.
+3. The web page (`web/`) reads this data through REAPER's built-in web
+   server and displays it, scrolling in sync with the playhead.
 
-## Installazione
+## Installation
 
 ### Script
 
-Copia `scripts/{AUTHOR}_Reachords Export.lua` nella cartella `Scripts` di
-REAPER (o installa via ReaPack, quando disponibile).
+Copy `scripts/arilia_Reachords Export.lua` into REAPER's `Scripts`
+folder (or install via ReaPack, once available).
 
-### Interfaccia web
+### Web interface
 
-1. Copia la cartella `web/` dentro la cartella del web server integrato di
-   REAPER (quella impostata in *Options > Preferences > Control/OSC/Web*),
-   ad esempio come sottocartella `reachords/`.
-2. Assicurati che il web server di REAPER sia abilitato.
-3. Apri da un browser (anche su tablet, sulla stessa rete locale)
-   l'indirizzo del web server seguito da `reachords/{AUTHOR}_Reachords Chords.html`.
+1. Copy the `web/` folder into REAPER's built-in web server directory
+   (set in *Options > Preferences > Control/OSC/Web*), for example as a
+   `reachords/` subfolder.
+2. Make sure REAPER's web server is enabled.
+3. From a browser on the same local network (including a tablet), open the
+   web server address followed by `reachords/arilia_Reachords Chords.html`.
 
-## Utilizzo
+## Usage
 
-1. Prepara gli item su una traccia `Chords` (e opzionalmente `Lyrics`) nel
-   progetto.
-2. Esegui l'azione `arilia_Reachords Export.lua` in REAPER (puoi anche
-   assegnarle una scorciatoia da tastiera, o farla girare a ogni salvataggio).
-3. Apri/aggiorna la pagina web sul tablet.
+1. Add items to a `Chords` track (and optionally a `Lyrics` track) in your
+   project.
+2. Run the `arilia_Reachords Export.lua` action in REAPER (you can assign
+   it a keyboard shortcut, or trigger it whenever needed).
+3. Open/refresh the web page on your tablet.
 
-## Stato del progetto
+## Project status
 
-Progetto ad uso personale/della band, in fase di stabilizzazione prima di
-un'eventuale pubblicazione su ReaPack.
+Personal project for the author and their band, currently being stabilized
+before a possible release on ReaPack.
 
 ### TODO
 
-- [ ] Verificare e allineare i nomi dei campi JSON tra script Lua e JS
-      (vedi nota sotto)
-- [ ] Aggiungere `arilia_Reachords Lyrics.html`
-- [ ] Aggiungere i metadati ReaPack (header `@description`, `@version`,
-      changelog) allo script quando pronto per la pubblicazione
-- [ ] Licenza
+- [ ] 
 
-## Nota tecnica aperta
+## Known issue
 
-Il file `web/js/reachords.js` attualmente si aspetta nel JSON esportato i
-campi `measure`, `beat`, `duration`, `start`, `end` — che corrispondono
-all'output del vecchio script di prototipo (`prova.lua`), non a quello
-dello script corrente (`scripts/arilia_Reachords Export.lua`), che esporta
-`barNumber`, `beatStart`, `beatDuration`, `startTime`, `endTime`. Da
-allineare prima di considerare il progetto funzionante end-to-end.
+Many
+
+## Author
+
+arilia
+
+## License
+
+TBD.
