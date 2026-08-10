@@ -1,41 +1,17 @@
-# Compiled Lua sources
-luac.out
+# REAPER
+*.RPP-bak
+*.reapeaks
+*.reaper-backup
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+# NetBeans
+nbproject/private/
+build/
+dist/
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
+# OS
+.DS_Store
+Thumbs.db
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
+# Editor backups
+*~
+*.swp
