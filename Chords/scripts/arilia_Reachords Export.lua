@@ -25,6 +25,7 @@ local globalOffset = reaper.GetProjectTimeOffset(0, false)
 local dirty = reaper.IsProjectDirty(0)
 --reaper.ShowConsoleMsg(dirty .. "\n")
 
+local offset = 0
 
 function getChordsJson(tr, chordsFound ) 
 	local chordjs = "{"
@@ -168,10 +169,6 @@ for i=1, trackCount do
   end
 end
 tr = reaper.GetTrack(0, trackNumber)
-
-local offset = 0
-
---reaper.ShowConsoleMsg(offset)
 
 -- Iterates all the items in the track and create a JSON objet with the list of the chords
 
