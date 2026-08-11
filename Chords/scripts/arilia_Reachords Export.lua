@@ -53,11 +53,11 @@ local function getChordsJson(tr, chordsFound )
 			  end
 			  chordjs = chordjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
 			  chordjs = chordjs .. ', "barNumber":' .. measure
-			  chordjs = chordjs .. ', "beatStart":'.. beat;
-			  chordjs = chordjs .. ', "sub":'.. sub;
-			  chordjs = chordjs .. ', "beatDuration":'.. duration;
-			  chordjs = chordjs .. ', "startTime":'.. position;
-			  chordjs = chordjs .. ', "endTime":'.. endTime;
+			  chordjs = chordjs .. ', "beatStart":'.. beat
+			  chordjs = chordjs .. ', "sub":'.. sub
+			  chordjs = chordjs .. ', "beatDuration":'.. duration
+			  chordjs = chordjs .. ', "startTime":'.. position
+			  chordjs = chordjs .. ', "endTime":'.. endTime
 			  chordjs = chordjs .. '}'
 			  if i<itemCount then
 				 chordjs = chordjs .. ','
@@ -132,8 +132,8 @@ for m=firstMeasure, lastMeasure do
 	barEnd = barEnd - globalOffset
 	meas = meas .. '"' .. m .. '": {' 
 	meas = meas .. '"number":' .. m
-	meas = meas .. ', "startTime": " .. barStart .. "'
-	meas = meas .. ', "endTime": " .. barEnd .. "'
+	meas = meas .. ', "startTime": ' .. barStart 
+	meas = meas .. ', "endTime": ' .. barEnd 
 	meas = meas .. ', "numOfBeats":' .. numOfBeats
 		
 	meas = meas .. '}'
@@ -212,9 +212,9 @@ if lyricsFound then
 	  
 	 
 	  lyrjs = lyrjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
-	  lyrjs = lyrjs .. ', "duration":'.. duration;
-	  lyrjs = lyrjs .. ', "startTime":'.. position;
-	  lyrjs = lyrjs .. ', "endTime":'.. endTime;
+	  lyrjs = lyrjs .. ', "duration":'.. duration
+	  lyrjs = lyrjs .. ', "startTime":'.. position
+	  lyrjs = lyrjs .. ', "endTime":'.. endTime
 	  lyrjs = lyrjs .. '}'
 	  if i<itemCount then
 	    lyrjs = lyrjs .. ','
