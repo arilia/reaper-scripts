@@ -45,9 +45,9 @@ end
 
 
 
-local function getChordsJson(tr, chordsFound ) 
+local function getChordsJson(tr) 
 	local chordjs = "{"
-	if chordsFound then
+	if tr then
 		offset =  reaper.GetMediaTrackInfo_Value(tr, "D_PLAY_OFFSET")
 		local itemCount = reaper.CountTrackMediaItems(tr)
 		for i=1, itemCount do
@@ -175,7 +175,7 @@ local tr = findTrackByName('chords')
 -- Iterates all the items in the track and create a JSON objet with the list of the chords
 
 local chordjs = "{}"
-chordjs  = getChordsJson(tr, chordsFound)
+chordjs  = getChordsJson(tr)
 
 --reaper.ShowConsoleMsg(chordjs .. "\n")
 
@@ -189,7 +189,7 @@ local tr = findTrackByName('lyrics')
 -- Iterates all the items in the track and create a JSON objet with the list of the chords
 
 local lyrjs = "{"
-if lyricsFound then
+if tr then
 	local itemCount = reaper.CountTrackMediaItems(tr)
 	for i=1, itemCount do
 	  local item = reaper.GetTrackMediaItem(tr, i-1)
