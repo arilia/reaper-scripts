@@ -264,8 +264,13 @@ class Lyric {
             var positionInfo = this.div.getBoundingClientRect();
             
             var top = positionInfo.top;// + positionInfo.height/2;
-            var nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
-            var height = nextLyricPositionInfo.top - positionInfo.top;
+            var height;
+            if (this.nextLyric) {
+                var nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
+                height = nextLyricPositionInfo.top - positionInfo.top;
+            } else {
+                height = positionInfo.height;
+            }
             var progress = height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
             this.song.moveTo(target_position - top - progress);
@@ -333,6 +338,7 @@ class Song {
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
         wwr_req("GET/EXTSTATE/reachords/chords");
         wwr_req_recur("TRANSPORT", 2000);
+        wwr_req_recur("GET/EXTSTATE/reachords/project", 2000);//Get a JSON string containing the name of the project.
         setInterval(this.calculatePosition.bind(this), 50);
     }
 
@@ -397,7 +403,7 @@ class Song {
         } else {
             this.createTableLyrics();
         }
-        wwr_req_recur("GET/EXTSTATE/reachords/project", 2000);//Get a JSON string containing the name of the project.
+        
     }
 
     createTableLyrics() {
