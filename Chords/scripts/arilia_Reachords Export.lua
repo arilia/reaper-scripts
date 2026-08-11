@@ -1,3 +1,15 @@
+local function jsonEscape(str)
+    if str == nil then return "" end
+    str = tostring(str)
+    str = str:gsub('\\', '\\\\')
+    str = str:gsub('"', '\\"')
+    str = str:gsub('\n', '\\n')
+    str = str:gsub('\r', '\\r')
+    str = str:gsub('\t', '\\t')
+    return str
+end
+
+
 reaper.ClearConsole()
 --reaper.ShowConsoleMsg("Starting...\n")
 
@@ -38,7 +50,7 @@ function getChordsJson(tr, chordsFound )
 			      beat    = tonumber(beat)
 			      sub     = tonumber(sub)
 			  end
-			  chordjs = chordjs .. '"' .. i .. '": { "text":'.. '"' .. text .. '"'
+			  chordjs = chordjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
 			  chordjs = chordjs .. ', "barNumber":' .. measure
 			  chordjs = chordjs .. ', "beatStart":'.. beat;
 			  chordjs = chordjs .. ', "sub":'.. sub;
@@ -83,7 +95,7 @@ for i=0, markerCount do
 		mark = mark .. '"' .. bar .. '": {' 
 		mark = mark .. '"barNumber":' .. bar
 		mark = mark .. ', "position": ' .. pos 
-		mark = mark .. ', "text": "' .. name .. '"'
+		mark = mark .. ', "text": "' .. jsonEscape(name) .. '"'
 		mark = mark .. ', "color": "' .. r .. ", " .. g .. ", " .. b .. '"'
 		mark = mark .. '}'
 		
@@ -204,7 +216,7 @@ if lyricsFound then
 	  local positionString = reaper.format_timestr_pos( position, '', 2 )
 	  
 	 
-	  lyrjs = lyrjs .. '"' .. i .. '": { "text":'.. '"' .. text .. '"'
+	  lyrjs = lyrjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
 	  lyrjs = lyrjs .. ', "duration":'.. duration;
 	  lyrjs = lyrjs .. ', "startTime":'.. position;
 	  lyrjs = lyrjs .. ', "endTime":'.. endTime;
@@ -226,7 +238,7 @@ json = json .. '"chords":' .. chordjs
 json = json .. ', "lyrics":' .. lyrjs
 json = json .. ', "bars":' .. meas
 json = json .. ', "markers":' .. mark
-json = json .. ', "title": "' .. projectName .. '"'
+json = json .. ', "title": "' .. jsonEscape(projectName) .. '"'
 json = json .. ', "offset": "' .. offset .. '"'
 json = json .. ', "globalOffset": "' .. globalOffset .. '"'
 json = json .. '}'
