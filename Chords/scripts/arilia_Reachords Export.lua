@@ -90,7 +90,7 @@ for i=0, markerCount - 1 do
 		  mark = mark .. ','
 		end
 		local bar = reaper.format_timestr_pos( pos, '', 2 )
-		bar, _, _ = bar:match("^(%d+)%.(%d+)%.(%d+)$")
+		bar, _, _ = bar:match("^(%d+)%.(%d+)%.(%d+)")
 		mark = mark .. '"' .. bar .. '": {' 
 		mark = mark .. '"barNumber":' .. bar
 		mark = mark .. ', "position": ' .. pos 
@@ -113,7 +113,7 @@ for i=0, markerCount - 1 do
 
 local projectLength = reaper.GetProjectLength()
 local lastBarString = reaper.format_timestr_pos( projectLength, '', 2 )
-local lastMeasure, _, _ = lastBarString:match("^(%d+)%.(%d+)%.(%d+)$")
+local lastMeasure, _, _ = lastBarString:match("^(%d+)%.(%d+)%.(%d+)")
 if lastMeasure then 
   lastMeasure = tonumber(lastMeasure)
 end
