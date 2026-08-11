@@ -54,11 +54,26 @@ local function getChordsJson(tr)
 			  local item = reaper.GetTrackMediaItem(tr, i-1)
 			  local position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
 			  local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-			  local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
-			  local endTime = position + length
-			  -- Converts time in beats
-			  local duration = length * (bpm / 60)
-			  local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
+
+
+			  --- local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
+			  --- local endTime = position + length
+
+
+			  --- Converts time in beats
+			  --- local duration = length * (bpm / 60)
+			  
+                          local bpmStart = reaper.TimeMap_GetDividedBpmAtTime(position)
+                            local endTime = position + length
+                            local bpmEnd = reaper.TimeMap_GetDividedBpmAtTime(endTime)
+
+                            -- Converts time in beats, accounting for linear tempo changes
+                            local bpmAvg = (bpmStart + bpmEnd) / 2
+                            local duration = length * (bpmAvg / 60)
+
+
+
+                            local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
 			  
 			  local positionString = reaper.format_timestr_pos( position, '', 2 )
 			  
