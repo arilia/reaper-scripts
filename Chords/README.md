@@ -28,7 +28,8 @@ folder (or install via ReaPack, once available).
    `reachords/` subfolder.
 2. Make sure REAPER's web server is enabled.
 3. From a browser on the same local network (including a tablet), open the
-   web server address followed by `reachords/chords.html`.
+   web server address followed by `reachords/`.
+4. For the lyrics go to `reachords/lyrics.html`.
 
 ## Usage
 

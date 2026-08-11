@@ -122,7 +122,7 @@ class Row {
     constructor(song, type = Row.CHORDS) {
         this.type = type;
         this.song = song;
-        this.number = song.rows.lenght + 1;
+        this.number = song.rows.length + 1;
     }
 
     render() {
