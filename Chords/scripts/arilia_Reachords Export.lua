@@ -77,7 +77,7 @@ end
 local mark = "{";
 local markerCount = reaper.CountProjectMarkers(0)
 local markCount =0;
-for i=0, markerCount do 
+for i=0, markerCount - 1 do 
 	retval, isrgn,  pos,  rgnend,  name,  markrgnindexnumber, color = reaper.EnumProjectMarkers3(0, i)
   
 	if(isrgn or #name == 0) then
