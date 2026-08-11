@@ -44,7 +44,7 @@ local function getChordsJson(tr, chordsFound )
 			  
 			  local positionString = reaper.format_timestr_pos( position, '', 2 )
 			  
-			  local measure, beat, sub = positionString:match("^(%d+)%.(%d+)%.(%d+)$")
+			  local measure, beat, sub = positionString:match("^(%d+)%.(%d+)%.(%d+)")
 			  
 			  if measure then
 			      measure = tonumber(measure)
