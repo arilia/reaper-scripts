@@ -93,9 +93,9 @@ for i=0, markerCount - 1 do
 		bar, _, _ = bar:match("^(%d+)%.(%d+)%.(%d+)")
 		mark = mark .. '"' .. bar .. '": {' 
 		mark = mark .. '"barNumber":' .. bar
-		mark = mark .. ', "position": ' .. pos 
-		mark = mark .. ', "text": "' .. jsonEscape(name) .. '"'
-		mark = mark .. ', "color": "' .. r .. ", " .. g .. ", " .. b .. '"'
+		mark = mark .. ', "position":' .. pos 
+		mark = mark .. ', "text":"' .. jsonEscape(name) .. '"'
+		mark = mark .. ', "color":"' .. r .. ", " .. g .. ", " .. b .. '"'
 		mark = mark .. '}'
 		
 	end
@@ -132,8 +132,8 @@ for m=firstMeasure, lastMeasure do
 	barEnd = barEnd - globalOffset
 	meas = meas .. '"' .. m .. '": {' 
 	meas = meas .. '"number":' .. m
-	meas = meas .. ', "startTime": ' .. barStart 
-	meas = meas .. ', "endTime": ' .. barEnd 
+	meas = meas .. ', "startTime":' .. barStart 
+	meas = meas .. ', "endTime":' .. barEnd 
 	meas = meas .. ', "numOfBeats":' .. numOfBeats
 		
 	meas = meas .. '}'
@@ -233,9 +233,9 @@ json = json .. '"chords":' .. chordjs
 json = json .. ', "lyrics":' .. lyrjs
 json = json .. ', "bars":' .. meas
 json = json .. ', "markers":' .. mark
-json = json .. ', "title": "' .. jsonEscape(projectName) .. '"'
-json = json .. ', "offset": "' .. offset .. '"'
-json = json .. ', "globalOffset": "' .. globalOffset .. '"'
+json = json .. ', "title":"' .. jsonEscape(projectName) .. '"'
+json = json .. ', "offset":"' .. offset .. '"'
+json = json .. ', "globalOffset":"' .. globalOffset .. '"'
 json = json .. '}'
 
 if json ~= old_json then 
