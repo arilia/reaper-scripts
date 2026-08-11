@@ -132,8 +132,8 @@ for m=firstMeasure, lastMeasure do
 	barEnd = barEnd - globalOffset
 	meas = meas .. '"' .. m .. '": {' 
 	meas = meas .. '"number":' .. m
-	meas = meas .. ', "startTime": "' .. barStart .. '"'
-	meas = meas .. ', "endTime": "' .. barEnd .. '"'
+	meas = meas .. ', "startTime": " .. barStart .. "'
+	meas = meas .. ', "endTime": " .. barEnd .. "'
 	meas = meas .. ', "numOfBeats":' .. numOfBeats
 		
 	meas = meas .. '}'
