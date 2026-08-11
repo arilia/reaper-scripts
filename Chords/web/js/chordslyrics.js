@@ -356,14 +356,7 @@ class Song {
         return this.projectTitle;
     }
 
-    clear() {
-        this.rows = [];
-        this.table = null;
-        this.chords = [];
-        this.bars = [];
-        this.lyrics = [];
-        this.complete = false;
-    }
+   
 
     set recordedPosition(position) {
         this.lastRecordedTime = Date.now();
@@ -480,11 +473,13 @@ class Song {
     }
 
     clear() {
-        this.translateY =0;
-        this.bars = [];
-        this.chords = [];
-        this.lyrics = [];
+        this.translateY = 0;
+        this.table = null;
+        this.complete = false;
         this.rows = [];
+        this.chords = [];
+        this.bars = [];
+        this.lyrics = [];
     }
 
     render() {
