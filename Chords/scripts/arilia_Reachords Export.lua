@@ -27,24 +27,24 @@ local dirty = reaper.IsProjectDirty(0)
 
 local offset = 0
 
-function getChordsJson(tr, chordsFound ) 
+local function getChordsJson(tr, chordsFound ) 
 	local chordjs = "{"
 	if chordsFound then
 		offset =  reaper.GetMediaTrackInfo_Value(tr, "D_PLAY_OFFSET")
 		local itemCount = reaper.CountTrackMediaItems(tr)
 		for i=1, itemCount do
-			  item = reaper.GetTrackMediaItem(tr, i-1)
-			  position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
-			  length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-			  bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
-			  endTime = position + length
+			  local item = reaper.GetTrackMediaItem(tr, i-1)
+			  local position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
+			  local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
+			  local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
+			  local endTime = position + length
 			  -- Converts time in beats
-			  duration = length * (bpm / 60)
-			  _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
+			  local duration = length * (bpm / 60)
+			  local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
 			  
 			  local positionString = reaper.format_timestr_pos( position, '', 2 )
 			  
-			  measure, beat, sub = positionString:match("^(%d+)%.(%d+)%.(%d+)$")
+			  local measure, beat, sub = positionString:match("^(%d+)%.(%d+)%.(%d+)$")
 			  
 			  if measure then
 			      measure = tonumber(measure)
@@ -79,14 +79,12 @@ local mark = "{";
 local markerCount = reaper.CountProjectMarkers(0)
 local markCount =0;
 for i=0, markerCount - 1 do 
-	retval, isrgn,  pos,  rgnend,  name,  markrgnindexnumber, color = reaper.EnumProjectMarkers3(0, i)
+	local retval, isrgn,  pos,  rgnend,  name,  markrgnindexnumber, color = reaper.EnumProjectMarkers3(0, i)
   
 	if(isrgn or #name == 0) then
 	else
-		r=0
-		g=0
-		b=0
-			r, g, b = reaper.ColorFromNative(color)
+		local r, g, b = 0, 0, 0
+		r, g, b = reaper.ColorFromNative(color)
 		markCount = markCount +1
 		if markCount>1 then
 		  mark = mark .. ','
@@ -115,21 +113,21 @@ for i=0, markerCount - 1 do
 
 local projectLength = reaper.GetProjectLength()
 local lastBarString = reaper.format_timestr_pos( projectLength, '', 2 )
-lastMeasure, _, _ = lastBarString:match("^(%d+)%.(%d+)%.(%d+)$")
+local lastMeasure, _, _ = lastBarString:match("^(%d+)%.(%d+)%.(%d+)$")
 if lastMeasure then 
   lastMeasure = tonumber(lastMeasure)
 end
 
 local firstBarString = reaper.format_timestr_pos( 0, '', 2 )
-firstMeasure, _, _ = firstBarString:match("([^.]+)")
+local firstMeasure, _, _ = firstBarString:match("([^.]+)")
 if firstMeasure then 
   firstMeasure = tonumber(firstMeasure)
 end
 local meas = "{";
 for m=firstMeasure, lastMeasure do
 
-	barStart, _, _, numOfBeats, _, BPM = reaper.TimeMap_GetMeasureInfo(0, m-1)
-	barEnd = reaper.TimeMap_GetMeasureInfo(0, m)
+	local barStart, _, _, numOfBeats, _, BPM = reaper.TimeMap_GetMeasureInfo(0, m-1)
+	local barEnd = reaper.TimeMap_GetMeasureInfo(0, m)
 	barStart = barStart - globalOffset
 	barEnd = barEnd - globalOffset
 	meas = meas .. '"' .. m .. '": {' 
@@ -168,7 +166,7 @@ for i=1, trackCount do
     trackNumber = i-1
   end
 end
-tr = reaper.GetTrack(0, trackNumber)
+local tr = reaper.GetTrack(0, trackNumber)
 
 -- Iterates all the items in the track and create a JSON objet with the list of the chords
 
@@ -181,7 +179,7 @@ chordjs  = getChordsJson(tr, chordsFound)
 -------------------
 
 
-local trackNumber = 0
+trackNumber = 0
 local lyricsFound = false
 -- FIND THE TRACK NAMED "lyrics" TODO make this string an option
 for i=1, trackCount do 
@@ -201,14 +199,14 @@ local lyrjs = "{"
 if lyricsFound then
 	local itemCount = reaper.CountTrackMediaItems(tr)
 	for i=1, itemCount do
-	  item = reaper.GetTrackMediaItem(tr, i-1)
-	  position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
-	  length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-	  bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
-	  endTime = position + length
+	  local item = reaper.GetTrackMediaItem(tr, i-1)
+	  local position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
+	  local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
+	  local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
+	  local endTime = position + length
 	  -- Converts time in beats
-	  duration = length * (bpm / 60)
-	  _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
+	  local duration = length * (bpm / 60)
+	  local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
 	  
 	  local positionString = reaper.format_timestr_pos( position, '', 2 )
 	  
@@ -228,7 +226,7 @@ lyrjs = lyrjs .. '}'
 
 
 --reaper.ShowConsoleMsg(lyrjs .. "\n")
-old_json = reaper.GetExtState("reachords", "chords")
+local old_json = reaper.GetExtState("reachords", "chords")
 
 local json = "{"
 json = json .. '"chords":' .. chordjs
@@ -247,4 +245,3 @@ else
 	reaper.SetExtState("reachords", "dirty", "false", false)
 end
 reaper.SetExtState("reachords", "chords", json, false)
-
