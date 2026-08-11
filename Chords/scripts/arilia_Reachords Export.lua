@@ -27,6 +27,24 @@ local dirty = reaper.IsProjectDirty(0)
 
 local offset = 0
 
+
+
+
+local function findTrackByName(name)
+    local trackCount = reaper.CountTracks(0)
+    for i = 1, trackCount do
+        local tr = reaper.GetTrack(0, i - 1)
+        local ok, trackName = reaper.GetTrackName(tr)
+        if string.lower(trackName) == string.lower(name) then
+            return tr
+        end
+    end
+    return nil
+end
+
+
+
+
 local function getChordsJson(tr, chordsFound ) 
 	local chordjs = "{"
 	if chordsFound then
@@ -152,21 +170,7 @@ meas = meas .. '}'
 -- CHORDS LIST    
 -------------------
 
-
-local trackCount = reaper.CountTracks(0);
-local trackNumber = 0
-
--- FIND THE TRACK NAMED "chords" TODO make this string an option
-local chordsFound = false
-for i=1, trackCount do 
-  local tr = reaper.GetTrack(0,i-1)
-  local ok, trackName = reaper.GetTrackName(tr)
-  if (trackName == "Chords" or trackName == "chords") then
-    chordsFound = true
-    trackNumber = i-1
-  end
-end
-local tr = reaper.GetTrack(0, trackNumber)
+local tr = findTrackByName('chords')
 
 -- Iterates all the items in the track and create a JSON objet with the list of the chords
 
@@ -174,23 +178,12 @@ local chordjs = "{}"
 chordjs  = getChordsJson(tr, chordsFound)
 
 --reaper.ShowConsoleMsg(chordjs .. "\n")
+
 -------------------
 -- LYRICS LIST    
 -------------------
 
-
-trackNumber = 0
-local lyricsFound = false
--- FIND THE TRACK NAMED "lyrics" TODO make this string an option
-for i=1, trackCount do 
-  local tr = reaper.GetTrack(0,i-1)
-  local ok, trackName = reaper.GetTrackName(tr)
-  if trackName == "lyrics" or trackName == "Lyrics" then
-    lyricsFound = true
-    trackNumber = i-1
-  end
-end
-tr = reaper.GetTrack(0, trackNumber)
+local tr = findTrackByName('lyrics')
 
 
 -- Iterates all the items in the track and create a JSON objet with the list of the chords
