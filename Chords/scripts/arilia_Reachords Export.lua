@@ -234,8 +234,8 @@ json = json .. ', "lyrics":' .. lyrjs
 json = json .. ', "bars":' .. meas
 json = json .. ', "markers":' .. mark
 json = json .. ', "title":"' .. jsonEscape(projectName) .. '"'
-json = json .. ', "offset":"' .. offset .. '"'
-json = json .. ', "globalOffset":"' .. globalOffset .. '"'
+json = json .. ', "offset":' .. offset 
+json = json .. ', "globalOffset":' .. globalOffset
 json = json .. '}'
 
 if json ~= old_json then 
