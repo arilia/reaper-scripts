@@ -336,9 +336,9 @@ class Song {
         this.type = type;
         wwr_req_recur("_RS2db92f0a1ab88f79fafb683fb9116d1ab6c097c7", 5000);
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
-        wwr_req("GET/EXTSTATE/reachords/chords");
+        wwr_req("GET/EXTSTATE/reachords/song");
         wwr_req_recur("TRANSPORT", 2000);
-        wwr_req_recur("GET/EXTSTATE/reachords/project", 2000);//Get a JSON string containing the name of the project.
+        wwr_req_recur("GET/EXTSTATE/reachords/dirty", 2000); //Get a JSON string containing the state of the project. If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
     }
 
@@ -643,19 +643,17 @@ function wwr_onreply(results) {
                     }
                     break;
                 case "EXTSTATE":
-                    if (tok[2] === "project") {
-                        if (tok[3] != song.project) {
-                            location.reload();
-                        } else {
-                        }
+                   if (tok[2] === "dirty" && tok[3] === "true") {
+                        wwr_req("GET/EXTSTATE/reachords/song");
                     }
-                    if (tok[2] === "chords" ) {
+                    if (tok[2] === "song" ) {
                         console.log(ar);
                         var json = "";
                         if(tok[3] !== "") {
                             json = JSON.parse(tok[3]);
                         }
                         song.json = json;
+                        song.clear();
                         song.parseJson();
                         song.createTable();
                     }
