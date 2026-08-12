@@ -252,4 +252,4 @@ if json ~= old_json then
 else
 	reaper.SetExtState("reachords", "dirty", "false", false)
 end
-reaper.SetExtState("reachords", "chords", json, false)
+reaper.SetExtState("reachords", "song", json, false)
