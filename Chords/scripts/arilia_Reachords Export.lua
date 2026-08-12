@@ -234,7 +234,7 @@ lyrjs = lyrjs .. '}'
 
 
 --reaper.ShowConsoleMsg(lyrjs .. "\n")
-local old_json = reaper.GetExtState("reachords", "chords")
+local old_json = reaper.GetExtState("reachords", "song")
 
 local json = "{"
 json = json .. '"chords":' .. chordjs
