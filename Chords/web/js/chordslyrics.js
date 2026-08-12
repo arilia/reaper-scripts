@@ -325,9 +325,9 @@ class Song {
     transportStatus = 0;
     globalOffset = 0;
     type = 'lyrics';
-    projectTitle = "Song";
+    project = "Song";
     complete = false;
-    static LYRICS = "lirics";
+    static LYRICS = "lyrics";
     static CHORDS = "chords";
     
 
@@ -342,22 +342,7 @@ class Song {
         setInterval(this.calculatePosition.bind(this), 50);
     }
 
-    set project(val) {
-        this.projectTitle = val;
-        
-        if (this.type === Song.LYRICS) {
-            document.title = val + " - Lyrics";
-        } else {
-            document.title = val + " - Chords";
-        }
-    }
-
-    get project() {
-        return this.projectTitle;
-    }
-
-   
-
+    
     set recordedPosition(position) {
         this.lastRecordedTime = Date.now();
         this.calculatedPosition = position = this.lastRecordedPosition = position + this.offset;
@@ -484,6 +469,11 @@ class Song {
 
     render() {
         document.getElementById('song_title').innerHTML = this.project;
+        if (this.type === Song.LYRICS) {
+            document.title = val + " - Lyrics";
+        } else {
+            document.title = val + " - Chords";
+        }
         this.table = document.createElement('div');
         for (let row of this.rows) {
             row.table = this.table;
