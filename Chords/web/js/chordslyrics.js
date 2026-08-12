@@ -344,11 +344,11 @@ class Song {
 
     set project(val) {
         this.projectTitle = val;
-        document.getElementById('song_title').innerHTML = song.project;
+        
         if (this.type === Song.LYRICS) {
-            document.title = song.project + " - Lyrics";
+            document.title = val + " - Lyrics";
         } else {
-            document.title = song.project + " - Chords";
+            document.title = val + " - Chords";
         }
     }
 
@@ -483,6 +483,7 @@ class Song {
     }
 
     render() {
+        document.getElementById('song_title').innerHTML = this.project;
         this.table = document.createElement('div');
         for (let row of this.rows) {
             row.table = this.table;
