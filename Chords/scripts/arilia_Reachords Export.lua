@@ -213,7 +213,7 @@ if tr then
 	  local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
 	  local endTime = position + length
 	  -- Converts time in beats
-	  local duration = length * (bpm / 60)
+	  local duration = length * (bpm / 60)  -- likely useless, remove in future TODO and BPM too
 	  local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
 	  
 	  local positionString = reaper.format_timestr_pos( position, '', 2 )
