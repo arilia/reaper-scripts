@@ -1,6 +1,5 @@
 reaper.set_action_options(1)
 reaper.ClearConsole()
-reaper.ShowConsoleMsg("avvio\n")
 
 -- QUA VA IL RECUPERO/CREAZIONE DELL'ID PROGETTO
 local projectId = "TODO"
@@ -232,6 +231,7 @@ end
 
 
 local function getSongJson()
+  globalOffset = reaper.GetProjectTimeOffset(0, false)
   local projectName = reaper.GetProjectName()
   projectName = projectName:match("(.+)%..+$") or projectName
   
@@ -298,7 +298,7 @@ local function loop()
         -- (version, os.time() come timestamp, projectId)
         local statusJson = '{"version":' .. version .. ', "timestamp":' .. os.time() .. ', "projectid": "'  ..  projectId ..  '"}'  -- placeholder
         reaper.SetExtState("reachords", "status", statusJson, false)
-        reaper.ShowConsoleMsg(statusJson .. "\n")
+        -- reaper.ShowConsoleMsg(statusJson .. "\n")
     end
 
     reaper.defer(loop)
