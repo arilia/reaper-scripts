@@ -296,7 +296,7 @@ local function loop()
 
         -- QUA VA LA SCRITTURA DELLO STATUS
         -- (version, os.time() come timestamp, projectId)
-        local statusJson = "{" .. version .. ", " .. os.time() ..", '"  ..  projectId ..  "'}"  -- placeholder
+        local statusJson = '{"version":' .. version .. ', "timestamp":' .. os.time() .. ', "projectid": "'  ..  projectId ..  '"}'  -- placeholder
         reaper.SetExtState("reachords", "status", statusJson, false)
         reaper.ShowConsoleMsg(statusJson .. "\n")
     end

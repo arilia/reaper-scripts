@@ -324,6 +324,7 @@ class Song {
     calculatedPosition = 0;
     transportStatus = 0;
     globalOffset = 0;
+    version = -1;
     type = 'lyrics';
     project = "Song";
     complete = false;
@@ -334,11 +335,11 @@ class Song {
     constructor(type) {
         this.id = Math.random();
         this.type = type;
-        wwr_req_recur("_RS2db92f0a1ab88f79fafb683fb9116d1ab6c097c7", 5000);
+        //wwr_req_recur("_RS2db92f0a1ab88f79fafb683fb9116d1ab6c097c7", 5000);
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
         wwr_req("GET/EXTSTATE/reachords/song");
         wwr_req_recur("TRANSPORT", 2000);
-        wwr_req_recur("GET/EXTSTATE/reachords/dirty", 2000); //Get a JSON string containing the state of the project. If something changes it rebuild the Song
+        wwr_req_recur("GET/EXTSTATE/reachords/status", 2000); //Get a JSON string containing the state of the project. If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
     }
 
@@ -470,9 +471,9 @@ class Song {
     render() {
         document.getElementById('song_title').innerHTML = this.project;
         if (this.type === Song.LYRICS) {
-            document.title = val + " - Lyrics";
+            document.title = this.project + " - Lyrics";
         } else {
-            document.title = val + " - Chords";
+            document.title = this.project + " - Chords";
         }
         this.table = document.createElement('div');
         for (let row of this.rows) {
@@ -634,11 +635,18 @@ function wwr_onreply(results) {
                     }
                     break;
                 case "EXTSTATE":
-                   if (tok[2] === "dirty" && tok[3] === "true") {
-                        wwr_req("GET/EXTSTATE/reachords/song");
+                   if (tok[2] === "status" && tok[3] !== "") {
+                        var statusjson = "";
+                        statusjson = JSON.parse(tok[3]);
+                        //console.log(statusjson);
+                        if(statusjson.version !== this.version)
+                        {
+                            this.version = statusjson.version;
+                            wwr_req("GET/EXTSTATE/reachords/song");
+                        }
                     }
                     if (tok[2] === "song" ) {
-                        console.log(ar);
+                        //console.log(ar);
                         var json = "";
                         if(tok[3] !== "") {
                             json = JSON.parse(tok[3]);
