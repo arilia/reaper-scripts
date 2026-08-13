@@ -6,8 +6,10 @@ local projectId = "TODO"
 
 local lastChangeCount = -1
 local version = 0
+local offset = 0
 local lastCheckTime = 0
-local globalOffset = reaper.GetProjectTimeOffset(0, false)
+local globalOffset = 0
+local projectName = ""
 
 
 
@@ -232,12 +234,8 @@ end
 
 local function getSongJson()
   globalOffset = reaper.GetProjectTimeOffset(0, false)
-  local projectName = reaper.GetProjectName()
+  projectName = reaper.GetProjectName()
   projectName = projectName:match("(.+)%..+$") or projectName
-  
-  
-  
-  local offset = 0
   
   local tr = findTrackByName('lyrics')
   local lyrjs = getLyricsJson(tr)
@@ -245,9 +243,6 @@ local function getSongJson()
   local chordjs  = getChordsJson(tr)
   local markjs = getMarkersJson()
   local measjs = getMeasuresJson()
-  
-  --reaper.ShowConsoleMsg(lyrjs .. "\n")
-  
   
   local json = "{"
   json = json .. '"chords":' .. chordjs
@@ -303,6 +298,10 @@ local function loop()
 
     reaper.defer(loop)
 end
+
+reaper.atexit(function()
+    reaper.DeleteExtState("reachords", "song", true)
+end)
 
 loop()
 

@@ -7,6 +7,18 @@
 .clock {
     position: absolute;
     top: 1em;
+    right: 4em;
+    padding: 1em;
+    
+    z-index: 30;
+    font-weight: bold;
+    background-color:  rgba(100,100,100,.5);
+    border-radius: 4px;
+}
+
+.scriptstatus{
+    position: absolute;
+    top: 1em;
     right: 1em;
     padding: 1em;
     
@@ -15,6 +27,15 @@
     background-color:  rgba(100,100,100,.5);
     border-radius: 4px;
 }
+
+.inactive {
+    background-color:  rgba(100,00,00,.5);
+}
+
+.active {
+    background-color:  rgba(00,100,000,.5);
+}
+
 .chords_table {
     background-color: black;
     font-size: 150%;

@@ -306,7 +306,7 @@ class Lyric {
 }
 
 class Song {
-    id = 0;
+    id = "";
     table = null;
     lastInsertedLyric = null;
     bars = [];
@@ -325,6 +325,7 @@ class Song {
     transportStatus = 0;
     globalOffset = 0;
     version = -1;
+    timestamp = -1;
     type = 'lyrics';
     project = "Song";
     complete = false;
@@ -535,8 +536,12 @@ class Song {
         if (!this.complete) {
             return;
         }
+        var formattedTime = "";
         var time = (position - this.offset + this.globalOffset);
-        var formattedTime = new Date(Math.abs(time) * 1000).toISOString().slice(14, 22);
+        if(time)
+        {
+            formattedTime = new Date(Math.abs(time) * 1000).toISOString().slice(14, 22);
+        }
         if (time < 0)
         {
             formattedTime = "-" + formattedTime;
@@ -611,6 +616,19 @@ class Song {
             this.appendChord(chord);
         }
     }
+    
+    setScriptActive(active)  {
+        this.scriptActive = active;
+        var dot = document.getElementById('scriptstatus_div');
+        if (active) {
+            dot.classList.remove('inactive');
+            dot.classList.add('active');       // QUA VA IL CSS: pallino verde
+        } else {
+            dot.classList.remove('active');
+            dot.classList.add('inactive');     // QUA VA IL CSS: pallino rosso
+        }
+        
+    }
 
 }
 
@@ -635,14 +653,28 @@ function wwr_onreply(results) {
                     }
                     break;
                 case "EXTSTATE":
-                   if (tok[2] === "status" && tok[3] !== "") {
-                        var statusjson = "";
-                        statusjson = JSON.parse(tok[3]);
-                        //console.log(statusjson);
-                        if(statusjson.version !== this.version)
-                        {
-                            this.version = statusjson.version;
-                            wwr_req("GET/EXTSTATE/reachords/song");
+                   if (tok[2] === "status" ) {
+                        var status = null;
+                        try {
+                            status = tok[3] ? JSON.parse(tok[3]) : null;
+                        } catch (e) {
+                            status = null;
+                        }
+                        if (status === null) {
+                            song.setScriptActive(false);
+                            return;
+                        }
+                        var timelimit = 3;
+                        var isActive = Date.now()/1000 - status.timestamp <= timelimit;
+                        song.setScriptActive(isActive);
+
+                        if (isActive) {
+                            if(status.version !== song.version || status.id !== song.id)
+                            {
+                                song.version = status.version;
+                                song.id = status.id;
+                                wwr_req("GET/EXTSTATE/reachords/song");
+                            }
                         }
                     }
                     if (tok[2] === "song" ) {
