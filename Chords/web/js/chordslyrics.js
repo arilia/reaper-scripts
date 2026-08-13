@@ -662,17 +662,17 @@ function wwr_onreply(results) {
                         }
                         if (status === null) {
                             song.setScriptActive(false);
-                            return;
+                            break;
                         }
                         var timelimit = 3;
                         var isActive = Date.now()/1000 - status.timestamp <= timelimit;
                         song.setScriptActive(isActive);
 
                         if (isActive) {
-                            if(status.version !== song.version || status.id !== song.id)
+                            if(status.version !== song.version || status.projectid !== song.id)
                             {
                                 song.version = status.version;
-                                song.id = status.id;
+                                song.id = status.projectid;
                                 wwr_req("GET/EXTSTATE/reachords/song");
                             }
                         }

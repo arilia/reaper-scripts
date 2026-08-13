@@ -1,4 +1,4 @@
-reaper.set_action_options(1)
+reaper.set_action_options(1|4)
 reaper.ClearConsole()
 
 -- QUA VA IL RECUPERO/CREAZIONE DELL'ID PROGETTO
@@ -300,7 +300,8 @@ local function loop()
 end
 
 reaper.atexit(function()
-    reaper.DeleteExtState("reachords", "song", true)
+    reaper.set_action_options(8)
+    --reaper.DeleteExtState("reachords", "song", true)
 end)
 
 loop()
