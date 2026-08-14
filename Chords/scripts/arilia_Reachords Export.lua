@@ -1,19 +1,12 @@
 reaper.set_action_options(1|4)
 reaper.ClearConsole()
 
--- QUA VA IL RECUPERO/CREAZIONE DELL'ID PROGETTO
-local projectId = "TODO"
-
 local lastChangeCount = -1
 local version = 0
 local offset = 0
 local lastCheckTime = 0
 local globalOffset = 0
 local projectName = ""
-
-
-
-
 
 local function jsonEscape(str)
     if str == nil then return "" end
@@ -25,10 +18,6 @@ local function jsonEscape(str)
     str = str:gsub('\t', '\\t')
     return str
 end
-
-
-  
-  
 
 
 local function findTrackByName(name)
