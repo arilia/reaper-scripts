@@ -264,10 +264,29 @@ end
 
 local function loop()
     local now = reaper.time_precise()
-
+    
     -- Check the project just one time a second,
     if now - lastCheckTime >= 1 then
         lastCheckTime = now
+
+        -- retrieve the projectid from the project path. 
+        -- if no projectid (new project) create a GUID and save it to the ProjExtState
+        local _, projectPath = reaper.EnumProjects(-1)
+        local projectId
+        
+        if projectPath ~= "" then
+            -- Saved project: using path
+            projectId = projectPath
+        else
+            -- New project
+            local _, storedId = reaper.GetProjExtState(0, "reachords", "projectid")
+            if storedId ~= "" then
+                projectId = storedId
+            else
+                projectId = reaper.genGuid("")
+                reaper.SetProjExtState(0, "reachords", "projectid", projectId)
+            end
+        end
 
         local changeCount = reaper.GetProjectStateChangeCount(0)
 
@@ -291,7 +310,7 @@ local function loop()
 
         -- QUA VA LA SCRITTURA DELLO STATUS
         -- (version, os.time() come timestamp, projectId)
-        local statusJson = '{"version":' .. version .. ', "timestamp":' .. os.time() .. ', "projectid": "'  ..  projectId ..  '"}'  -- placeholder
+        local statusJson = '{"version":' .. version .. ', "timestamp":' .. os.time() .. ', "projectid": "'  ..  jsonEscape(projectId) ..  '"}'  -- placeholder
         reaper.SetExtState("reachords", "status", statusJson, false)
         -- reaper.ShowConsoleMsg(statusJson .. "\n")
     end
