@@ -1,7 +1,8 @@
 reaper.set_action_options(1|4)
 reaper.ClearConsole()
 
-local lastChangeCount = -1
+local lastChangeCount = -1 
+
 local version = 0
 local offset = 0
 local lastCheckTime = 0
