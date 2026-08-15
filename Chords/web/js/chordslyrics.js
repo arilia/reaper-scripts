@@ -678,15 +678,19 @@ function wwr_onreply(results) {
                         }
                     }
                     if (tok[2] === "song" ) {
-                        //console.log(ar);
+                        
                         var json = "";
                         if(tok[3] !== "") {
                             json = JSON.parse(tok[3]);
                         }
-                        song.json = json;
-                        song.clear();
-                        song.parseJson();
-                        song.createTable();
+                        if(json){
+                            song.json = json;
+                            song.clear();
+                            song.parseJson();
+                            song.createTable();
+                        }
+        
+                        
                     }
                     break;
             }
