@@ -357,6 +357,7 @@ class Song {
             this.calculatedPosition = position;
         }
         this.checkPlaying(position);
+        this.instantPositioning = false;
         this.hideSong(false);
     }
 
@@ -365,7 +366,6 @@ class Song {
         var table_style = this.table.style;
         if (this.instantPositioning) {
             table_style.willChange = 'none';
-            this.instantPositioning = false;
         } else {
             
             table_style.willChange = 'transform';
