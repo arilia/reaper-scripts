@@ -329,6 +329,7 @@ class Song {
     type = 'lyrics';
     project = "Song";
     complete = false;
+    instantPositioning = false;
     static LYRICS = "lyrics";
     static CHORDS = "chords";
     
@@ -336,11 +337,9 @@ class Song {
     constructor(type) {
         this.id = Math.random();
         this.type = type;
-        //wwr_req_recur("_RS2db92f0a1ab88f79fafb683fb9116d1ab6c097c7", 5000);
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
-        wwr_req("GET/EXTSTATE/reachords/song");
-        wwr_req_recur("TRANSPORT", 2000);
-        wwr_req_recur("GET/EXTSTATE/reachords/status", 2000); //Get a JSON string containing the state of the project. If something changes it rebuild the Song
+        //wwr_req("GET/EXTSTATE/reachords/song");
+        wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", 2000); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
     }
 
@@ -358,13 +357,20 @@ class Song {
             this.calculatedPosition = position;
         }
         this.checkPlaying(position);
+        this.hideSong(false);
     }
 
     translate(val) {
         this.translateY = val + this.translateY;
         var table_style = this.table.style;
-        table_style.willChange = 'transform';
-        table_style.transition = 'transform 400ms ease';
+        if (this.instantPositioning) {
+            table_style.willChange = 'none';
+            this.instantPositioning = false;
+        } else {
+            
+            table_style.willChange = 'transform';
+            table_style.transition = 'transform 400ms ease';
+        }
         table_style.transform = "translateY(" + this.translateY + "px)";
     }
 
@@ -378,6 +384,7 @@ class Song {
     }
     
     createTable() {
+        this.instantPositioning = true;
         if (this.type == "chords") {
             this.createTableChords();
         } else {
@@ -492,6 +499,11 @@ class Song {
         }
     }
     
+    hideSong(hide) {
+        document.getElementById('song').style.visibility = hide ? 'hidden' : 'visible';
+    }
+    
+    
     appendChord(chord) {
         if (this.type === Song.LYRICS) {
             return;
@@ -563,6 +575,7 @@ class Song {
                 }
                 break;
         }
+        
     }
 
     parseJson() {
@@ -570,7 +583,8 @@ class Song {
         this.project = json.title;
         this.offset = json.offset * 1;
         this.globalOffset = json.globalOffset * 1;
-
+//        this.transportStatus = json.transportStatus;
+//        this.recordedPosition = json.position;
         var markers = json.markers;
         for (var j in markers) {
             var m = markers[j];
@@ -639,13 +653,8 @@ function wwr_onreply(results) {
         if (tok && tok.length > 0) {
             switch (tok[0]) {
                 case "TRANSPORT":
-                    const position_string_beats = tok[5];
-                    const transportStatus = tok[1];
-                    song.transportStatus = transportStatus;
-                    measure_beat = position_string_beats.split('.');
-                    measure = measure_beat[0];
-                    var position = tok[2] * 1;
-                    song.recordedPosition = position;
+                    song.transportStatus = tok[1];
+                    song.recordedPosition = tok[2]*1;
                     break;
                 case "PROJEXTSTATE":
                     if (tok[2] === "barsPerRow" && 1 * tok[3] >= 1) {
@@ -684,6 +693,7 @@ function wwr_onreply(results) {
                             json = JSON.parse(tok[3]);
                         }
                         if(json){
+                            song.hideSong(true);
                             song.json = json;
                             song.clear();
                             song.parseJson();

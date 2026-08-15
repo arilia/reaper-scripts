@@ -21,6 +21,18 @@ local function jsonEscape(str)
 end
 
 
+local function getTransport()
+  local state = reaper.GetPlayState()
+  local transport = 0;
+  if state & 1 ~= 0 then
+      transport = reaper.GetPlayPosition()
+  else
+      transport = reaper.GetCursorPosition()
+  end
+  return transport
+end
+
+
 local function findTrackByName(name)
     local trackCount = reaper.CountTracks(0)
     for i = 1, trackCount do
@@ -242,6 +254,8 @@ local function getSongJson()
   json = json .. ', "title":"' .. jsonEscape(projectName) .. '"'
   json = json .. ', "offset":' .. offset 
   json = json .. ', "globalOffset":' .. globalOffset
+  json = json .. ', "position":' .. getTransport()
+  json = json .. ', "transportStatus":' .. reaper.GetPlayState()
   json = json .. '}'
   return json
 end  
