@@ -630,7 +630,7 @@ class Song {
         let maxBeatPerRow = 0;
         let beatPerRow = 0;
         let barInRow = 0;
-        for (var j in bars) {
+        for (let j in bars) {
             barInRow++;
             const b = bars[j];
             const bar = new Bar(b);
@@ -683,7 +683,7 @@ class Song {
 
 function wwr_onreply(results) {
     const ar = results.split("\n");
-    for (var i = 0; i < ar.length; i++) {
+    for (let i = 0; i < ar.length; i++) {
         const tok = ar[i].split("\t");          // split a responded line into its individual fields into the array "tok"
         if (tok && tok.length > 0) {
             switch (tok[0]) {
