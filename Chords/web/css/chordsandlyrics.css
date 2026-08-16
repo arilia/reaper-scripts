@@ -7,7 +7,7 @@
 .clock {
     position: absolute;
     top: 1em;
-    right: 4em;
+    right: 10em;
     padding: 1em;
     
     z-index: 30;
@@ -51,9 +51,9 @@
     top: 1em;
     right: 1em;
     padding: 1em;
-    
+    width: 6em;
     z-index: 30;
-    font-weight: bold;
+    font-weight: normal;
     background-color:  rgba(100,100,100,.5);
     border-radius: 4px;
 }

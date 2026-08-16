@@ -352,7 +352,7 @@ class Song {
 
     calculatePosition() {
         var position = this.lastRecordedPosition;
-        if (this.playState == 1) {
+        if (this.playState === 1) {
             const elapsedTime = Date.now() - this.lastRecordedTime;
             position += elapsedTime / 1000;
             this.calculatedPosition = position;
@@ -417,7 +417,7 @@ class Song {
     
     createTable() {
         this.instantPositioning = true;
-        if (this.type == "chords") {
+        if (this.type === "chords") {
             this.createTableChords();
         } else {
             this.createTableLyrics();
@@ -668,11 +668,13 @@ class Song {
         this.scriptActive = active;
         var dot = document.getElementById('scriptstatus_div');
         if (active) {
+            dot.innerHTML = "Running"
             dot.classList.remove('inactive');
-            dot.classList.add('active');       // QUA VA IL CSS: pallino verde
+            dot.classList.add('active');       
         } else {
+            dot.innerHTML = "Click to run"
             dot.classList.remove('active');
-            dot.classList.add('inactive');     // QUA VA IL CSS: pallino rosso
+            dot.classList.add('inactive');    
         }
         
     }
