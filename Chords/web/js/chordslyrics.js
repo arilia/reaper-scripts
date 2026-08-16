@@ -477,6 +477,7 @@ class Song {
         this.chords = [];
         this.bars = [];
         this.lyrics = [];
+        this.markers = [];
     }
 
     render() {
