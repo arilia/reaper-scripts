@@ -3,7 +3,6 @@
     margin: 20px auto;
 }
 
-
 .clock {
     position: absolute;
     top: 1em;
@@ -59,11 +58,11 @@
 }
 
 .inactive {
-    background-color:  rgba(100,00,00,.5);
+    background-color:  rgba(100, 0, 0, .5);
 }
 
 .active {
-    background-color:  rgba(00,100,000,.5);
+    background-color:  rgba(0, 100, 0, .5);
 }
 
 .chords_table {
@@ -82,8 +81,6 @@
 }
 
 
-
-/* Ogni bar occupa tante colonne quanti sono i suoi beat */
 .bar {
     position: relative;
     box-sizing: border-box;
@@ -100,7 +97,6 @@
     background: #444;
     border-right: 1px solid #333;
     border-left: 1px solid #333;
-
     height: 3.6em;
     margin: 0;
     position: relative;
@@ -116,7 +112,6 @@
     margin-top: 1em;
     margin-bottom: .1em;
     margin-left: 2px;
-    /* margin-right: 8px; */
     background-color: gray;
     font-weight: bold;
     position: absolute;
@@ -127,16 +122,14 @@
 }
 
 
-
-
 .bar.playing {
     border-bottom: 4px solid darkorange;
 }
 
 .position_row {
-    background-color: rgba(100,100,100,.5);
+    background-color: rgba(100, 100, 100, .5);
     box-sizing: border-box;
-    border: 1px solid rgba(100,100,100,.2);
+    border: 1px solid rgba(100, 100, 100, .2);
     padding:.3em;
     border-radius: 4px;
     display: inline-block;
@@ -148,9 +141,6 @@
     left: 5%;
 
 }
-
-
-
 
 .time {
     padding: .3em;
@@ -165,33 +155,12 @@
 }
 
 
-
 @media (min-width: 768px) and (max-width: 1024px) {
     .song {
         width: 90%;
     }
 }
 
-.bar_cell {
-    background: #333;
-    position: relative;
-    border: 4px solid black;
-    /*padding: .6em;*/
-    height: 4em;
-
-}
-
-.line {
-    display: inline-block;
-    overflow: hidden;
-    width: 8px;
-}
-
-.bar_count {
-    color:white;
-    text-align: right;
-    padding: .3em;
-}
 
 .lyric {
     color: white;
@@ -201,13 +170,9 @@
     background-color: black;
     font-weight: bold;
     height: 1.2em;
-    /*opacity: 80%;*/
     z-index: 10;
-    /*margin-left:2em;*/
-    /*margin-right:2em;*/
     margin-top: 2px;
     border-radius: 4px;
-    /*transition: all 2s ease;*/
 }
 
 .bottom_curtain {
@@ -228,39 +193,6 @@
 
 }
 
-.bar1_4 {
-    width:21%;
-}
-
-.bar2_4 {
-    width:46%;
-}
-
-.bar4_4 {
-    width:96%;
-}
-
-.bar8_4 {
-    width:196%;
-}
-
-.bar1_3 {
-    width:29.3%;
-}
-
-.bar2_3 {
-    width:62.6%;
-}
-
-.bar3_3 {
-    width:96%;
-}
-
-.bar6_3 {
-    width:196%;
-}
-
-
 .marker_row {
     grid-row: span 1;
     grid-column: 1 / -1;
@@ -275,7 +207,6 @@
     color: white;
     text-align: left;
     font-size: .8em;
-    /*//font-weight: bold;*/
     padding: .2em;
     border: 1px solid white;
 }
@@ -288,14 +219,9 @@
 .lyric_marker_row .marker {
     top:-1.2em;
     left:0;
-    /*position: absolute;*/
 }
 
-.lyric_marker_row {
-    /*position: relative;*/
-/*    border-bottom: 1px solid #050505;*/
     
-}
 
 .chord_playing {
     border-color: darkgreen;
@@ -327,4 +253,3 @@ body {
     font-family: arial;
     color: #bbb;
 }
-
