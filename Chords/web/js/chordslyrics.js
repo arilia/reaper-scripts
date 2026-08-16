@@ -48,9 +48,9 @@ class Bar {
 
     createBeats() {
         this.beats = [];
-        for (var b = 1; b <= this.beatDuration; b++)
+        for (let b = 1; b <= this.beatDuration; b++)
         {
-            var beat = new Beat(this);
+            let beat = new Beat(this);
             beat.number = b;
             this.beats.push(beat);
         }
@@ -64,10 +64,10 @@ class Bar {
         }
         if (val && !this.isPlaying) {
 
-            var row_box = document.getElementById('position_row').getBoundingClientRect()
-            var target_position = row_box.top + row_box.height / 2;
-            var positionInfo = this.div.getBoundingClientRect();
-            var top = positionInfo.top + positionInfo.height / 2;
+            let row_box = document.getElementById('position_row').getBoundingClientRect()
+            let target_position = row_box.top + row_box.height / 2;
+            let positionInfo = this.div.getBoundingClientRect();
+            let top = positionInfo.top + positionInfo.height / 2;
             this.song.translate(target_position - top);
         }
         this.isPlaying = val;
@@ -78,9 +78,9 @@ class Bar {
     }
 
     get width() {
-        var left = this.beats[0].div.getBoundingClientRect().left;
-        var right = this.beats[this.beats.length - 1].div.getBoundingClientRect().right;
-        var width = right - left;
+        let left = this.beats[0].div.getBoundingClientRect().left;
+        let right = this.beats[this.beats.length - 1].div.getBoundingClientRect().right;
+        let width = right - left;
         return width;
     }
 
@@ -88,7 +88,7 @@ class Bar {
         this.div = document.createElement('div');
         this.div.classList.add('bar');
         this.div.style.setProperty("--beats", this.beats.length);
-        var time_div = document.createElement('div');
+        let time_div = document.createElement('div');
         time_div.classList.add('time');
         time_div.innerHTML = this.number;
         this.div.appendChild(time_div);
@@ -142,7 +142,7 @@ class Row {
                 break;
         }
         this.div.id = "row_" + this.number;
-        for (var element of this.elements) {
+        for (let element of this.elements) {
             if(element !== undefined) {
                 element.render();
             }
@@ -256,22 +256,21 @@ class Lyric {
         }
         if (val) {
 
-            var div = this.div;
-            var row_box = document.getElementById('position_row').getBoundingClientRect();
+            let div = this.div;
+            let row_box = document.getElementById('position_row').getBoundingClientRect();
             
             var target_position = row_box.top + row_box.height / 2;
+            let            var positionInfo = this.div.getBoundingClientRect();
             
-            var positionInfo = this.div.getBoundingClientRect();
-            
-            var top = positionInfo.top;// + positionInfo.height/2;
-            var height;
+            let top = positionInfo.top;// + positionInfo.height/2;
+            let height;
             if (this.nextLyric) {
-                var nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
+                let nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
                 height = nextLyricPositionInfo.top - positionInfo.top;
             } else {
                 height = positionInfo.height;
             }
-            var progress = height * (this.song.calculatedPosition - this.startTime) / this.duration;
+            let progress = height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
             this.song.moveTo(target_position - top - progress);
         }
@@ -351,7 +350,7 @@ class Song {
     }
 
     calculatePosition() {
-        var position = this.lastRecordedPosition;
+        let position = this.lastRecordedPosition;
         if (this.playState == 1) {
             const elapsedTime = Date.now() - this.lastRecordedTime;
             position += elapsedTime / 1000;
@@ -395,7 +394,7 @@ class Song {
 
     translate(val) {
         this.translateY = val + this.translateY;
-        var table_style = this.table.style;
+        let table_style = this.table.style;
         if (this.instantPositioning) {
             table_style.willChange = 'none';
         } else {
@@ -411,7 +410,7 @@ class Song {
     {	
 //        console.log(val);
         this.translateY = val + this.translateY;
-        var table_style = this.table.style;
+        let table_style = this.table.style;
         table_style.transform = "translateY(" + this.translateY + "px)";
     }
     
@@ -426,7 +425,7 @@ class Song {
     }
 
     createTableLyrics() {
-        var lastEnd = 0;
+        let lastEnd = 0;
         
         for (let lyric of this.lyrics)
         {
@@ -434,14 +433,14 @@ class Song {
             {
                 if (marker !== undefined && marker.position >= lastEnd && marker.position < lyric.endTime)
                 {
-                    var markerRow = new Row(this, Row.LYRICS_MARKER);
+                    let markerRow = new Row(this, Row.LYRICS_MARKER);
                     markerRow.append(marker);
                     this.rows.push(markerRow);
                     row = new Row(this, Row.LYRICS);
                     this.rows.push(row);
                 }
             }
-            var row = new Row(this, Row.LYRICS);
+            let row = new Row(this, Row.LYRICS);
             row.append(lyric);
             this.rows.push(row);
             lastEnd = lyric.endTime;
@@ -469,20 +468,20 @@ class Song {
     }
     
     createTableChords() {
-        var columnCount = 0;
+        let columnCount = 0;
         for (let bar of this.bars)
         {
             
             columnCount++;
             if (columnCount === 1) {
-                var row = new Row(this);
+                let row = new Row(this);
                 this.rows.push(row);
             }
 
             if (this.markers[bar.number] !== undefined)
             {
 
-                var markerRow = new Row(this, Row.MARKER);
+                let markerRow = new Row(this, Row.MARKER);
                 markerRow.append(this.markers[bar.number]);
                 this.rows.push(markerRow);
                 columnCount = 1;
@@ -522,7 +521,7 @@ class Song {
             row.render();
         }
 
-        var table = document.getElementById('chords')
+        let table = document.getElementById('chords')
         this.table.classList.add("chords_table");
         this.table.id = "chords";
         this.table.style.setProperty("--maxbeats", this.maxBeats);
@@ -583,8 +582,8 @@ class Song {
         if (!this.complete) {
             return;
         }
-        var formattedTime = "";
-        var time = (position - this.offset + this.globalOffset);
+        let formattedTime = "";
+        let time = (position - this.offset + this.globalOffset);
         if(time)
         {
             formattedTime = new Date(Math.abs(time) * 1000).toISOString().slice(14, 22);
@@ -614,26 +613,26 @@ class Song {
     }
 
     parseJson() {
-        var json = this.json;
+        let json = this.json;
         this.project = json.title;
         this.offset = json.offset * 1;
         this.globalOffset = json.globalOffset * 1;
-        var markers = json.markers;
-        for (var j in markers) {
-            var m = markers[j];
-            var marker = new Marker(m);
+        let markers = json.markers;
+        for (let j in markers) {
+            let m = markers[j];
+            let marker = new Marker(m);
             this.appendMarker(marker);
         }
 
 
-        var bars = json.bars;
-        var maxBeatPerRow = 0;
-        var beatPerRow = 0;
-        var barInRow = 0;
-        for (var j in bars) {
+        let bars = json.bars;
+        let maxBeatPerRow = 0;
+        let beatPerRow = 0;
+        let barInRow = 0;
+        for (let j in bars) {
             barInRow++;
-            var b = bars[j];
-            var bar = new Bar(b);
+            let b = bars[j];
+            let bar = new Bar(b);
             this.appendBar(bar);
             beatPerRow = beatPerRow + bar.beatDuration;
             if (beatPerRow > maxBeatPerRow) {
@@ -647,26 +646,26 @@ class Song {
         this.bars.sort(compareBar);
         this.maxBeats = maxBeatPerRow;
 
-        var lyrics = json.lyrics;
+        let lyrics = json.lyrics;
         for (j in lyrics)
         {
-            var l = lyrics[j];
-            var lyric = new Lyric(l);
+            let l = lyrics[j];
+            let lyric = new Lyric(l);
             song.appendLyric(lyric);
         }
 
-        var chords = json.chords;
-        for (var j in chords)
+        let chords = json.chords;
+        for (let j in chords)
         {
-            var c = chords[j];
-            var chord = new Chord(c);
+            let c = chords[j];
+            let chord = new Chord(c);
             this.appendChord(chord);
         }
     }
     
     setScriptActive(active)  {
         this.scriptActive = active;
-        var dot = document.getElementById('scriptstatus_div');
+        let dot = document.getElementById('scriptstatus_div');
         if (active) {
             dot.classList.remove('inactive');
             dot.classList.add('active');       // QUA VA IL CSS: pallino verde
@@ -680,9 +679,9 @@ class Song {
 }
 
 function wwr_onreply(results) {
-    var ar = results.split("\n");
-    for (var i = 0; i < ar.length; i++) {
-        var tok = ar[i].split("\t");          // split a responded line into its individual fields into the array "tok"
+    let ar = results.split("\n");
+    for (let i = 0; i < ar.length; i++) {
+        let tok = ar[i].split("\t");          // split a responded line into its individual fields into the array "tok"
         if (tok && tok.length > 0) {
             switch (tok[0]) {
                 case "TRANSPORT":
@@ -696,7 +695,7 @@ function wwr_onreply(results) {
                     break;
                 case "EXTSTATE":
                    if (tok[2] === "status" ) {
-                        var status = null;
+                        let status = null;
                         try {
                             status = tok[3] ? JSON.parse(tok[3]) : null;
                         } catch (e) {
@@ -706,8 +705,8 @@ function wwr_onreply(results) {
                             song.setScriptActive(false);
                             break;
                         }
-                        var timelimit = 3;
-                        var isActive = Date.now()/1000 - status.timestamp <= timelimit;
+                        let timelimit = 3;
+                        let isActive = Date.now()/1000 - status.timestamp <= timelimit;
                         song.setScriptActive(isActive);
 
                         if (isActive) {
@@ -723,7 +722,7 @@ function wwr_onreply(results) {
                     }
                     if (tok[2] === "song" ) {
                         
-                        var json = "";
+                        let json = "";
                         if(tok[3] !== "") {
                             json = JSON.parse(tok[3]);
                         }
