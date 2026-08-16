@@ -500,7 +500,9 @@ class Song {
     }
     
     hideSong(hide) {
+        //console.log(hide);
         document.getElementById('song').style.visibility = hide ? 'hidden' : 'visible';
+        document.getElementById('loader').style.visibility = hide ? 'visible' : 'hidden';
     }
     
     
@@ -680,6 +682,7 @@ function wwr_onreply(results) {
                         if (isActive) {
                             if(status.version !== song.version || status.projectid !== song.id)
                             {
+                                
                                 song.version = status.version;
                                 song.id = status.projectid;
                                 wwr_req("GET/EXTSTATE/reachords/song");

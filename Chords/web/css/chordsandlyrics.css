@@ -16,6 +16,12 @@
     border-radius: 4px;
 }
 
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
 .scriptstatus{
     position: absolute;
     top: 1em;
@@ -44,11 +50,8 @@
 
 }
 
-/* Ogni riga usa la stessa griglia globale */
 .bar_row {
     display: grid;
-    <!-- gap: 6px;
-    -->
     justify-content: start;
     grid-template-columns: repeat(var(--maxbeats), 1fr);
     padding:2px;
@@ -65,16 +68,9 @@
     grid-column: span var(--beats);
     border-right: 6px solid black;
     border-bottom: 4px solid black;
-    <!-- border-radius: 6px;
-    -->
 
 }
 
-.bar.playing {
-    border-bottom-color: darkorange;
-}
-
-/* Ogni beat è una cella della griglia → tutti identici */
 .beat {
     box-sizing: border-box;
     background: #444;
@@ -129,10 +125,6 @@
 
 }
 
-/* .bar_row { */
-/* box-sizing: border-box; */
-
-/* } */
 
 
 
@@ -141,7 +133,6 @@
     margin-top: .2em;
     margin-bottom: .3em;
     margin-left: 0px;
-    color: light;
     font-size: 50%;
     position: absolute;
     top: 0;
@@ -177,25 +168,6 @@
     text-align: right;
     padding: .3em;
 }
-/* .chord { */
-/* color: black; */
-/* box-sizing: border-box; */
-/* border: 2px solid #333; */
-/* border-radius: 4px; */
-/* display: inline-block; */
-/* padding: .1em; */
-/* margin-top: 1em; */
-/* margin-bottom: .1em; */
-/* margin-left: 0; */
-/* margin-right: 0; */
-/* background-color: gray; */
-/* font-weight: bold; */
-/* position: absolute; */
-/* top: 0em; */
-/* height: 2.2em; */
-/* opacity: 80%; */
-/* z-index: 10; */
-/* } */
 
 .lyric {
     color: white;
@@ -330,11 +302,5 @@ body {
     background-color: black;
     font-family: arial;
     color: #bbb;
-}
-h1   {
-    color: blue;
-}
-p    {
-    color: red;
 }
 
