@@ -323,7 +323,7 @@ class Song {
     lastRecordedPosition = 0;
     lastRecordedTime = 0;
     calculatedPosition = 0;
-    transportStatus = 0;
+    playState = 0;
     globalOffset = 0;
     version = -1;
     timestamp = -1;
@@ -352,10 +352,39 @@ class Song {
 
     calculatePosition() {
         var position = this.lastRecordedPosition;
-        if (this.transportStatus == 1) {
+        if (this.playState == 1) {
             const elapsedTime = Date.now() - this.lastRecordedTime;
             position += elapsedTime / 1000;
             this.calculatedPosition = position;
+        }
+        let playStateDiv = document.getElementById('play_state');
+        switch(this.playState) {
+            case 0:
+                
+                playStateDiv.innerHTML = "Stop";
+                playStateDiv.classList = "play_state stop"
+                break;
+            case 1:
+                playStateDiv.innerHTML = "Play";
+                playStateDiv.classList = "play_state play"
+                break;
+            case 2:
+                playStateDiv.innerHTML = "Pause";
+                playStateDiv.classList = "play_state stop"
+                playStateDiv
+                break;
+            case 5:
+                playStateDiv.innerHTML = "Rec";
+                playStateDiv.classList = "play_state rec"
+                playStateDiv
+                break;
+            case 6:
+                playStateDiv.innerHTML = "Rec Pause";
+                playStateDiv.classList = "play_state rec"
+                playStateDiv
+                break;
+            
+            
         }
         this.checkPlaying(position);
         this.instantPositioning = false;
@@ -589,8 +618,6 @@ class Song {
         this.project = json.title;
         this.offset = json.offset * 1;
         this.globalOffset = json.globalOffset * 1;
-//        this.transportStatus = json.transportStatus;
-//        this.recordedPosition = json.position;
         var markers = json.markers;
         for (var j in markers) {
             var m = markers[j];
@@ -659,7 +686,7 @@ function wwr_onreply(results) {
         if (tok && tok.length > 0) {
             switch (tok[0]) {
                 case "TRANSPORT":
-                    song.transportStatus = tok[1];
+                    song.playState = tok[1]*1;
                     song.recordedPosition = tok[2]*1;
                     break;
                 case "PROJEXTSTATE":

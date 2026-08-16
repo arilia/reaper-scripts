@@ -298,13 +298,8 @@ local function loop()
         if changeCount ~= lastChangeCount then
             lastChangeCount = changeCount
 
-            -- QUA VA IL CODICE PER RICOSTRUIRE IL JSON DELLA CANZONE
-            -- (findTrackByName "chords"/"lyrics", getChordsJson, marker, misure)
             local json = getSongJson()
 
-            -- QUA VA IL CONFRONTO COL JSON PRECEDENTE
-            -- per capire se il cambiamento rilevato da GetProjectStateChangeCount
-            -- ha effettivamente prodotto un JSON diverso
             local oldJson = reaper.GetExtState("reachords", "song")
             if json ~= oldJson then
                 version = changeCount
@@ -312,8 +307,7 @@ local function loop()
             end
         end
 
-        -- QUA VA LA SCRITTURA DELLO STATUS
-        -- (version, os.time() come timestamp, projectId)
+        -- Write into status
         local statusJson = '{"version":' .. version .. ', "timestamp":' .. os.time() .. ', "projectid": "'  ..  jsonEscape(projectId) ..  '"}'  -- placeholder
         reaper.SetExtState("reachords", "status", statusJson, false)
         -- reaper.ShowConsoleMsg(statusJson .. "\n")

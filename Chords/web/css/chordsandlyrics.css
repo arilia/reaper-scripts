@@ -23,6 +23,29 @@
     left: 50%;
 }
 
+.play_state {
+    position: absolute;
+    top: 1em;
+    left: 4em;
+    padding: 1em;
+    
+    z-index: 30;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.stop {
+     background-color:  rgba(100,100,100,.5);   
+}
+
+.play {
+    background-color:  rgba(100,255,100,.5);
+}
+
+.rec {
+    background-color:  rgba(255,100,100,.5);
+}
+
 .scriptstatus{
     position: absolute;
     top: 1em;

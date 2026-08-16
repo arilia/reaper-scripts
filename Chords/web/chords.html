@@ -11,12 +11,13 @@
     <body>
         
         <h1 id="song_title" class ="song_title"></h1>
+        <div class="play_state stop" id="play_state">Stop</div>
         <div class="clock" id="clock_div"></div>
         <div class="scriptstatus" id="scriptstatus_div" onclick='wwr_req("_RS4fd7acc159a450fc45241f92ba3f22933a8a534b");'></div>
-        <div class="command-button">
+<!--        <div class="command-button">
             <img  id="decrease_bars" src='img/toolbar_grid_adjust_decrease.png'>
             <img id="increase_bars" src='img/toolbar_grid_adjust_increase.png'>
-        </div>
+        </div>-->
         <div class="position_row" id="position_row">
             <div id="position" class="position">&nbsp;</div>
         </div>
@@ -30,8 +31,8 @@
     <script>
 
         var song = new Song(Song.CHORDS);
-        document.getElementById("increase_bars").addEventListener("click",  function f() {song.increaseBars()});
-        document.getElementById("decrease_bars").addEventListener("click",  function f() {song.decreaseBars()});
+        //document.getElementById("increase_bars").addEventListener("click",  function f() {song.increaseBars()});
+        //document.getElementById("decrease_bars").addEventListener("click",  function f() {song.decreaseBars()});
     </script>
 </html>
 
