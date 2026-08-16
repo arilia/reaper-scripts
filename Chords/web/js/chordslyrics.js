@@ -142,7 +142,7 @@ class Row {
                 break;
         }
         this.div.id = "row_" + this.number;
-        for (var element of this.elements) {
+        for (const element of this.elements) {
             if(element !== undefined) {
                 element.render();
             }
@@ -256,22 +256,22 @@ class Lyric {
         }
         if (val) {
 
-            var div = this.div;
-            var row_box = document.getElementById('position_row').getBoundingClientRect();
+            const div = this.div;
+            const row_box = document.getElementById('position_row').getBoundingClientRect();
             
-            var target_position = row_box.top + row_box.height / 2;
+            const target_position = row_box.top + row_box.height / 2;
             
-            var positionInfo = this.div.getBoundingClientRect();
+            const positionInfo = this.div.getBoundingClientRect();
             
-            var top = positionInfo.top;// + positionInfo.height/2;
-            var height;
+            const top = positionInfo.top;// + positionInfo.height/2;
+            let height;
             if (this.nextLyric) {
-                var nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
+                const nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
                 height = nextLyricPositionInfo.top - positionInfo.top;
             } else {
                 height = positionInfo.height;
             }
-            var progress = height * (this.song.calculatedPosition - this.startTime) / this.duration;
+            const progress = height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
             this.song.moveTo(target_position - top - progress);
         }
@@ -351,7 +351,7 @@ class Song {
     }
 
     calculatePosition() {
-        var position = this.lastRecordedPosition;
+        let position = this.lastRecordedPosition;
         if (this.playState === 1) {
             const elapsedTime = Date.now() - this.lastRecordedTime;
             position += elapsedTime / 1000;
@@ -395,7 +395,7 @@ class Song {
 
     translate(val) {
         this.translateY = val + this.translateY;
-        var table_style = this.table.style;
+        const table_style = this.table.style;
         if (this.instantPositioning) {
             table_style.willChange = 'none';
         } else {
@@ -469,7 +469,7 @@ class Song {
     }
     
     createTableChords() {
-        var columnCount = 0;
+        let columnCount = 0;
         for (let bar of this.bars)
         {
             
