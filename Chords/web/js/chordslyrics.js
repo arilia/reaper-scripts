@@ -371,17 +371,14 @@ class Song {
             case 2:
                 playStateDiv.textContent  = "Pause";
                 playStateDiv.classList = "play_state stop"
-                playStateDiv
                 break;
             case 5:
                 playStateDiv.textContent  = "Rec";
                 playStateDiv.classList = "play_state rec"
-                playStateDiv
                 break;
             case 6:
                 playStateDiv.textContent  = "Rec Pause";
                 playStateDiv.classList = "play_state rec"
-                playStateDiv
                 break;
             
             
@@ -430,6 +427,7 @@ class Song {
         
         for (let lyric of this.lyrics)
         {
+            let row;
             for (let marker of this.markers)
             {
                 if (marker !== undefined && marker.position >= lastEnd && marker.position < lyric.endTime)
@@ -441,7 +439,7 @@ class Song {
                     this.rows.push(row);
                 }
             }
-            var row = new Row(this, Row.LYRICS);
+            row = new Row(this, Row.LYRICS);
             row.append(lyric);
             this.rows.push(row);
             lastEnd = lyric.endTime;
@@ -470,12 +468,13 @@ class Song {
     
     createTableChords() {
         let columnCount = 0;
-        for (let bar of this.bars)
+        let row = null;
+        for (const bar of this.bars)
         {
             
             columnCount++;
             if (columnCount === 1) {
-                var row = new Row(this);
+                row = new Row(this);
                 this.rows.push(row);
             }
 
