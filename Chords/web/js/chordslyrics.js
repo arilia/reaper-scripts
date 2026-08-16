@@ -313,6 +313,7 @@ class Song {
     chords = [];
     lyrics = [];
     rows = [];
+    songReady = true;
     json = "";
     markers = [];
     maxBeats = 16;
@@ -358,7 +359,9 @@ class Song {
         }
         this.checkPlaying(position);
         this.instantPositioning = false;
-        this.hideSong(false);
+        if (this.songReady) {          // <-- nuovo: non rivelare se stai ancora aspettando
+            this.hideSong(false);
+        }
     }
 
     translate(val) {
@@ -682,7 +685,8 @@ function wwr_onreply(results) {
                         if (isActive) {
                             if(status.version !== song.version || status.projectid !== song.id)
                             {
-                                
+                                song.hideSong(true);
+                                song.songReady = false; 
                                 song.version = status.version;
                                 song.id = status.projectid;
                                 wwr_req("GET/EXTSTATE/reachords/song");
@@ -696,11 +700,12 @@ function wwr_onreply(results) {
                             json = JSON.parse(tok[3]);
                         }
                         if(json){
-                            song.hideSong(true);
+                            
                             song.json = json;
                             song.clear();
                             song.parseJson();
                             song.createTable();
+                            song.songReady = true; 
                         }
         
                         
