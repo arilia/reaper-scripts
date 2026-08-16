@@ -88,7 +88,7 @@ class Bar {
         this.div = document.createElement('div');
         this.div.classList.add('bar');
         this.div.style.setProperty("--beats", this.beats.length);
-        var time_div = document.createElement('div');
+        const time_div = document.createElement('div');
         time_div.classList.add('time');
         time_div.innerHTML = this.number;
         this.div.appendChild(time_div);
@@ -411,7 +411,7 @@ class Song {
     {	
 //        console.log(val);
         this.translateY = val + this.translateY;
-        var table_style = this.table.style;
+        const table_style = this.table.style;
         table_style.transform = "translateY(" + this.translateY + "px)";
     }
     
@@ -426,7 +426,7 @@ class Song {
     }
 
     createTableLyrics() {
-        var lastEnd = 0;
+        let lastEnd = 0;
         
         for (let lyric of this.lyrics)
         {
@@ -434,7 +434,7 @@ class Song {
             {
                 if (marker !== undefined && marker.position >= lastEnd && marker.position < lyric.endTime)
                 {
-                    var markerRow = new Row(this, Row.LYRICS_MARKER);
+                    const markerRow = new Row(this, Row.LYRICS_MARKER);
                     markerRow.append(marker);
                     this.rows.push(markerRow);
                     row = new Row(this, Row.LYRICS);
@@ -482,7 +482,7 @@ class Song {
             if (this.markers[bar.number] !== undefined)
             {
 
-                var markerRow = new Row(this, Row.MARKER);
+                const markerRow = new Row(this, Row.MARKER);
                 markerRow.append(this.markers[bar.number]);
                 this.rows.push(markerRow);
                 columnCount = 1;
@@ -522,12 +522,12 @@ class Song {
             row.render();
         }
 
-        var table = document.getElementById('chords')
+        const table = document.getElementById('chords')
         this.table.classList.add("chords_table");
         this.table.id = "chords";
         this.table.style.setProperty("--maxbeats", this.maxBeats);
         table.parentNode.replaceChild(this.table, table);
-        for (let chord of this.chords) {
+        for (const chord of this.chords) {
             chord.render();
         }
     }
@@ -583,8 +583,8 @@ class Song {
         if (!this.complete) {
             return;
         }
-        var formattedTime = "";
-        var time = (position - this.offset + this.globalOffset);
+        let formattedTime = "";
+        const time = (position - this.offset + this.globalOffset);
         if(time)
         {
             formattedTime = new Date(Math.abs(time) * 1000).toISOString().slice(14, 22);
@@ -614,26 +614,26 @@ class Song {
     }
 
     parseJson() {
-        var json = this.json;
+        const json = this.json;
         this.project = json.title;
         this.offset = json.offset * 1;
         this.globalOffset = json.globalOffset * 1;
-        var markers = json.markers;
-        for (var j in markers) {
-            var m = markers[j];
-            var marker = new Marker(m);
+        const markers = json.markers;
+        for (let j in markers) {
+            const m = markers[j];
+            const marker = new Marker(m);
             this.appendMarker(marker);
         }
 
 
-        var bars = json.bars;
-        var maxBeatPerRow = 0;
-        var beatPerRow = 0;
-        var barInRow = 0;
+        const bars = json.bars;
+        let maxBeatPerRow = 0;
+        let beatPerRow = 0;
+        let barInRow = 0;
         for (var j in bars) {
             barInRow++;
-            var b = bars[j];
-            var bar = new Bar(b);
+            const b = bars[j];
+            const bar = new Bar(b);
             this.appendBar(bar);
             beatPerRow = beatPerRow + bar.beatDuration;
             if (beatPerRow > maxBeatPerRow) {
@@ -647,26 +647,26 @@ class Song {
         this.bars.sort(compareBar);
         this.maxBeats = maxBeatPerRow;
 
-        var lyrics = json.lyrics;
-        for (j in lyrics)
+        const lyrics = json.lyrics;
+        for (let j in lyrics)
         {
-            var l = lyrics[j];
-            var lyric = new Lyric(l);
+            const l = lyrics[j];
+            const lyric = new Lyric(l);
             song.appendLyric(lyric);
         }
 
-        var chords = json.chords;
-        for (var j in chords)
+        const chords = json.chords;
+        for (let j in chords)
         {
-            var c = chords[j];
-            var chord = new Chord(c);
+            const c = chords[j];
+            const chord = new Chord(c);
             this.appendChord(chord);
         }
     }
     
     setScriptActive(active)  {
         this.scriptActive = active;
-        var dot = document.getElementById('scriptstatus_div');
+        const dot = document.getElementById('scriptstatus_div');
         if (active) {
             dot.innerHTML = "Running"
             dot.classList.remove('inactive');
@@ -682,9 +682,9 @@ class Song {
 }
 
 function wwr_onreply(results) {
-    var ar = results.split("\n");
+    const ar = results.split("\n");
     for (var i = 0; i < ar.length; i++) {
-        var tok = ar[i].split("\t");          // split a responded line into its individual fields into the array "tok"
+        const tok = ar[i].split("\t");          // split a responded line into its individual fields into the array "tok"
         if (tok && tok.length > 0) {
             switch (tok[0]) {
                 case "TRANSPORT":
@@ -698,7 +698,7 @@ function wwr_onreply(results) {
                     break;
                 case "EXTSTATE":
                    if (tok[2] === "status" ) {
-                        var status = null;
+                        let status = null;
                         try {
                             status = tok[3] ? JSON.parse(tok[3]) : null;
                         } catch (e) {
@@ -708,8 +708,8 @@ function wwr_onreply(results) {
                             song.setScriptActive(false);
                             break;
                         }
-                        var timelimit = 3;
-                        var isActive = Date.now()/1000 - status.timestamp <= timelimit;
+                        const TIMELIMIT = 3; //TODO Move from here
+                        const isActive = Date.now()/1000 - status.timestamp <= TIMELIMIT;
                         song.setScriptActive(isActive);
 
                         if (isActive) {
@@ -725,7 +725,7 @@ function wwr_onreply(results) {
                     }
                     if (tok[2] === "song" ) {
                         
-                        var json = "";
+                        let json = "";
                         if(tok[3] !== "") {
                             json = JSON.parse(tok[3]);
                         }
