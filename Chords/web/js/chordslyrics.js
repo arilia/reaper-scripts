@@ -466,7 +466,7 @@ class Song {
         this.clear();
         this.parseJson();
         this.createTable();
-    }
+    } 
     
     createTableChords() {
         let columnCount = 0;
