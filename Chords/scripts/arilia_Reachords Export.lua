@@ -214,9 +214,6 @@ local function getLyricsJson(tr)
       local duration = length * (bpm / 60)  -- likely useless, remove in future TODO and BPM too
       local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
       
-      local positionString = reaper.format_timestr_pos( position, '', 2 )
-      
-     
       lyrjs = lyrjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
       lyrjs = lyrjs .. ', "duration":'.. duration
       lyrjs = lyrjs .. ', "startTime":'.. position
