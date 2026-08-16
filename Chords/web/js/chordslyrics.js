@@ -39,7 +39,7 @@ class Bar {
 
     constructor(b) {
         this.number = b.number;
-        this.song = this;
+        this.song = null;
         this.startTime = Math.round(Number(b.startTime) * 10000) / 10000;
         this.endTime = Math.round(Number(b.endTime) * 10000) / 10000;
         this.beatDuration = b.numOfBeats;
@@ -90,7 +90,7 @@ class Bar {
         this.div.style.setProperty("--beats", this.beats.length);
         const time_div = document.createElement('div');
         time_div.classList.add('time');
-        time_div.innerHTML = this.number;
+        time_div.textContent  = this.number;
         this.div.appendChild(time_div);
         if(this.row.div) this.row.div.append(this.div); else console.log(this);
         for (let beat of this.beats)
@@ -168,7 +168,7 @@ class Marker {
     }
     render() {
         this.div = document.createElement("div");
-        this.div.innerHTML = this.text;
+        this.div.textContent  = this.text;
         this.div.classList.add('marker');
         this.div.style.border = "1px solid rgb(" + this.color + ")";
         if(this.row.div) this.row.div.append(this.div);
@@ -220,7 +220,7 @@ class Chord {
     {
         this.div = document.createElement('div');
         this.div.classList.add('chord');
-        this.div.innerHTML = this.name;
+        this.div.textContent  = this.name;
         this.div.style.left = Number((this.beatStart - 1) * this.bar.width / this.bar.beats.length) + "px"
         this.div.style.width = Number(this.beatDuration * this.bar.width / this.bar.beats.length) - 4 + "px"
         this.bar.div.append(this.div);
@@ -283,7 +283,7 @@ class Lyric {
     {
         this.div = document.createElement('div');
         this.div.classList.add('lyric');
-        this.div.innerHTML = this.text;
+        this.div.textContent  = this.text;
         if (this.playing)
         {
             this.div.classList.add('playing')
@@ -313,7 +313,7 @@ class Song {
     chords = [];
     lyrics = [];
     rows = [];
-    songReady = true;
+    songReady = false;
     json = "";
     markers = [];
     maxBeats = 16;
@@ -361,25 +361,25 @@ class Song {
         switch(this.playState) {
             case 0:
                 
-                playStateDiv.innerHTML = "Stop";
+                playStateDiv.textContent  = "Stop";
                 playStateDiv.classList = "play_state stop"
                 break;
             case 1:
-                playStateDiv.innerHTML = "Play";
+                playStateDiv.textContent  = "Play";
                 playStateDiv.classList = "play_state play"
                 break;
             case 2:
-                playStateDiv.innerHTML = "Pause";
+                playStateDiv.textContent  = "Pause";
                 playStateDiv.classList = "play_state stop"
                 playStateDiv
                 break;
             case 5:
-                playStateDiv.innerHTML = "Rec";
+                playStateDiv.textContent  = "Rec";
                 playStateDiv.classList = "play_state rec"
                 playStateDiv
                 break;
             case 6:
-                playStateDiv.innerHTML = "Rec Pause";
+                playStateDiv.textContent  = "Rec Pause";
                 playStateDiv.classList = "play_state rec"
                 playStateDiv
                 break;
@@ -510,7 +510,7 @@ class Song {
     }
 
     render() {
-        document.getElementById('song_title').innerHTML = this.project;
+        document.getElementById('song_title').textContent  = this.project;
         if (this.type === Song.LYRICS) {
             document.title = this.project + " - Lyrics";
         } else {
@@ -593,7 +593,7 @@ class Song {
         {
             formattedTime = "-" + formattedTime;
         }
-        document.getElementById('clock_div').innerHTML = formattedTime;
+        document.getElementById('clock_div').textContent  = formattedTime;
 
         switch (this.type) {
             case Song.CHORDS:
@@ -668,11 +668,11 @@ class Song {
         this.scriptActive = active;
         const dot = document.getElementById('scriptstatus_div');
         if (active) {
-            dot.innerHTML = "Running"
+            dot.textContent  = "Running"
             dot.classList.remove('inactive');
             dot.classList.add('active');       
         } else {
-            dot.innerHTML = "Click to run"
+            dot.textContent  = "Click to run"
             dot.classList.remove('active');
             dot.classList.add('inactive');    
         }
