@@ -48,9 +48,9 @@ class Bar {
 
     createBeats() {
         this.beats = [];
-        for (var b = 1; b <= this.beatDuration; b++)
+        for (let b = 1; b <= this.beatDuration; b++)
         {
-            var beat = new Beat(this);
+            const beat = new Beat(this);
             beat.number = b;
             this.beats.push(beat);
         }
@@ -64,10 +64,10 @@ class Bar {
         }
         if (val && !this.isPlaying) {
 
-            var row_box = document.getElementById('position_row').getBoundingClientRect()
-            var target_position = row_box.top + row_box.height / 2;
-            var positionInfo = this.div.getBoundingClientRect();
-            var top = positionInfo.top + positionInfo.height / 2;
+            const row_box = document.getElementById('position_row').getBoundingClientRect()
+            const target_position = row_box.top + row_box.height / 2;
+            const positionInfo = this.div.getBoundingClientRect();
+            const top = positionInfo.top + positionInfo.height / 2;
             this.song.translate(target_position - top);
         }
         this.isPlaying = val;
@@ -78,9 +78,9 @@ class Bar {
     }
 
     get width() {
-        var left = this.beats[0].div.getBoundingClientRect().left;
-        var right = this.beats[this.beats.length - 1].div.getBoundingClientRect().right;
-        var width = right - left;
+        const left = this.beats[0].div.getBoundingClientRect().left;
+        const right = this.beats[this.beats.length - 1].div.getBoundingClientRect().right;
+        const width = right - left;
         return width;
     }
 
