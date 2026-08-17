@@ -38,6 +38,8 @@ folder (or install via ReaPack, once available). The path is important.
 2. Open/refresh the web page on your tablet.
 3. The `arilia_Reachords Export.lua` action in REAPER should be running.
    You can do it manually from the action list or click on the dedicated button in the web interface
+4. You can open multiple projects/songs at the same time and the web page automatically shows the project you are working on
+   
 
 
 ## Project status
@@ -54,7 +56,10 @@ before a possible release on ReaPack.
 
 ## Known issue
 
-
+- The script compares the project paths and the number of changes made to determine whether
+  to rebuild the web page. If you are working on two or more projects that have not yet been saved, 
+  there is a remote possibility that the web
+  page will show the wrong song. Solution: name and save projects
 
 ## Author
 
