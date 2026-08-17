@@ -5,7 +5,7 @@
 
 .clock {
     position: absolute;
-    top: 1em;
+    top: 10px;
     right: 10em;
     padding: 1em;
     
@@ -13,6 +13,31 @@
     font-weight: bold;
     background-color:  rgba(100,100,100,.5);
     border-radius: 4px;
+}
+
+.top_bar {
+     position: fixed;
+     top: 0;
+     bottom: 0;
+     background-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+     width: 100%;
+     z-index: 20;
+     height: 15em;
+}
+
+.song_title {
+    
+    margin: auto;
+    width: 100%;
+    /*padding-top: .5em;*/
+    padding-bottom: 2em;
+    padding-left: 17%;
+    color: #bbb;
+    left: 0;
+    top: 10px;
+    position: absolute;
+    font-size: 3em;
+
 }
 
 .loader {
@@ -24,7 +49,7 @@
 
 .play_state {
     position: absolute;
-    top: 1em;
+    top: 10px;
     left: 4em;
     padding: 1em;
     
@@ -47,7 +72,7 @@
 
 .scriptstatus{
     position: absolute;
-    top: 1em;
+    top: 10px;
     right: 1em;
     padding: 1em;
     width: 6em;
@@ -188,7 +213,7 @@
     left: 0;
     bottom: 0;
     z-index: 30;
-    position: absolute;
+    position: fixed;
     font-size: 3em;
 
 }
@@ -232,24 +257,10 @@
     background-color: #222;
 }
 
-.song_title {
 
-    background-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
-    margin: auto;
-    width: 100%;
-    padding-top: .5em;
-    padding-bottom: 2em;
-    padding-left: 17%;
-    color: #bbb;
-    left: 0;
-    top: 0;
-    z-index: 20;
-    position: absolute;
-    font-size: 3em;
-
-}
 body {
     background-color: black;
     font-family: arial;
     color: #bbb;
+    margin: 0;
 }
