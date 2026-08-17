@@ -59,25 +59,21 @@ local function getChordsJson(tr)
         local item = reaper.GetTrackMediaItem(tr, i-1)
         local position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
         local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-
-
-        --- local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
-        --- local endTime = position + length
-
-
-        --- Converts time in beats
-        --- local duration = length * (bpm / 60)
-        
-      local bpmStart = reaper.TimeMap_GetDividedBpmAtTime(position)
         local endTime = position + length
-        local bpmEnd = reaper.TimeMap_GetDividedBpmAtTime(endTime)
+        local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
 
-        -- Converts time in beats, accounting for linear tempo changes
-        local bpmAvg = (bpmStart + bpmEnd) / 2
-        local duration = length * (bpmAvg / 60)
-
-
-
+        -- Converts time in beats, problem if BPM change Old code, it works 
+        -- if tempo does not change between chords. I leave it here for storical reasons 
+        -- local duration = length * (bpm / 60)
+        
+        
+        
+        -- Converts time in beats using Quartr Notes
+        local startQN = reaper.TimeMap2_timeToQN(0, position)
+        local endQN = reaper.TimeMap2_timeToQN(0, endTime)
+        local numerator, denominator, _ = reaper.TimeMap_GetTimeSigAtTime(0, position)
+        local duration = (endQN - startQN)* denominator / 4
+        
         local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
         
         local positionString = reaper.format_timestr_pos( position, '', 2 )
