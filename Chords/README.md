@@ -47,7 +47,9 @@ before a possible release on ReaPack.
 
 ### TODO
 
-- [ ] 
+- [X] Rewrite Lua script logic
+- [X] Review javascript code
+- [ ] Review HTML and CSS
 
 ## Known issue
 
