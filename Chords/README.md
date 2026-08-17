@@ -18,7 +18,7 @@ live show.
 
 ### Script
 
-Copy `scripts/arilia_Reachords Export.lua` into REAPER's `Scripts`
+Copy `scripts/arilia_Reachords Export.lua` and `arilia_start.lua` into REAPER's `Scripts`
 folder (or install via ReaPack, once available).
 
 ### Web interface
@@ -28,16 +28,16 @@ folder (or install via ReaPack, once available).
    `reachords/` subfolder.
 2. Make sure REAPER's web server is enabled.
 3. From a browser on the same local network (including a tablet), open the
-   web server address followed by `reachords/`.
-4. For the lyrics go to `reachords/lyrics.html`.
+   web server address followed by `reachords/chords`.
+4. For the lyrics go to `reachords/lyrics`.
 
 ## Usage
 
 1. Add items to a `Chords` track (and optionally a `Lyrics` track) in your
    project.
-2. Run the `arilia_Reachords Export.lua` action in REAPER (you can assign
-   it a keyboard shortcut, or trigger it whenever needed).
-3. Open/refresh the web page on your tablet.
+2. Open/refresh the web page on your tablet.
+3. The `arilia_Reachords Export.lua` action in REAPER should be running. You can do it manually from the action list or click on the dedicated button in the web interface
+
 
 ## Project status
 
