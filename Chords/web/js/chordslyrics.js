@@ -64,11 +64,11 @@ class Bar {
         }
         if (val && !this.isPlaying) {
 
-            const row_box = document.getElementById('position_row').getBoundingClientRect()
-            const target_position = row_box.top + row_box.height / 2;
+            const rowBox = document.getElementById('position_row').getBoundingClientRect()
+            const targetPosition = rowBox.top + rowBox.height / 2;
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
-            this.song.translate(target_position - top);
+            this.song.translate(targetPosition - top);
         }
         this.isPlaying = val;
     }
@@ -88,10 +88,10 @@ class Bar {
         this.div = document.createElement('div');
         this.div.classList.add('bar');
         this.div.style.setProperty("--beats", this.beats.length);
-        const time_div = document.createElement('div');
-        time_div.classList.add('time');
-        time_div.textContent  = this.number;
-        this.div.appendChild(time_div);
+        const timeDiv = document.createElement('div');
+        timeDiv.classList.add('time');
+        timeDiv.textContent  = this.number;
+        this.div.appendChild(timeDiv);
         if(this.row.div) this.row.div.append(this.div); else console.log(this);
         for (let beat of this.beats)
         {
@@ -257,9 +257,9 @@ class Lyric {
         if (val) {
 
             const div = this.div;
-            const row_box = document.getElementById('position_row').getBoundingClientRect();
+            const rowBox = document.getElementById('position_row').getBoundingClientRect();
             
-            const target_position = row_box.top + row_box.height / 2;
+            const targetPosition = rowBox.top + rowBox.height / 2;
             
             const positionInfo = this.div.getBoundingClientRect();
             
@@ -273,7 +273,7 @@ class Lyric {
             }
             const progress = height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
-            this.song.moveTo(target_position - top - progress);
+            this.song.moveTo(targetPosition - top - progress);
         }
         this.isPlaying = val;
 
@@ -392,15 +392,15 @@ class Song {
 
     translate(val) {
         this.translateY = val + this.translateY;
-        const table_style = this.table.style;
+        const tableStyle = this.table.style;
         if (this.instantPositioning) {
-            table_style.willChange = 'none';
+            tableStyle.willChange = 'none';
         } else {
             
-            table_style.willChange = 'transform';
-            table_style.transition = 'transform 400ms ease';
+            tableStyle.willChange = 'transform';
+            tableStyle.transition = 'transform 400ms ease';
         }
-        table_style.transform = "translateY(" + this.translateY + "px)";
+        tableStyle.transform = "translateY(" + this.translateY + "px)";
     }
 
 
@@ -408,8 +408,8 @@ class Song {
     {	
 //        console.log(val);
         this.translateY = val + this.translateY;
-        const table_style = this.table.style;
-        table_style.transform = "translateY(" + this.translateY + "px)";
+        const tableStyle = this.table.style;
+        tableStyle.transform = "translateY(" + this.translateY + "px)";
     }
     
     createTable() {
