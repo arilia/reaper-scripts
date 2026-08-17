@@ -208,14 +208,11 @@ local function getLyricsJson(tr)
       local item = reaper.GetTrackMediaItem(tr, i-1)
       local position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
       local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-      local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
       local endTime = position + length
       -- Converts time in beats
-      local duration = length * (bpm / 60)  -- likely useless, remove in future TODO and BPM too
       local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
       
       lyrjs = lyrjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
-      lyrjs = lyrjs .. ', "duration":'.. duration
       lyrjs = lyrjs .. ', "startTime":'.. position
       lyrjs = lyrjs .. ', "endTime":'.. endTime
       lyrjs = lyrjs .. '}'
