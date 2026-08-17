@@ -255,8 +255,6 @@ class Lyric {
             this.div.classList.remove('lyric_playing');
         }
         if (val) {
-
-            const div = this.div;
             const rowBox = document.getElementById('position_row').getBoundingClientRect();
             
             const targetPosition = rowBox.top + rowBox.height / 2;
@@ -333,10 +331,10 @@ class Song {
     instantPositioning = false;
     static LYRICS = "lyrics";
     static CHORDS = "chords";
+    static TIMELIMIT = 3; 
     
 
     constructor(type) {
-        this.id = Math.random();
         this.type = type;
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
         //wwr_req("GET/EXTSTATE/reachords/song");
@@ -553,7 +551,7 @@ class Song {
     }
 
     appendBar(bar) {
-        if (this.type === "lyrics") {
+        if (this.type === Song.LYRICS) {
             return;
         }
         bar.song = this;
@@ -563,7 +561,6 @@ class Song {
 
     appendMarker(marker) {
         this.markers[marker.barNumber] = marker;
-        ;
     }
 
     appendLyric(lyric) {
@@ -707,8 +704,8 @@ function wwr_onreply(results) {
                             song.setScriptActive(false);
                             break;
                         }
-                        const TIMELIMIT = 3; //TODO Move from here
-                        const isActive = Date.now()/1000 - status.timestamp <= TIMELIMIT;
+                        
+                        const isActive = Date.now()/1000 - status.timestamp <= Song.TIMELIMIT;
                         song.setScriptActive(isActive);
 
                         if (isActive) {
