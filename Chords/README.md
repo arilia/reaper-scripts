@@ -34,7 +34,7 @@ folder (or install via ReaPack, once available). The path is important.
 ## Usage
 
 1. Add items to a `Chords` track (and optionally a `Lyrics` track) in your
-   project.
+   project (case insensitive).
 2. Open/refresh the web page on your tablet.
 3. The `arilia_Reachords Export.lua` action in REAPER should be running.
    You can do it manually from the action list or click on the dedicated button in the web interface
@@ -53,6 +53,7 @@ before a possible release on ReaPack.
 - [X] review javascript code
 - [ ] review HTML and CSS
 - [ ] files naming
+- [ ] add an option for choosing different names for `Chords` and `Lyrics` tracks
 
 ## Known issue
 
@@ -60,6 +61,8 @@ before a possible release on ReaPack.
   to rebuild the web page. If you are working on two or more projects that have not yet been saved, 
   there is a remote possibility that the web
   page will show the wrong song. Solution: name and save projects
+- If a chords is between two or more bars and the second bar is on a new line the chord
+  is not split between the two lines but overflows the row above
 
 ## Author
 
