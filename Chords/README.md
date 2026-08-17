@@ -1,6 +1,6 @@
 # Reachords
 
-A web interface for REAPER that displays chords and lyrics in real time as a
+A web interface for REAPER that displays scrolling chords and lyrics in real time as a
 song is played — designed to be opened on a tablet during rehearsals or a
 live show.
 
