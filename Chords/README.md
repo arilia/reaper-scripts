@@ -39,6 +39,7 @@ folder (or install via ReaPack, once available). The path is important.
 3. The `arilia_Reachords Export.lua` action in REAPER should be running.
    You can do it manually from the action list or click on the dedicated button in the web interface
 4. You can open multiple projects/songs at the same time and the web page automatically shows the project you are working on
+5. You can set an offset in the Chords track to take into account network latency
    
 
 
@@ -63,6 +64,10 @@ before a possible release on ReaPack.
   page will show the wrong song. Solution: name and save projects
 - If a chords is between two or more bars and the second bar is on a new line the chord
   is not split between the two lines but overflows the row above
+- There could be a delay up to 2 seconds (less in average) between a play/pause action in Reaper and what happens in the web page.
+  This is the intended behavior. Once started the scrolling in the web page is always in sync with the transport.
+  Every two seconds the client ask Reaper webserver for the Transport position and the play state. In the meanwhile javascript interpolate
+  the information to estimate the actual position.
 
 ## Author
 
