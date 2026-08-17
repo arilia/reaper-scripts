@@ -66,7 +66,7 @@ before a possible release on ReaPack.
   is not split between the two lines but overflows the row above
 - There could be a delay up to 2 seconds (less in average) between a play/pause action in Reaper and what happens in the web page.
   This is the intended behavior. Once started the scrolling in the web page is always in sync with the transport.
-  Every two seconds the client ask Reaper webserver for the Transport position and the play state. In the meanwhile javascript interpolate
+  Every two seconds the client asks Reaper webserver for the Transport position and the play state. In the meanwhile javascript interpolate
   the information to estimate the actual position.
 
 ## Author
