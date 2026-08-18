@@ -7,7 +7,8 @@ the folder structure below.
 
 ## Projects
 
-- **[Chords](Chords/)** — Web interface that displays chords and lyrics in
+- **[Web Interfaces](Web Interfaces/)** 
+  - **reachords** a web interface that displays chords and lyrics in
   real time as a song plays in REAPER, synced with the playhead. Designed
   for use on a tablet during rehearsals or live shows.
 
@@ -16,10 +17,10 @@ the folder structure below.
 ```
 reaper-script/
 ├── README.md              (this file)
-├── Chords/
-│   ├── README.md          (project-specific documentation)
-│   ├── scripts/           (Lua scripts, go in REAPER's Scripts folder)
-│   └── web/                (HTML/CSS/JS, go in REAPER's web server folder)
+├── Web Interfaces/
+|   |                      (Lua scripts)
+│   ├── README.md          (folder-specific documentation)
+│   └── reachords/         (HTML/CSS/JS, go in REAPER's web server folder)
 └── (future projects follow the same pattern)
 ```
 
