@@ -2,10 +2,7 @@
 
 A collection of personal REAPER scripts and web interfaces.
 
-Each subfolder is a self-contained project with its own README, following
-the folder structure below.
-
-## Projects
+## Folders
 
 - **[Web Interfaces](https://github.com/arilia/reaper-scripts/tree/main/Web%20Interfaces)** 
   - **reachords** a web interface that displays chords and lyrics in
