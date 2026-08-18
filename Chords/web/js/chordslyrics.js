@@ -311,7 +311,7 @@ class Song {
     chords = [];
     lyrics = [];
     rows = [];
-    songReady = false;
+    songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
     json = "";
     markers = [];
     maxBeats = 16;
@@ -382,8 +382,11 @@ class Song {
             
         }
         this.checkPlaying(position);
+        // Skip the animated transition for the very first positioning after a
+        // song rebuild. Without this, the page would visibly scroll from the top
+        // down to the current playhead position before the user sees it settled.
         this.instantPositioning = false;
-        if (this.songReady) {          // <-- nuovo: non rivelare se stai ancora aspettando
+        if (this.songReady) {          
             this.hideSong(false);
         }
     }
@@ -704,7 +707,8 @@ function wwr_onreply(results) {
                             song.setScriptActive(false);
                             break;
                         }
-                        
+                        // Comparing server timestamps
+                        // if they differ it means the script is not running
                         const isActive = status.timestamp != song.lastTimestamp;
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
@@ -712,6 +716,9 @@ function wwr_onreply(results) {
                         if (isActive) {
                             if(status.version !== song.version || status.projectid !== song.id)
                             {
+                                // Hide immediately on detecting a change, before the "song" data has
+                                // even been fetched — avoids a brief window where the old song is shown
+                                // with a playhead position that already belongs to the new one.
                                 song.hideSong(true);
                                 song.songReady = false; 
                                 song.version = status.version;
