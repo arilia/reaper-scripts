@@ -26,7 +26,7 @@ jobs:
         run: gem install reapack-index
 
       - name: Generate ReaPack index
-        run: reapack-index --name "arilia ReaScripts"
+        run: reapack-index --name "arilia ReaScripts" --commit  
       
       - name: Upload index
         uses: actions/upload-artifact@v4
