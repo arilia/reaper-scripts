@@ -7,7 +7,7 @@
 --   Initial release
 
 local workerSectionID = 0  -- usually 0 = Main
-local workerCmdID = reaper.NamedCommandLookup("__RS49fce34133949e0d9fa2711e868490836c2fa8cb")
+local workerCmdID = reaper.NamedCommandLookup("_RS49fce34133949e0d9fa2711e868490836c2fa8cb")
 
 local workerState = reaper.GetToggleCommandStateEx(workerSectionID, workerCmdID)
 
