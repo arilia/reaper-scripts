@@ -25,6 +25,11 @@ jobs:
       - name: Install reapack-index
         run: gem install reapack-index
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    
       - name: Generate ReaPack index
         run: reapack-index --name "arilia ReaScripts" --commit  
       
