@@ -34,4 +34,4 @@ package browser.
 
 ## License
 
-TBD.
+GPL-3.0 license
