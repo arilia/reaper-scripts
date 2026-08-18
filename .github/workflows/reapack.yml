@@ -36,13 +36,14 @@ jobs:
       - name: Generate ReaPack index
         run: reapack-index --name "Arilia Scripts" --commit
 
-      - name: Commit updated index
+      - name: Commit and push index
         if: github.event_name == 'push'
         run: |
           if git diff --quiet index.xml; then
             echo "index.xml is already up to date"
-          else
-            git add index.xml
-            git commit -m "Update ReaPack index"
-            git push
+            exit 0
           fi
+
+          git add index.xml
+          git commit -m "Update ReaPack index"
+          git push
