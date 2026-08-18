@@ -329,9 +329,9 @@ class Song {
     project = "Song";
     complete = false;
     instantPositioning = false;
+    lastTimestamp = null;
     static LYRICS = "lyrics";
     static CHORDS = "chords";
-    static TIMELIMIT = 3; 
     
 
     constructor(type) {
@@ -705,7 +705,8 @@ function wwr_onreply(results) {
                             break;
                         }
                         
-                        const isActive = Date.now()/1000 - status.timestamp <= Song.TIMELIMIT;
+                        const isActive = status.timestamp != song.lastTimestamp;
+                        song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
 
                         if (isActive) {
