@@ -1,12 +1,13 @@
 -- @description Reachords
 -- @author arilia
--- @version 1.0.1
+-- @version 1.0.2
 -- @link https://github.com/arilia/reaper-scripts
 -- @license GPL-3.0-or-later
 -- @changelog
 --   Initial release
+--   Change ID
 -- @provides
---   chords.html 
---   lyrics.html 
---   js/chordslyrics.js 
---   css/chordsandlyrics.css 
+--   chords.html > reachords/chords.html
+--   lyrics.html > reachords/lyrics.html
+--   js/chordslyrics.js > reachords/js/chordslyrics.js
+--   css/chordsandlyrics.css > reachords/css/chordsandlyrics.css
