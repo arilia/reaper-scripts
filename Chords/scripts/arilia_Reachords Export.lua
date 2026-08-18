@@ -1,3 +1,6 @@
+-- Option 1: auto-terminate this instance if the action is relaunched while
+-- already running (prevents duplicate defer loops if triggered again,
+-- e.g. from the web page). Option 4: turn the toolbar toggle button on.
 reaper.set_action_options(1|4)
 reaper.ClearConsole()
 
@@ -263,8 +266,10 @@ local function loop()
     if now - lastCheckTime >= 1 then
         lastCheckTime = now
 
-        -- retrieve the projectid from the project path. 
-        -- if no projectid (new project) create a GUID and save it to the ProjExtState
+        -- Use the saved project's file path as its id whenever possible: it's a
+        -- pure read, so it never marks the project as modified. TODO: fall back to
+        -- a generated GUID (stored via ProjExtState) for unsaved projects, which
+        -- are already "dirty" anyway, so writing to them costs nothing extra.
         local _, projectPath = reaper.EnumProjects(-1)
         local projectId
         
@@ -284,7 +289,10 @@ local function loop()
 
         local changeCount = reaper.GetProjectStateChangeCount(0)
 
-        -- Build the json only if the project is changed
+        -- Only rebuild the JSON when something in the project actually changed
+        -- (e.g. chords, lyrics, markers, measures) — GetProjectStateChangeCount
+        -- increments on ANY project edit, including unrelated ones like adjusting
+        -- a fader, so this avoids needless rebuilds.
         if changeCount ~= lastChangeCount then
             lastChangeCount = changeCount
 
