@@ -1,3 +1,12 @@
+-- @description Reachords Export
+-- @author arilia
+-- @version 1.0.0
+-- @link https://github.com/arilia/reaper-scripts
+-- @license GPL-3.0-or-later
+-- @changelog
+--   Initial release
+
+
 -- Option 1: auto-terminate this instance if the action is relaunched while
 -- already running (prevents duplicate defer loops if triggered again,
 -- e.g. from the web page). Option 4: turn the toolbar toggle button on.
