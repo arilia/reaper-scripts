@@ -7,7 +7,7 @@ the folder structure below.
 
 ## Projects
 
-- **[Web Interfaces](Web Interfaces/)** 
+- **[Web Interfaces](https://github.com/arilia/reaper-scripts/tree/main/Web%20Interfaces)** 
   - **reachords** a web interface that displays chords and lyrics in
   real time as a song plays in REAPER, synced with the playhead. Designed
   for use on a tablet during rehearsals or live shows.
