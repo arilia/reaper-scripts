@@ -31,7 +31,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
     
       - name: Generate ReaPack index
-        run: reapack-index --name "arilia ReaScripts" --commit  
+        run: reapack-index --name "Arilia Scripts" --commit  
       
       - name: Upload index
         uses: actions/upload-artifact@v4

@@ -1,4 +1,4 @@
--- @description arilia Reachords
+-- @description Reachords
 -- @author arilia
 -- @version 1.0.0
 -- @link https://github.com/arilia/reaper-scripts
@@ -6,7 +6,7 @@
 -- @changelog
 --   Initial release
 -- @provides
---   chords.html > reachords/chords.html
---   lyrics.html > reachords/lyrics.html
---   js/chordslyrics.js > reachords/js/chordslyrics.js
---   css/chordsandlyrics.css > reachords/css/chordsandlyrics.css
+--   chords.html 
+--   lyrics.html 
+--   js/chordslyrics.js 
+--   css/chordsandlyrics.css 
