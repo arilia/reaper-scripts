@@ -5,3 +5,8 @@
 -- @license GPL-3.0-or-later
 -- @changelog
 --   Initial release
+-- @provides
+--   chords.html
+--   lyrics.html
+--   js/chordslyrics.js
+--   css/chordsandlyrics.css
