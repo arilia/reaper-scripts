@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="arilia ReaScripts" commit="cd5f99f86829ca21d0cf4c0399c710816d7b3b15">
+<index version="1" name="Arilia Scripts" commit="18506d069f598b8ce6fa2598b5b71fb2fe6fdd08">
   <category name="Web Interfaces">
     <reapack name="arilia_Reachords Export.lua" type="script" desc="Reachords Export">
       <metadata>
@@ -21,7 +21,7 @@
     </reapack>
   </category>
   <category name="Web Interfaces/reachords">
-    <reapack name="Reachords.www" type="webinterface" desc="arilia Reachords">
+    <reapack name="Reachords.www" type="webinterface" desc="Reachords">
       <metadata>
         <link rel="website">https://github.com/arilia/reaper-scripts</link>
       </metadata>
