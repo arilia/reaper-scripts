@@ -5,6 +5,8 @@
 -- @license GPL-3.0-or-later
 -- @changelog
 --   Initial release
+--   Change ID
+
 
 local workerSectionID = 0  -- usually 0 = Main
 local workerCmdID = reaper.NamedCommandLookup("_RS49fce34133949e0d9fa2711e868490836c2fa8cb")
