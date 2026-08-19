@@ -291,15 +291,21 @@ class Lyric {
 
     checkPlaying(position) {
         if (position >= this.startTime && position < this.endTime) {
-
             this.playing = true;
 
         } else {
-
             this.playing = false;
 
         }
     }
+    
+    checkPlayingChords(position) {
+        if (position >= this.startTime && position < this.endTime) {
+            const lyrics_banner = document.getElementById("lyrics_banner");
+            lyrics_banner.textContent = this.text;
+        } 
+    }
+    
 }
 
 class Song {
@@ -600,7 +606,7 @@ class Song {
 
     appendLyric(lyric) {
         if (this.type === Song.CHORDS) {
-            return;
+            //return;
         }
         lyric.song = this;
         if(this.lastInsertedLyric) {
@@ -633,6 +639,9 @@ class Song {
                 }
                 for (let bar of this.bars) {
                     bar.checkPlaying(position);
+                }
+                for (let lyric of this.lyrics) {
+                    lyric.checkPlayingChords(position);
                 }
                 break;
             case Song.LYRICS:
