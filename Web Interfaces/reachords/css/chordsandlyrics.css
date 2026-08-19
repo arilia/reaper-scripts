@@ -198,6 +198,8 @@
     z-index: 10;
     margin-top: 2px;
     border-radius: 4px;
+    transition-property: color;
+    transition-duration: 1s;
 }
 
 .bottom_curtain {
@@ -254,7 +256,11 @@
 }
 
 .lyric_playing {
-    background-color: #222;
+    /*background-color: #222;*/
+    font-weight: bold;
+    color: blue;
+    transition-property: color;
+    transition-duration: 2s;
 }
 
 

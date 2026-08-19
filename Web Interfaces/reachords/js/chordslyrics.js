@@ -290,7 +290,6 @@ class Lyric {
     }
 
     checkPlaying(position) {
-
         if (position >= this.startTime && position < this.endTime) {
 
             this.playing = true;
@@ -317,7 +316,8 @@ class Song {
     maxBeats = 16;
     barsPerRow = 4;
     translateY = 0;
-    offset = 0;
+    internalChordsOffset = 0;
+    internallyricsOffset = 0;
     lastRecordedPosition = 0;
     lastRecordedTime = 0;
     calculatedPosition = 0;
@@ -332,6 +332,7 @@ class Song {
     lastTimestamp = null;
     static LYRICS = "lyrics";
     static CHORDS = "chords";
+    static LYRICSDELTA = 0.5;
     
 
     constructor(type) {
@@ -343,9 +344,40 @@ class Song {
     }
 
     
+    set chordsOffset(val) {
+        this.internallyricsOffset = val;
+    }
+    
+    get chordsOffset() {
+        if(this.type === Song.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
+        {
+            return 0;
+        }
+        return this.internallyricsOffset;
+    }
+    
+    set lyricsOffset(val) {
+        this.internallyricsOffset = val;
+    }
+    
+    get lyricsOffset() {
+        if(this.type === Song.CHORDS || this.playState === 0 || this.playState === 2 || this.playState === 6)
+        {
+            return 0;
+        }
+        return this.internallyricsOffset + Song.LYRICSDELTA;
+    }
+    
     set recordedPosition(position) {
         this.lastRecordedTime = Date.now();
-        this.calculatedPosition = position = this.lastRecordedPosition = position + this.offset;
+//        let lyrOffset = 0;
+//        if(this.type==Song.LYRICS) {
+//            console.log(this.calculatedPosition );
+//            lyrOffset = .5;
+//             console.log(this.calculatedPosition );
+//        }
+        this.calculatedPosition = position = this.lastRecordedPosition = position + this.chordsOffset + this.lyricsOffset; 
+        
     }
 
     calculatePosition() {
@@ -583,7 +615,7 @@ class Song {
             return;
         }
         let formattedTime = "";
-        const time = (position - this.offset + this.globalOffset);
+        const time = (position - this.chordsOffset - this.lyricsOffset + this.globalOffset);
         if(time)
         {
             formattedTime = new Date(Math.abs(time) * 1000).toISOString().slice(14, 22);
@@ -615,7 +647,8 @@ class Song {
     parseJson() {
         const json = this.json;
         this.project = json.title;
-        this.offset = json.offset * 1;
+        this.chordsOffset = json.chordsOffset * 1;
+        this.lyricsOffset = json.lyricsOffset * 1;
         this.globalOffset = json.globalOffset * 1;
         const markers = json.markers;
         for (let j in markers) {
@@ -709,7 +742,7 @@ function wwr_onreply(results) {
                         }
                         // Comparing server timestamps
                         // if they differ it means the script is not running
-                        const isActive = status.timestamp != song.lastTimestamp;
+                        const isActive = status.timestamp !== song.lastTimestamp;
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
 

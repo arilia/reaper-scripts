@@ -17,7 +17,8 @@ reaper.ClearConsole()
 local lastChangeCount = -1 
 
 local version = 0
-local offset = 0
+local chordsOffset = 0
+local lyricsOffset = 0
 local lastCheckTime = 0
 local globalOffset = 0
 local projectName = ""
@@ -66,7 +67,7 @@ end
 local function getChordsJson(tr) 
   local chordjs = "{"
   if tr then
-    offset =  reaper.GetMediaTrackInfo_Value(tr, "D_PLAY_OFFSET")
+    chordsOffset =  reaper.GetMediaTrackInfo_Value(tr, "D_PLAY_OFFSET")
     local itemCount = reaper.CountTrackMediaItems(tr)
     for i=1, itemCount do
         local item = reaper.GetTrackMediaItem(tr, i-1)
@@ -209,7 +210,7 @@ end
 
 local function getLyricsJson(tr)
   -- Iterates all the items in the track and create a JSON objet with the list of the chords
-  
+  lyricsOffset =  reaper.GetMediaTrackInfo_Value(tr, "D_PLAY_OFFSET")
   local lyrjs = "{"
   if tr then
     local itemCount = reaper.CountTrackMediaItems(tr)
@@ -255,7 +256,8 @@ local function getSongJson()
   json = json .. ', "bars":' .. measjs
   json = json .. ', "markers":' .. markjs
   json = json .. ', "title":"' .. jsonEscape(projectName) .. '"'
-  json = json .. ', "offset":' .. offset 
+  json = json .. ', "chordsOffset":' .. chordsOffset 
+  json = json .. ', "lyricsOffset":' .. lyricsOffset 
   json = json .. ', "globalOffset":' .. globalOffset
   json = json .. ', "position":' .. getTransport()
   json = json .. ', "transportStatus":' .. reaper.GetPlayState()
