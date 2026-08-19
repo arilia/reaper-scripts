@@ -25,6 +25,19 @@
      height: 15em;
 }
 
+
+.lyrics_banner {
+    position: fixed;
+    color: blue;
+    font-size: 2em;
+    font-weight: bold;
+    top: 2em;
+    background: black;
+    text-align: center;
+    width: 100%;
+}
+
+
 .song_title {
     
     margin: auto;
@@ -116,6 +129,7 @@
     border-bottom: 4px solid black;
 
 }
+
 
 .beat {
     box-sizing: border-box;
