@@ -14,6 +14,6 @@ local workerCmdID = reaper.NamedCommandLookup("_RS49fce34133949e0d9fa2711e868490
 local workerState = reaper.GetToggleCommandStateEx(workerSectionID, workerCmdID)
 
 if workerState ~= 1 then
-    -- non risulta attivo: avvialo
+    -- if not active, start it
     reaper.Main_OnCommand(workerCmdID, 0)
 end
