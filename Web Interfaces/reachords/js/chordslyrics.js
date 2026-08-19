@@ -282,7 +282,7 @@ class Lyric {
         this.div = document.createElement('div');
         this.div.classList.add('lyric');
         this.div.textContent  = this.text;
-        if (this.playing)
+        if (this.isPlaying)
         {
             this.div.classList.add('playing')
         }
@@ -360,23 +360,23 @@ class Song {
             case 0:
                 
                 playStateDiv.textContent  = "Stop";
-                playStateDiv.classList = "play_state stop"
+                playStateDiv.className  = "play_state stop"
                 break;
             case 1:
                 playStateDiv.textContent  = "Play";
-                playStateDiv.classList = "play_state play"
+                playStateDiv.className  = "play_state play"
                 break;
             case 2:
                 playStateDiv.textContent  = "Pause";
-                playStateDiv.classList = "play_state stop"
+                playStateDiv.className  = "play_state stop"
                 break;
             case 5:
                 playStateDiv.textContent  = "Rec";
-                playStateDiv.classList = "play_state rec"
+                playStateDiv.className  = "play_state rec"
                 break;
             case 6:
                 playStateDiv.textContent  = "Rec Pause";
-                playStateDiv.classList = "play_state rec"
+                playStateDiv.className  = "play_state rec"
                 break;
             
             
@@ -651,7 +651,7 @@ class Song {
         {
             const l = lyrics[j];
             const lyric = new Lyric(l);
-            song.appendLyric(lyric);
+            this.appendLyric(lyric);
         }
 
         const chords = json.chords;
