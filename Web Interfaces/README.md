@@ -55,9 +55,11 @@ before a possible release on ReaPack.
 - [X] rethink Lua script logic
 - [X] review javascript code
 - [ ] review HTML and CSS
-- [ ] files naming
+- [X] files naming
 - [ ] add an option for choosing different names for `Chords` and `Lyrics`
       tracks
+- [ ] find the offset automatically and adjust accordingly
+- [ ] do not loop every element every cicle to find their dimension      
 
 ## Known issue
 
