@@ -548,10 +548,12 @@ class Song {
     }
 
     render() {
+        
         document.getElementById('song_title').textContent  = this.project;
         if (this.type === Song.LYRICS) {
             document.title = this.project + " - Lyrics";
         } else {
+            document.getElementById('lyrics_banner').textContent  = "";
             document.title = this.project + " - Chords";
         }
         this.table = document.createElement('div');
