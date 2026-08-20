@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Arilia Scripts" commit="f3abf07d881da5caec702c35c0c35676c0f6c0f9">
+<index version="1" name="Arilia Scripts" commit="e6f43d687a596d2760dec827c5e712414434bf9f">
   <category name="Web Interfaces">
     <reapack name="arilia_Reachords Export.lua" type="script" desc="Reachords Export">
       <metadata>
@@ -13,6 +13,11 @@
         <changelog><![CDATA[Initial release]]></changelog>
         <source main="main">https://github.com/arilia/reaper-scripts/raw/5b261a038de9b4b67a0aaf44d67a8dc4063c1bd4/Web%20Interfaces/arilia_Reachords%20Export.lua</source>
       </version>
+      <version name="1.0.3" author="arilia" time="2026-08-20T16:44:51Z">
+        <changelog><![CDATA[Initial release
+Change ID]]></changelog>
+        <source main="main">https://github.com/arilia/reaper-scripts/raw/e6f43d687a596d2760dec827c5e712414434bf9f/Web%20Interfaces/arilia_Reachords%20Export.lua</source>
+      </version>
     </reapack>
     <reapack name="arilia_start.lua" type="script" desc="Reachords Start">
       <metadata>
@@ -25,6 +30,11 @@
       <version name="1.0.1" author="arilia" time="2026-08-18T20:13:21Z">
         <changelog><![CDATA[Initial release]]></changelog>
         <source main="main">https://github.com/arilia/reaper-scripts/raw/5b261a038de9b4b67a0aaf44d67a8dc4063c1bd4/Web%20Interfaces/arilia_start.lua</source>
+      </version>
+      <version name="1.0.3" author="arilia" time="2026-08-20T16:44:51Z">
+        <changelog><![CDATA[Initial release
+Change ID]]></changelog>
+        <source main="main">https://github.com/arilia/reaper-scripts/raw/e6f43d687a596d2760dec827c5e712414434bf9f/Web%20Interfaces/arilia_start.lua</source>
       </version>
     </reapack>
   </category>
@@ -54,6 +64,14 @@ Change ID]]></changelog>
         <source file="reachords/lyrics.html">https://github.com/arilia/reaper-scripts/raw/f3abf07d881da5caec702c35c0c35676c0f6c0f9/Web%20Interfaces/reachords/lyrics.html</source>
         <source file="reachords/js/chordslyrics.js">https://github.com/arilia/reaper-scripts/raw/f3abf07d881da5caec702c35c0c35676c0f6c0f9/Web%20Interfaces/reachords/js/chordslyrics.js</source>
         <source file="reachords/css/chordsandlyrics.css">https://github.com/arilia/reaper-scripts/raw/f3abf07d881da5caec702c35c0c35676c0f6c0f9/Web%20Interfaces/reachords/css/chordsandlyrics.css</source>
+      </version>
+      <version name="1.0.3" author="arilia" time="2026-08-20T16:41:12Z">
+        <changelog><![CDATA[Initial release
+Change ID]]></changelog>
+        <source file="reachords/chords.html">https://github.com/arilia/reaper-scripts/raw/171316943c47d494b74bdf6a160cabc2e1b31346/Web%20Interfaces/reachords/chords.html</source>
+        <source file="reachords/lyrics.html">https://github.com/arilia/reaper-scripts/raw/171316943c47d494b74bdf6a160cabc2e1b31346/Web%20Interfaces/reachords/lyrics.html</source>
+        <source file="reachords/js/chordslyrics.js">https://github.com/arilia/reaper-scripts/raw/171316943c47d494b74bdf6a160cabc2e1b31346/Web%20Interfaces/reachords/js/chordslyrics.js</source>
+        <source file="reachords/css/chordsandlyrics.css">https://github.com/arilia/reaper-scripts/raw/171316943c47d494b74bdf6a160cabc2e1b31346/Web%20Interfaces/reachords/css/chordsandlyrics.css</source>
       </version>
     </reapack>
   </category>
