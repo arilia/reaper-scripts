@@ -1,4 +1,4 @@
-# reaper-script
+# Arilia Script
 
 A collection of personal REAPER scripts and web interfaces.
 
