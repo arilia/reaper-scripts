@@ -80,19 +80,18 @@ body:has(.bottom_bar) .bottom_curtain {
 
 
 .song_title {
-    
-    margin: auto;
-    width: 100%;
-    /*padding-top: .5em;*/
-    padding-bottom: 2em;
-    padding-left: 17%;
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
     color: #bbb;
-    left: 0;
-    top: 10px;
-    position: absolute;
-    font-size: 3em;
-
+    font-size: 1.6em;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+
 
 .loader {
     position: absolute;
@@ -101,47 +100,41 @@ body:has(.bottom_bar) .bottom_curtain {
     left: 50%;
 }
 
-.play_state {
-    position: absolute;
-    top: 10px;
-    left: 4em;
-    padding: 1em;
-    
-    z-index: 30;
+.play_state,
+ .scriptstatus{
+    flex: 0 0 8em;
+    width: 8em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: .6em 0;
+    border-radius: 6px;
     font-weight: bold;
-    border-radius: 4px;
-}
-
-.stop {
-     background-color:  rgba(100,100,100,.5);   
-}
-
-.play {
-    background-color:  rgba(100,255,100,.5);
-}
-
-.rec {
-    background-color:  rgba(255,100,100,.5);
+    color: #ddd;
 }
 
 .scriptstatus{
-    position: absolute;
-    top: 10px;
-    right: 1em;
-    padding: 1em;
-    width: 6em;
-    z-index: 30;
-    font-weight: normal;
-    background-color:  rgba(100,100,100,.5);
-    border-radius: 4px;
+    cursor: pointer;
 }
 
-.inactive {
-    background-color:  rgba(100, 0, 0, .5);
+.play_state.stop {
+     background-color: hsl(0, 0%, 40%);
 }
 
-.active {
-    background-color:  rgba(0, 100, 0, .5);
+.play_state.play {
+    background-color:  hsl(120, 25%, 35%);
+}
+
+.play_state.rec {
+    background-color: hsl(0, 30%, 40%);
+}
+
+
+.scriptstatus.inactive {
+    background-color:  hsl(0, 30%, 40%);
+}
+
+.scriptstatus.active {
+    background-color:  hsl(120, 25%, 35%);
 }
 
 .chords_table {
@@ -206,6 +199,10 @@ body:has(.bottom_bar) .bottom_curtain {
     border-bottom: 4px solid darkorange;
 }
 
+.lyric_row {
+    color: #fff;
+}
+
 .position_row {
     background-color: rgba(100, 100, 100, .5);
     box-sizing: border-box;
@@ -234,6 +231,24 @@ body:has(.bottom_bar) .bottom_curtain {
     z-index: 20;
 }
 
+.bar_adjust {
+    flex: 0 0 2.5em;
+    width: 2.5em;
+    height: 2.5em;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background-color: hsl(0, 0%, 30%);
+    color: #ddd;
+    font-weight: bold;
+    font-size: 1.4em;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
 
 @media (min-width: 768px) and (max-width: 1024px) {
     .song {
