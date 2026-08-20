@@ -11,38 +11,47 @@ rehearsals or a live show.
    track works the same way for song lyrics.
 2. The script `scripts/arilia_Reachords Export.lua` reads the project and
    exports chords, lyrics, markers, and measures as JSON via `ExtState`.
-3. The web page (`web/`) reads this data through REAPER's built-in web
+3. The web page reads this data through REAPER's built-in web
    server and displays it, scrolling in sync with the playhead.
 
 ## Installation
 
-### Script
+### Via reaPack 
+- Add the `https://raw.githubusercontent.com/arilia/reaper-scripts/refs/heads/main/index.xml` 
+  repo to your repositories list.
+- Install the `Arilia Scripts` package.
+
+### Manual
+
+**Scripts**
 
 Copy `scripts/arilia_Reachords Export.lua` and `arilia_start.lua` into
-REAPER's `Scripts/arilia-scripts` folder (or install via ReaPack, once
-available). The path is important.
+REAPER's `Scripts/Arilia Scripts` folder 
 
-### Web interface
+**Web interface**
 
-1. Copy the `web/` folder into REAPER's built-in web server directory (set
-   in *Options > Preferences > Control/OSC/Web*), for example as a
-   `reachords/` subfolder.
-2. Make sure REAPER's web server is enabled.
-3. From a browser on the same local network (including a tablet), open the
+Copy the `reachords/` folder into REAPER's built-in web server directory (set
+in *Options > Preferences > Control/OSC/Web*),  subfolder.
+
+Make sure REAPER's web server is enabled.
+2. From a browser on the same local network (including a tablet), open the
    web server address followed by `reachords/chords`.
 4. For lyrics, go to `reachords/lyrics`.
 
+
 ## Usage
 
-1. Add items to a `Chords` track (and optionally a `Lyrics` track) in your
+1. Make sure REAPER's web server is enabled.
+2. Add items to a `Chords` track (and optionally a `Lyrics` track) in your
    project (track names are case insensitive).
-2. Open/refresh the web page on your tablet.
-3. The `arilia_Reachords Export.lua` action in REAPER should be running.
+3. From a browser on the same local network, open the
+   web server address followed by `reachords/chords` or `reachords/lyrics`
+4. The `arilia_Reachords Export.lua` action in REAPER should be running.
    You can start it manually from the action list, or by clicking the
    dedicated button in the web interface.
-4. You can have multiple projects/songs open at the same time, and the web
+5. You can have multiple projects/songs open at the same time, and the web
    page automatically shows the project you're currently working on.
-5. You can set an offset on the `Chords` track to compensate for network
+6. You can set an offset on the `Chords` or `Lyrics` track to compensate for network
    latency.
 
 ## Project status
@@ -59,7 +68,8 @@ before a possible release on ReaPack.
 - [ ] add an option for choosing different names for `Chords` and `Lyrics`
       tracks
 - [ ] find the offset automatically and adjust accordingly
-- [ ] do not loop every element every cicle to find their dimension      
+- [ ] do not loop every element every cicle to find their dimension
+- [ ] dynamic transport polling rate based on playState
 
 ## Known issue
 
