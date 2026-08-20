@@ -77,10 +77,3 @@ before a possible release on ReaPack.
   the meantime, javascript interpolates the information to estimate the
   actual position.
 
-## Author
-
-arilia
-
-## License
-
-TBD.
