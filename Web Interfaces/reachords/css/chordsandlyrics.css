@@ -38,7 +38,7 @@
     top: 4.5em;
     left: 0;
     right: 0;
-    height: 3em;
+    height: 6em;
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     z-index: 20;
     pointer-events: none;
@@ -50,8 +50,8 @@
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 4.5em;
-    height: 3em;
+    bottom: 0;
+    height: 10em;
     background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     z-index: 20;
     pointer-events: none;
@@ -123,6 +123,7 @@ body:has(.bottom_bar) .bottom_curtain {
 }
 
 .scriptstatus{
+    
     cursor: pointer;
 }
 
