@@ -351,7 +351,7 @@ class Song {
 
     
     set chordsOffset(val) {
-        this.internallyricsOffset = val;
+        this.internalChordsOffset = val;
     }
     
     get chordsOffset() {
@@ -359,7 +359,7 @@ class Song {
         {
             return 0;
         }
-        return this.internallyricsOffset;
+        return this.internalChordsOffset;
     }
     
     set lyricsOffset(val) {
