@@ -4,18 +4,22 @@
 }
 
 .clock {
-    position: absolute;
-    top: 10px;
-    right: 10em;
-    padding: 1em;
-    
-    z-index: 30;
+    flex: 0 0 7em;
+    width: 7em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: .7em 0;
+    border-radius: 6px;
+    background-color: hsl(0, 0%, 30%);
+    font-size: 1.3em;
     font-weight: bold;
-    background-color:  rgba(100,100,100,.5);
-    border-radius: 4px;
+    color: #eee;
+        margin-left: 1em;
+    margin-right: 1em;
 }
 
 .top_bar {
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
@@ -26,6 +30,7 @@
     width: 100%;
     z-index: 20;
     height: 4.5em;
+
 }
 
 .top_curtain {
@@ -43,9 +48,10 @@
 
 .bottom_curtain {
     position: fixed;
-    top: 0;
+    left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 4.5em;
+    height: 3em;
     background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     z-index: 20;
     pointer-events: none;
@@ -69,11 +75,11 @@ body:has(.bottom_bar) .bottom_curtain {
 
 
 .lyrics_banner {
-    position: fixed;
+    /*position: fixed;*/
     color: blue;
     font-size: 2em;
     font-weight: bold;
-    top: 2em;
+    /*top: 2em;*/
     background: black;
     text-align: center;
     width: 100%;
@@ -111,6 +117,9 @@ body:has(.bottom_bar) .bottom_curtain {
     border-radius: 6px;
     font-weight: bold;
     color: #ddd;
+    height: 2.5em;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 .scriptstatus{
@@ -244,11 +253,13 @@ body:has(.bottom_bar) .bottom_curtain {
     background-color: hsl(0, 0%, 30%);
     color: #ddd;
     font-weight: bold;
-    font-size: 1.4em;
+    /*font-size: 1.4em;*/
     line-height: 1;
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    margin-left: .1em;
+    margin-right: .1em;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
