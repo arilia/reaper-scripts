@@ -33,9 +33,27 @@
 
 }
 
-.top_curtain {
+.title_bar {
+    display: flex;
     position: fixed;
     top: 4.5em;
+    left: 0;
+    right: 0;
+    
+    /*align-items: flex-start;*/
+    padding-left: 1em;
+    padding-top: .6em; 
+    padding-bottom: .6em; 
+    background: #000;
+    width: 100%;
+    z-index: 20;
+    height: 2em;
+
+}
+
+.top_curtain {
+    position: fixed;
+    top: 7.5em;
     left: 0;
     right: 0;
     height: 6em;
@@ -223,10 +241,10 @@ body:has(.bottom_bar) .bottom_curtain {
     display: inline-block;
     font-weight: bold;
     position: absolute;
-    width: 7%;
+    width: 95%;
     height: .5em;
     top: 40%;
-    left: 5%;
+    left: 2.5%;
 
 }
 

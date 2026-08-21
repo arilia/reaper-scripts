@@ -292,18 +292,22 @@ class Lyric {
     checkPlaying(position) {
         if (position >= this.startTime && position < this.endTime) {
             this.playing = true;
+            
 
         } else {
             this.playing = false;
 
         }
+        return this.isPlaying;
     }
     
     checkPlayingChords(position) {
         if (position >= this.startTime && position < this.endTime) {
             const lyrics_banner = document.getElementById("lyrics_banner");
             lyrics_banner.textContent = this.text;
+            return true;
         } 
+        return false;
     }
     
 }
@@ -636,6 +640,7 @@ class Song {
 
         switch (this.type) {
             case Song.CHORDS:
+                let foundLyric = false;
                 for (let chord of this.chords) {
                     chord.checkPlaying(position);
                 }
@@ -643,10 +648,16 @@ class Song {
                     bar.checkPlaying(position);
                 }
                 for (let lyric of this.lyrics) {
-                    lyric.checkPlayingChords(position);
+                    foundLyric = foundLyric || lyric.checkPlayingChords(position);
+                }
+                if(!foundLyric)
+                {
+                    const lyrics_banner = document.getElementById("lyrics_banner");
+                    lyrics_banner.textContent = "";
                 }
                 break;
             case Song.LYRICS:
+                
                 for (let lyric of this.lyrics) {
                     lyric.checkPlaying(position);
                 }
