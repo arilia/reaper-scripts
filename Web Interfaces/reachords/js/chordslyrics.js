@@ -649,6 +649,7 @@ class Song {
                 }
                 for (let lyric of this.lyrics) {
                     foundLyric = foundLyric || lyric.checkPlayingChords(position);
+                    
                 }
                 if(!foundLyric)
                 {
