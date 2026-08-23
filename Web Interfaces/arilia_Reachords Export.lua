@@ -1,11 +1,12 @@
 -- @description Reachords Export
 -- @author arilia
--- @version 1.0.3
+-- @version 1.0.5
 -- @link https://github.com/arilia/reaper-scripts
 -- @license GPL-3.0-or-later
 -- @changelog
 --   Initial release
 --   Change ID
+--   Bar with offset bug fix
 
 
 -- Option 1: auto-terminate this instance if the action is relaunched while
@@ -71,10 +72,12 @@ local function getChordsJson(tr)
     local itemCount = reaper.CountTrackMediaItems(tr)
     for i=1, itemCount do
         local item = reaper.GetTrackMediaItem(tr, i-1)
-        local position = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
+        local startTime = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
         local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-        local endTime = position + length
-        local bpm = reaper.TimeMap_GetDividedBpmAtTime(position)
+        local endTime = startTime + length
+        local bpm = reaper.TimeMap_GetDividedBpmAtTime(startTime)
+
+        -- reaper.ShowConsoleMsg("Accordo: " .. startTime .. "\n")
 
         -- Converts time in beats, problem if BPM change Old code, it works 
         -- if tempo does not change between chords. I leave it here for storical reasons 
@@ -83,16 +86,16 @@ local function getChordsJson(tr)
         
         
         -- Converts time in beats using Quartr Notes
-        local startQN = reaper.TimeMap2_timeToQN(0, position)
+        local startQN = reaper.TimeMap2_timeToQN(0, startTime)
         local endQN = reaper.TimeMap2_timeToQN(0, endTime)
-        local numerator, denominator, _ = reaper.TimeMap_GetTimeSigAtTime(0, position)
+        local numerator, denominator, _ = reaper.TimeMap_GetTimeSigAtTime(0, startTime)
         local duration = (endQN - startQN)* denominator / 4
         
         local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
         
-        local positionString = reaper.format_timestr_pos( position, '', 2 )
+        local positionString = reaper.format_timestr_pos( startTime, '', 2 )
         
-        local measure, beat, sub = positionString:match("^(%d+)%.(%d+)%.(%d+)")
+        local measure, beat, sub = positionString:match("^(%-?%d+)%.(%d+)%.(%d+)")
         
         if measure then
             measure = tonumber(measure)
@@ -104,7 +107,7 @@ local function getChordsJson(tr)
         chordjs = chordjs .. ', "beatStart":'.. beat
         chordjs = chordjs .. ', "sub":'.. sub
         chordjs = chordjs .. ', "beatDuration":'.. duration
-        chordjs = chordjs .. ', "startTime":'.. position
+        chordjs = chordjs .. ', "startTime":'.. startTime
         chordjs = chordjs .. ', "endTime":'.. endTime
         chordjs = chordjs .. '}'
         if i<itemCount then
@@ -140,7 +143,7 @@ local function getMarkersJson()
         mark = mark .. ','
       end
       local bar = reaper.format_timestr_pos( pos, '', 2 )
-      bar, _, _ = bar:match("^(%d+)%.(%d+)%.(%d+)")
+      bar, _, _ = bar:match("^(%-?%d+)%.(%d+)%.(%d+)")
       mark = mark .. '"' .. bar .. '": {' 
       mark = mark .. '"barNumber":' .. bar
       mark = mark .. ', "position":' .. pos 
@@ -163,7 +166,7 @@ end
 local function getMeasuresJson() 
   local projectLength = reaper.GetProjectLength()
   local lastBarString = reaper.format_timestr_pos( projectLength, '', 2 )
-  local lastMeasure, _, _ = lastBarString:match("^(%d+)%.(%d+)%.(%d+)")
+  local lastMeasure, _, _ = lastBarString:match("^(%-?%d+)%.(%d+)%.(%d+)")
   if lastMeasure then 
     lastMeasure = tonumber(lastMeasure)
   end
@@ -176,14 +179,14 @@ local function getMeasuresJson()
   local meas = "{";
   for m=firstMeasure, lastMeasure do
   
-    local barStart, _, _, numOfBeats, _, BPM = reaper.TimeMap_GetMeasureInfo(0, m-1)
-    local barEnd = reaper.TimeMap_GetMeasureInfo(0, m)
-    barStart = barStart - globalOffset
-    barEnd = barEnd - globalOffset
-    meas = meas .. '"' .. m .. '": {' 
+    local startTime, _, _, numOfBeats, _, BPM = reaper.TimeMap_GetMeasureInfo(0, m - firstMeasure)
+    local endTime = reaper.TimeMap_GetMeasureInfo(0, m + 1 - firstMeasure)
+    -- barStart = startTime - globalOffset
+    -- endTime = endTime - globalOffset
+    meas = meas .. '"' .. m  - firstMeasure .. '": {' 
     meas = meas .. '"number":' .. m
-    meas = meas .. ', "startTime":' .. barStart 
-    meas = meas .. ', "endTime":' .. barEnd 
+    meas = meas .. ', "startTime":' .. startTime 
+    meas = meas .. ', "endTime":' .. endTime 
     meas = meas .. ', "numOfBeats":' .. numOfBeats
       
     meas = meas .. '}'
@@ -193,6 +196,7 @@ local function getMeasuresJson()
     
   end
   meas = meas .. '}'
+  -- reaper.ShowConsoleMsg(meas)
   return meas
 end
 
@@ -210,9 +214,9 @@ end
 
 local function getLyricsJson(tr)
   -- Iterates all the items in the track and create a JSON objet with the list of the chords
-  lyricsOffset =  reaper.GetMediaTrackInfo_Value(tr, "D_PLAY_OFFSET")
   local lyrjs = "{"
   if tr then
+    lyricsOffset =  reaper.GetMediaTrackInfo_Value(tr, "D_PLAY_OFFSET")
     local itemCount = reaper.CountTrackMediaItems(tr)
     for i=1, itemCount do
       local item = reaper.GetTrackMediaItem(tr, i-1)

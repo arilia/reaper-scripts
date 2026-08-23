@@ -391,6 +391,7 @@ class Song {
     }
 
     calculatePosition() {
+    
         let position = this.lastRecordedPosition;
         if (this.playState === 1) {
             const elapsedTime = Date.now() - this.lastRecordedTime;
@@ -431,6 +432,7 @@ class Song {
         if (this.songReady) {          
             this.hideSong(false);
         }
+        
     }
 
     translate(val) {
@@ -571,9 +573,22 @@ class Song {
         this.table.id = "chords";
         this.table.style.setProperty("--maxbeats", this.maxBeats);
         table.parentNode.replaceChild(this.table, table);
-        for (const chord of this.chords) {
+        let chord
+        for (chord of this.chords) {
             chord.render();
+            // DEBUG
+//            if(chord.beatStart == 1)
+//            {
+//                const diff = (chord.startTime - chord.bar.startTime)*1000;
+//                console.log("accordo:" + chord.startTime + " - barra: " + chord.bar.startTime + "- diff ms: " + diff);
+//                if(diff > 3  || diff <-3)
+//                {
+//                    console.log(chord);
+//                }
+//            }
+            
         }
+       
     }
     
     hideSong(hide) {
@@ -787,6 +802,7 @@ function wwr_onreply(results) {
                         
                         let json = "";
                         if(tok[3] !== "") {
+//                            console.log(tok[3]);
                             json = JSON.parse(tok[3]);
                         }
                         if(json){
