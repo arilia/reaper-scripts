@@ -126,7 +126,7 @@ body:has(.bottom_bar) .bottom_curtain {
 }
 
 .play_state,
- .scriptstatus{
+ .scriptstatus_div{
     flex: 0 0 8em;
     width: 8em;
     box-sizing: border-box;
@@ -138,9 +138,12 @@ body:has(.bottom_bar) .bottom_curtain {
     height: 2.5em;
     margin-left: 1em;
     margin-right: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.scriptstatus{
+.scriptstatus_div{
     
     cursor: pointer;
 }
@@ -158,12 +161,17 @@ body:has(.bottom_bar) .bottom_curtain {
 }
 
 
-.scriptstatus.inactive {
+.scriptstatus_div.inactive {
     background-color:  hsl(0, 30%, 40%);
 }
 
-.scriptstatus.active {
+.scriptstatus_div.active {
     background-color:  hsl(120, 25%, 35%);
+}
+
+
+.scriptstatus {
+    font-size: .6em;
 }
 
 .chords_table {

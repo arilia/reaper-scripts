@@ -331,7 +331,8 @@ class Song {
     lastRecordedPosition = 0;
     lastRecordedTime = 0;
     calculatedPosition = 0;
-    playState = 0;
+    playState = -1;
+    lastPlayState = -1;
     globalOffset = 0;
     version = -1;
     timestamp = -1;
@@ -340,6 +341,11 @@ class Song {
     complete = false;
     instantPositioning = false;
     lastTimestamp = null;
+    songDiv = null;
+    loaderDiv = null;
+    playStateDiv = null;
+    clockDiv = null;
+    lastClockTime = "";
     static LYRICS = "lyrics";
     static CHORDS = "chords";
     static LYRICSDELTA = 0.5;
@@ -351,6 +357,10 @@ class Song {
         //wwr_req("GET/EXTSTATE/reachords/song");
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", 2000); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
+        this.songDiv =  document.getElementById('song');
+        this.loaderDiv = document.getElementById('loader');
+        this.playStateDiv = document.getElementById('play_state');
+        this.clockDiv = document.getElementById('clock_div')
     }
 
     
@@ -398,31 +408,31 @@ class Song {
             position += elapsedTime / 1000;
             this.calculatedPosition = position;
         }
-        let playStateDiv = document.getElementById('play_state');
-        switch(this.playState) {
-            case 0:
-                
-                playStateDiv.textContent  = "Stop";
-                playStateDiv.className  = "play_state stop"
-                break;
-            case 1:
-                playStateDiv.textContent  = "Play";
-                playStateDiv.className  = "play_state play"
-                break;
-            case 2:
-                playStateDiv.textContent  = "Pause";
-                playStateDiv.className  = "play_state stop"
-                break;
-            case 5:
-                playStateDiv.textContent  = "Rec";
-                playStateDiv.className  = "play_state rec"
-                break;
-            case 6:
-                playStateDiv.textContent  = "Rec Pause";
-                playStateDiv.className  = "play_state rec"
-                break;
-            
-            
+        if(this.playState !== this.lastPlayState)
+        {
+            let content ="Stopped";
+            let className = "play_state stop";
+            switch(this.playState) {
+                case 1:
+                    content  = "Playing";
+                    className  = "play_state play"
+                    break;
+                case 2:
+                    content  = "Paused";
+                    className  = "play_state stop"
+                    break;
+                case 5:
+                    content  = "Recording";
+                    className  = "play_state rec"
+                    break;
+                case 6:
+                    content  = "Recording Paused";
+                    className  = "play_state rec"
+                    break;
+            }
+            this.playStateDiv.textContent = content;
+            this.playStateDiv.className = className;
+            this.lastPlayState = this.playState;
         }
         this.checkPlaying(position);
         // Skip the animated transition for the very first positioning after a
@@ -480,8 +490,8 @@ class Song {
                     const markerRow = new Row(this, Row.LYRICS_MARKER);
                     markerRow.append(marker);
                     this.rows.push(markerRow);
-                    row = new Row(this, Row.LYRICS);
-                    this.rows.push(row);
+//                    row = new Row(this, Row.LYRICS); // Probably not needed,
+//                    this.rows.push(row);             // TODO remove
                 }
             }
             row = new Row(this, Row.LYRICS);
@@ -530,8 +540,8 @@ class Song {
                 markerRow.append(this.markers[bar.number]);
                 this.rows.push(markerRow);
                 columnCount = 1;
-                row = new Row(this);
-                this.rows.push(row);
+                row = new Row(this);  // Needed to create a new line when there is a marker 
+                this.rows.push(row);  // In the middle of the line
             }
             row.append(bar);
             if (columnCount === this.barsPerRow) {
@@ -573,28 +583,16 @@ class Song {
         this.table.id = "chords";
         this.table.style.setProperty("--maxbeats", this.maxBeats);
         table.parentNode.replaceChild(this.table, table);
-        let chord
-        for (chord of this.chords) {
+        for (const chord of this.chords) {
             chord.render();
-            // DEBUG
-//            if(chord.beatStart == 1)
-//            {
-//                const diff = (chord.startTime - chord.bar.startTime)*1000;
-//                console.log("accordo:" + chord.startTime + " - barra: " + chord.bar.startTime + "- diff ms: " + diff);
-//                if(diff > 3  || diff <-3)
-//                {
-//                    console.log(chord);
-//                }
-//            }
-            
         }
        
     }
     
     hideSong(hide) {
         //console.log(hide);
-        document.getElementById('song').style.visibility = hide ? 'hidden' : 'visible';
-        document.getElementById('loader').style.visibility = hide ? 'visible' : 'hidden';
+        this.songDiv.style.visibility = hide ? 'hidden' : 'visible';
+        this.loaderDiv.style.visibility = hide ? 'visible' : 'hidden';
     }
     
     
@@ -651,8 +649,11 @@ class Song {
         {
             formattedTime = "-" + formattedTime;
         }
-        document.getElementById('clock_div').textContent  = formattedTime;
-
+        if(formattedTime !== this.lastClockTime)
+        {
+            this.clockDiv.textContent  = formattedTime;
+            this.lastClockTime = formattedTime;
+        }
         switch (this.type) {
             case Song.CHORDS:
                 let foundLyric = false;
@@ -736,15 +737,16 @@ class Song {
     
     setScriptActive(active)  {
         this.scriptActive = active;
-        const dot = document.getElementById('scriptstatus_div');
+        const scriptstatus_div = document.getElementById('scriptstatus_div');
+        const scriptstatus = document.getElementById('scriptstatus');
         if (active) {
-            dot.textContent  = "Running"
-            dot.classList.remove('inactive');
-            dot.classList.add('active');       
+            scriptstatus.textContent  = "Script is Running..."
+            scriptstatus_div.classList.remove('inactive');
+            scriptstatus_div.classList.add('active');       
         } else {
-            dot.textContent  = "Click to run"
-            dot.classList.remove('active');
-            dot.classList.add('inactive');    
+            scriptstatus.innerHTML  = "Script is not running<br>Click Here to run."
+            scriptstatus_div.classList.remove('active');
+            scriptstatus_div.classList.add('inactive');    
         }
         
     }
