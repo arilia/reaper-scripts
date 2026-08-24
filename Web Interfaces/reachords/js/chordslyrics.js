@@ -64,8 +64,8 @@ class Bar {
         }
         if (val && !this.isPlaying) {
 
-            const rowBox = document.getElementById('position_row').getBoundingClientRect()
-            const targetPosition = rowBox.top + rowBox.height / 2;
+            
+            const targetPosition = this.song.targetPosition;
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
             this.song.translate(targetPosition - top);
@@ -236,6 +236,8 @@ class Lyric {
     endTime; //in seconds
     duration; //in seconds
     isPlaying = false;
+    height = 0;
+    top =0;
     div = null;
     song = null;
     row = null;
@@ -249,29 +251,19 @@ class Lyric {
     }   
 
     set playing(val) {
+        
         if (val) {
             this.div.classList.add('lyric_playing');
         } else {
             this.div.classList.remove('lyric_playing');
         }
         if (val) {
-            const rowBox = document.getElementById('position_row').getBoundingClientRect();
+            this.calculateHeight();
+            const targetPosition = song.targetPosition;
             
-            const targetPosition = rowBox.top + rowBox.height / 2;
-            
-            const positionInfo = this.div.getBoundingClientRect();
-            
-            const top = positionInfo.top;// + positionInfo.height/2;
-            let height;
-            if (this.nextLyric) {
-                const nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
-                height = nextLyricPositionInfo.top - positionInfo.top;
-            } else {
-                height = positionInfo.height;
-            }
-            const progress = height * (this.song.calculatedPosition - this.startTime) / this.duration;
+            const progress = this.height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
-            this.song.moveTo(targetPosition - top - progress);
+            this.song.moveTo(targetPosition - this.top - progress);
         }
         this.isPlaying = val;
 
@@ -284,9 +276,22 @@ class Lyric {
         this.div.textContent  = this.text;
         if (this.isPlaying)
         {
-            this.div.classList.add('playing')
+            this.div.classList.add('playing');
         }
         this.row.div.append(this.div);
+       
+    }
+
+    calculateHeight()
+    {
+        const positionInfo = this.div.getBoundingClientRect();
+        this.top = positionInfo.top;// + positionInfo.height/2;
+        if (this.nextLyric) {
+            const nextLyricPositionInfo = this.nextLyric.div.getBoundingClientRect();
+            this.height = nextLyricPositionInfo.top - positionInfo.top;
+        } else {
+            this.height = positionInfo.height;
+        }
     }
 
     checkPlaying(position) {
@@ -341,6 +346,7 @@ class Song {
     complete = false;
     instantPositioning = false;
     lastTimestamp = null;
+    targetPosition = null;
     songDiv = null;
     loaderDiv = null;
     playStateDiv = null;
@@ -360,7 +366,10 @@ class Song {
         this.songDiv =  document.getElementById('song');
         this.loaderDiv = document.getElementById('loader');
         this.playStateDiv = document.getElementById('play_state');
-        this.clockDiv = document.getElementById('clock_div')
+        this.clockDiv = document.getElementById('clock_div');
+        const rowBox = document.getElementById('position_row').getBoundingClientRect()
+        this.targetPosition = rowBox.top + rowBox.height / 2;
+            
     }
 
     
