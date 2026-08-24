@@ -193,19 +193,12 @@ local function getMeasuresJson()
    if m<lastMeasure then
       meas = meas .. ','
     end
-    
+     
   end
   meas = meas .. '}'
   -- reaper.ShowConsoleMsg(meas)
   return meas
 end
-
-
-
-
-
-
-
 
 -------------------
 -- LYRICS LIST    
