@@ -69,6 +69,7 @@ class Bar {
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
             this.song.translate(targetPosition - top);
+//            console.log(top);
         }
         this.isPlaying = val;
     }
@@ -171,6 +172,7 @@ class Marker {
         this.div.textContent  = this.text;
         this.div.classList.add('marker');
         this.div.style.border = "1px solid rgb(" + this.color + ")";
+        this.div.style.background = "rgba(" + this.color + ", .3)";
         if(this.row.div) this.row.div.append(this.div);
         
     }
