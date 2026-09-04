@@ -218,7 +218,6 @@ local function getLyricsJson(tr)
       local endTime = position + length
       -- Converts time in beats
       local _, text = reaper.GetSetMediaItemInfo_String(item, "P_NOTES", '', false)
-      
       lyrjs = lyrjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
       lyrjs = lyrjs .. ', "startTime":'.. position
       lyrjs = lyrjs .. ', "endTime":'.. endTime

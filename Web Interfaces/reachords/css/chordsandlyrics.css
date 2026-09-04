@@ -327,7 +327,7 @@ body:has(.bottom_bar) .bottom_curtain {
     color: white;
     text-align: left;
     font-size: .8em;
-    padding: .2em;
+    padding: .2em 3em .2em 3em ;
     border: 1px solid white;
 }
 
