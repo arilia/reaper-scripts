@@ -1,12 +1,13 @@
 -- @description Reachords Export
 -- @author arilia
--- @version 1.0.5
+-- @version 1.0.6
 -- @link https://github.com/arilia/reaper-scripts
 -- @license GPL-3.0-or-later
 -- @changelog
 --   Initial release
 --   Change ID
 --   Bar with offset bug fix
+--   jsonEscape fix
 
 
 -- Option 1: auto-terminate this instance if the action is relaunched while
