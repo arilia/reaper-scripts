@@ -65,7 +65,9 @@ class Bar {
         if (val && !this.isPlaying) {
 
             
-            const targetPosition = this.song.targetPosition;
+//            const targetPosition = this.song.targetPosition;
+            const rowBox = document.getElementById('position_row').getBoundingClientRect()
+            const targetPosition = rowBox.top + rowBox.height / 2;
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
             this.song.translate(targetPosition - top);
@@ -261,7 +263,8 @@ class Lyric {
         }
         if (val) {
             this.calculateHeight();
-            const targetPosition = song.targetPosition;
+            const rowBox = document.getElementById('position_row').getBoundingClientRect()
+            const targetPosition = rowBox.top + rowBox.height / 2;
             
             const progress = this.height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
@@ -369,8 +372,8 @@ class Song {
         this.loaderDiv = document.getElementById('loader');
         this.playStateDiv = document.getElementById('play_state');
         this.clockDiv = document.getElementById('clock_div');
-        const rowBox = document.getElementById('position_row').getBoundingClientRect()
-        this.targetPosition = rowBox.top + rowBox.height / 2;
+//        const rowBox = document.getElementById('position_row').getBoundingClientRect()
+//        this.targetPosition = rowBox.top + rowBox.height / 2;
             
     }
 
