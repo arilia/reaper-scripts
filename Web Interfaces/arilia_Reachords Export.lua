@@ -313,9 +313,11 @@ local function loop()
                 reaper.SetExtState("reachords", "song", json, false)
             end
         end
-
+        
         -- Write into status
-        local statusJson = '{"version":' .. version .. ', "timestamp":' .. os.time() .. ', "projectid": "'  ..  jsonEscape(projectId) ..  '"}'  -- placeholder
+        local playPosition = reaper.GetPlayPosition()
+        local bpm = reaper.TimeMap2_GetDividedBpmAtTime(0, playPosition)
+        local statusJson = '{"bpm":' .. bpm .. ', "version":' .. version .. ', "timestamp":' .. os.time() .. ', "projectid": "'  ..  jsonEscape(projectId) ..  '"}'  -- placeholder
         reaper.SetExtState("reachords", "status", statusJson, false)
         -- reaper.ShowConsoleMsg(statusJson .. "\n")
     end

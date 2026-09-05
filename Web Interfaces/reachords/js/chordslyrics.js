@@ -356,6 +356,7 @@ class Song {
     loaderDiv = null;
     playStateDiv = null;
     clockDiv = null;
+    bpm = 0;
     lastClockTime = "";
     static LYRICS = "lyrics";
     static CHORDS = "chords";
@@ -665,7 +666,7 @@ class Song {
         }
         if(formattedTime !== this.lastClockTime)
         {
-            this.clockDiv.textContent  = formattedTime;
+            this.clockDiv.innerHTML  = formattedTime + "<p class ='bpm'>" + this.bpm + " bpm</p>";
             this.lastClockTime = formattedTime;
         }
         switch (this.type) {
@@ -796,6 +797,7 @@ function wwr_onreply(results) {
                         }
                         // Comparing server timestamps
                         // if they differ it means the script is not running
+                        song.bpm = status.bpm;
                         const isActive = status.timestamp !== song.lastTimestamp;
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
