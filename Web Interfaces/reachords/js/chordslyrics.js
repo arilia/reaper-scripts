@@ -796,7 +796,7 @@ function wwr_onreply(results) {
                         const isActive = status.timestamp !== song.lastTimestamp;
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
-
+                        status.projectid = simple_unescape(status.projectid);
                         if (isActive) {
                             if(status.version !== song.version || status.projectid !== song.id)
                             {
@@ -816,7 +816,7 @@ function wwr_onreply(results) {
                         let json = "";
                         if(tok[3] !== "") {
 //                            console.log(tok[3]);
-                            json = JSON.parse(tok[3]);
+                            json = JSON.parse(simple_unescape(tok[3]));
                         }
                         if(json){
                             
