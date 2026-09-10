@@ -297,7 +297,7 @@ body:has(.bottom_bar) .bottom_curtain {
 
 @media (min-width: 768px) and (max-width: 1024px) {
     .song {
-        width: 90%;
+        width: 95%;
     }
 }
 
