@@ -785,6 +785,7 @@ function wwr_onreply(results) {
                     break;
                 case "EXTSTATE":
                    if (tok[2] === "status" ) {
+                       console.log("status");
                         let status = null;
                         try {
                             status = tok[3] ? JSON.parse(tok[3]) : null;
@@ -850,4 +851,21 @@ function compareBar(a, b) {
 }
 
 
+
+
 wwr_start();//Starts the Server
+//
+//
+//setInterval(() => {
+//  const t0 = performance.now();
+//  fetch("../_/GET/EXTSTATE/reachords/status;", {cache:"no-store"})
+//    .then(resp => {
+//      const t1 = performance.now();
+//      document.getElementById('debug_banner').innerHTML = "RTT ms:" +  (t1 - t0).toFixed(1)
+//      console.log("RTT ms:", (t1 - t0).toFixed(1));
+//    })
+//    .catch(err => console.warn("fetch err", err));
+//  // qui il callback è già terminato (non aspetta la risposta)
+//}, 500);
+//
+
