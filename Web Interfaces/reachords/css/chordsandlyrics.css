@@ -89,13 +89,58 @@ body:has(.bottom_bar) .bottom_curtain {
      position: fixed;
      left: 0;
      right: 0;
-     bottom: 0;
+     bottom: 1.2em;
      background: #000;
      z-index: 20;
      height: 4.5em;
 }
 
+.status_bar {
+     position: fixed;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background: #bbb;
+     z-index: 20;
+     padding: .1em;
+     height: 1.2em;
+}
 
+div.latency {
+    color: #333;
+    flex: 0 0 10em;
+    position: fixed;
+    left: 1em;
+    width: 10em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: .2em 0;
+    border-radius: 6px;
+    background-color: hsl(0, 0%, 30%);
+    font-size: .8em;
+    font-weight: normal;
+    color: #eee;
+    /*margin-left: 11em;*/
+    margin-right: auto;
+}
+
+div.offset {
+    color: #333;
+    flex: 0 0 10em;
+    position: fixed;
+    left: 12em;
+    width: 10em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: .2em 0;
+    border-radius: 6px;
+    background-color: hsl(0, 0%, 30%);
+    font-size: .8em;
+    font-weight: normal;
+    color: #eee;
+    /*margin-left: 1em;*/
+    margin-right: auto;
+}
 
 
 .lyrics_banner {

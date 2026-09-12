@@ -40,8 +40,8 @@ class Bar {
     constructor(b) {
         this.number = b.number;
         this.song = null;
-        this.startTime = Math.round(Number(b.startTime) * 10000) / 10000;
-        this.endTime = Math.round(Number(b.endTime) * 10000) / 10000;
+        this.startTime = Math.round(Number(b.startTime) * 1000000) / 1000000;
+        this.endTime = Math.round(Number(b.endTime) * 1000000) / 1000000;
         this.beatDuration = b.numOfBeats;
         this.createBeats();
     }
@@ -194,8 +194,8 @@ class Chord {
     song = null;
 
     constructor(c) {
-        this.startTime = Math.round(Number(c.startTime) * 10000) / 10000;
-        this.endTime = Math.round(Number(c.endTime) * 10000) / 10000;
+        this.startTime = Math.round(Number(c.startTime) * 1000000) / 1000000;
+        this.endTime = Math.round(Number(c.endTime) * 1000000) / 1000000;
         this.barNumber = c.barNumber;
         this.beatStart = c.beatStart;
         this.beatDuration = c.beatDuration;
@@ -330,6 +330,8 @@ class Song {
     chords = [];
     lyrics = [];
     rows = [];
+    networkBuf = [];
+    paintBuf = [];
     songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
     json = "";
     markers = [];
@@ -338,6 +340,8 @@ class Song {
     translateY = 0;
     internalChordsOffset = 0;
     internallyricsOffset = 0;
+    networkOffset = 0;
+    paintOffset = 0;
     lastRecordedPosition = 0;
     lastRecordedTime = 0;
     calculatedPosition = 0;
@@ -361,13 +365,12 @@ class Song {
     static LYRICS = "lyrics";
     static CHORDS = "chords";
     static LYRICSDELTA = 0.5;
-    
+    static STATUSPOLLING = 2000;
 
     constructor(type) {
         this.type = type;
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
-        //wwr_req("GET/EXTSTATE/reachords/song");
-        wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", 2000); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
+        wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
         this.songDiv =  document.getElementById('song');
         this.loaderDiv = document.getElementById('loader');
@@ -388,7 +391,7 @@ class Song {
         {
             return 0;
         }
-        return this.internalChordsOffset;
+        return this.internalChordsOffset + this.networkOffset + this.paintOffset;
     }
     
     set lyricsOffset(val) {
@@ -400,17 +403,11 @@ class Song {
         {
             return 0;
         }
-        return this.internallyricsOffset + Song.LYRICSDELTA;
+        return this.internallyricsOffset + Song.LYRICSDELTA  + this.networkOffset +  + this.paintOffset;
     }
     
     set recordedPosition(position) {
         this.lastRecordedTime = Date.now();
-//        let lyrOffset = 0;
-//        if(this.type==Song.LYRICS) {
-//            console.log(this.calculatedPosition );
-//            lyrOffset = .5;
-//             console.log(this.calculatedPosition );
-//        }
         this.calculatedPosition = position = this.lastRecordedPosition = position + this.chordsOffset + this.lyricsOffset; 
         
     }
@@ -449,7 +446,15 @@ class Song {
             this.playStateDiv.className = className;
             this.lastPlayState = this.playState;
         }
+        const t0 = performance.now();
         this.checkPlaying(position);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.calculatePaintDelay(t0);
+            
+          });
+        });
+        
         // Skip the animated transition for the very first positioning after a
         // song rebuild. Without this, the page would visibly scroll from the top
         // down to the current playhead position before the user sees it settled.
@@ -765,10 +770,51 @@ class Song {
         }
         
     }
+    
+    calculateNetwordDelay(t0) {
+        const RTT_SAMPLES = 20;
+        const t1 = (new Date).getTime();
+        const delta = (t1 - t0)/2;
+        
+        this.networkBuf.push(delta);
+        if(this.networkBuf.length > RTT_SAMPLES) {
+            this.networkBuf.shift();
+        }
+        this.networkOffset = trimmedMean(this.networkBuf)/1000;
+        
+        document.getElementById('latency').innerHTML = "Latency: " +  delta.toFixed(1) + " ms";
+        document.getElementById('offset').innerHTML = "Offset: " +  (1000*this.chordsOffset).toFixed(1) + " ms";
+        //console.log("net: " + (1000*this.networkOffset).toFixed(1) + " paint: " +  (1000*this.paintOffset).toFixed(1));
+    }
+
+    calculatePaintDelay(t0) {
+        const RTT_SAMPLES = 20;
+        const t1 = performance.now();
+        const delta = (t1 - t0)/2;
+        
+        this.paintBuf.push(delta);
+        if(this.paintBuf.length > RTT_SAMPLES) {
+            this.paintBuf.shift();
+        }
+        this.paintOffset = trimmedMean(this.paintBuf)/1000;
+        
+        //console.log(this.paintOffset);
+    }
 
 }
 
-function wwr_onreply(results) {
+
+function trimmedMean(arr, trimPct=0.1) {
+  if (!arr.length) return 0;
+
+  const a = arr.slice().sort((x,y)=>x-y);
+  const t = Math.floor(a.length * trimPct);
+  const mid = a.slice(t, a.length - t);
+  return mid.length ? mid.reduce((s,v)=>s+v,0)/mid.length : a.reduce((s,v)=>s+v,0)/a.length;
+}
+
+
+function wwr_onreply(results, t0) {
     const ar = results.split("\n");
     for (let i = 0; i < ar.length; i++) {
         const tok = ar[i].split("\t");          // split a responded line into its individual fields into the array "tok"
@@ -785,7 +831,8 @@ function wwr_onreply(results) {
                     break;
                 case "EXTSTATE":
                    if (tok[2] === "status" ) {
-                       console.log("status");
+                       
+                        song.calculateNetwordDelay(t0);
                         let status = null;
                         try {
                             status = tok[3] ? JSON.parse(tok[3]) : null;
@@ -841,6 +888,9 @@ function wwr_onreply(results) {
     }
 }
 
+
+
+
 function compareBar(a, b) {
     if (a.number * 1 < b.number * 1) {
         return -1;
@@ -854,18 +904,23 @@ function compareBar(a, b) {
 
 
 wwr_start();//Starts the Server
-//
+
 //
 //setInterval(() => {
 //  const t0 = performance.now();
-//  fetch("../_/GET/EXTSTATE/reachords/status;", {cache:"no-store"})
+//  fetch("../_/TRANSPORT;GET/EXTSTATE/reachords/status;", {cache:"no-store"})
 //    .then(resp => {
-//      const t1 = performance.now();
-//      document.getElementById('debug_banner').innerHTML = "RTT ms:" +  (t1 - t0).toFixed(1)
-//      console.log("RTT ms:", (t1 - t0).toFixed(1));
+//        const t1 = performance.now();
+//        const latency = ((t1 - t0)/2);
+//        
+//        return resp.text();
+//    })
+//    .then(results => {
+//        wwr_onreply(results); 
 //    })
 //    .catch(err => console.warn("fetch err", err));
-//  // qui il callback è già terminato (non aspetta la risposta)
-//}, 500);
+//  
+//}, 2000);
 //
-
+//
+//var frames =0;

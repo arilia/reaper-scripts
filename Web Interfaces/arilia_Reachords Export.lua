@@ -256,8 +256,6 @@ local function getSongJson()
   json = json .. ', "chordsOffset":' .. chordsOffset 
   json = json .. ', "lyricsOffset":' .. lyricsOffset 
   json = json .. ', "globalOffset":' .. globalOffset
-  json = json .. ', "position":' .. getTransport()
-  json = json .. ', "transportStatus":' .. reaper.GetPlayState()
   json = json .. '}'
   return json
 end  
