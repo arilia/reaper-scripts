@@ -340,15 +340,15 @@ div.offset {
     margin-right: .1em;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 0) and (max-width: 1024px) {
     .song {
-        width: 95%;
+        width: 90%;
     }
 }
 
 
 .lyric {
-    color: white;
+    color: #666;
     border: none;
     text-align: center;
     padding: .5em;
@@ -360,7 +360,7 @@ div.offset {
     border-radius: 4px;
     transition-property: color;
     transition-duration: 1s;
-}
+    }
 
 
 
@@ -402,7 +402,8 @@ div.offset {
 .lyric_playing {
     /*background-color: #222;*/
     font-weight: bold;
-    color: blue;
+    /*font-size: 120%;*/
+    color: white;
     transition-property: color;
     transition-duration: 2s;
 }

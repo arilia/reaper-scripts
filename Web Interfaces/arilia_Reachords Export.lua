@@ -24,6 +24,7 @@ local lyricsOffset = 0
 local lastCheckTime = 0
 local globalOffset = 0
 local projectName = ""
+local projectTitle  = ""
 
 local function jsonEscape(str)
     if str == nil then return "" end
@@ -239,7 +240,12 @@ local function getSongJson()
   globalOffset = reaper.GetProjectTimeOffset(0, false)
   projectName = reaper.GetProjectName()
   projectName = projectName:match("(.+)%..+$") or projectName
-  
+  -- reaper.ShowConsoleMsg(projectTitle .. "\n")
+  _, projectTitle  = reaper.GetSetProjectInfo_String(0, "PROJECT_TITLE", "", false)
+  if projectTitle ~= "" then
+    projectName = projectTitle
+  end
+  -- reaper.ShowConsoleMsg(projectName)
   local tr = findTrackByName('lyrics')
   local lyrjs = getLyricsJson(tr)
   local tr = findTrackByName('chords')
