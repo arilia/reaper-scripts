@@ -265,6 +265,7 @@ div.offset {
 
 .chord {
     color: black;
+    /*font-family: sans-serif;;*/
     box-sizing: border-box;
     border: 1px solid gray;
     border-radius: 4px;

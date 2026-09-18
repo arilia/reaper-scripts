@@ -200,8 +200,59 @@ class Chord {
         this.beatStart = c.beatStart;
         this.beatDuration = c.beatDuration;
         this.name = c.text;
+        this.formattedName = this.formatChord(c.text);
     }
 
+
+    formatChord(chordString) {
+        const notes = ["A", "B", "C", "D", "E", "F", "G", "A", "B"];
+        let root = chordString.substring(0,1);
+        if(notes.indexOf(root) === -1) { 
+            return chordString;
+        }
+        let index = 1;
+        let accidental = "";
+        let quality = "";
+        
+        if(chordString[1] === "♯" || chordString[1] === "#") {
+            accidental = "♯" ;
+            index++;
+        } else if(chordString[1] === "b" || chordString[1] === "♭" ) {
+            accidental = "♭" ;
+            index++;
+        }
+        
+        const qualities = ["maj", "min", "sus", "add", "dim", "aug", "m"];
+
+        for (const q of qualities) {
+            if (chordString.startsWith(q, index)) {
+                quality = q;
+                index += q.length;
+                break;
+            }
+        }
+        let modifiers = chordString.substring(index);
+        let bassIndex = modifiers.indexOf("/")
+        let bass = "";
+        if(bassIndex !== -1)
+        {
+            const note = modifiers.substring(bassIndex+1,bassIndex+2);
+            if(notes.indexOf(note) !== -1)
+            {
+                bass = modifiers.substring(bassIndex);
+                modifiers = modifiers.substring(0, bassIndex);
+            }
+        }
+        let chordJson = {
+            root: root,
+            accidental: accidental,
+            quality: quality,
+            modifiers: modifiers,
+            bass: bass
+        };
+        return  root + accidental + quality + "<sup>" + modifiers + "</sup><sub>" + bass + "</sub>" ;
+    }
+    
     set playing(val) {
         this.isPlaying = val;
         if (val && this.div !== null) {
@@ -224,7 +275,12 @@ class Chord {
     {
         this.div = document.createElement('div');
         this.div.classList.add('chord');
-        this.div.textContent  = this.name;
+        if(song.decoratedChords)
+        {
+            this.div.innerHTML  = this.formattedName;
+        } else {
+            this.div.textContent = this.name;
+        }
         this.div.style.left = Number((this.beatStart - 1) * this.bar.width / this.bar.beats.length) + "px"
         this.div.style.width = Number(this.beatDuration * this.bar.width / this.bar.beats.length) - 4 + "px"
         this.bar.div.append(this.div);
@@ -360,6 +416,7 @@ class Song {
     loaderDiv = null;
     playStateDiv = null;
     clockDiv = null;
+    decoratedChords = true;
     bpm = 0;
     lastClockTime = "";
     static LYRICS = "lyrics";
@@ -784,7 +841,7 @@ class Song {
         
         document.getElementById('latency').innerHTML = "Latency: " +  delta.toFixed(1) + " ms";
         let offs =this.chordsOffset;
-        if(this.type == Song.LYRICS)
+        if(this.type === Song.LYRICS)
         {
             offs = this.lyricsOffset;
         }
@@ -804,6 +861,15 @@ class Song {
         this.paintOffset = trimmedMean(this.paintBuf)/1000;
         
         //console.log(this.paintOffset);
+    }
+    
+    repaint() {
+        this.hideSong(true);
+        this.songReady = false;
+        this.clear();
+        this.parseJson();
+        this.createTable();
+        this.songReady = true; 
     }
 
 }
