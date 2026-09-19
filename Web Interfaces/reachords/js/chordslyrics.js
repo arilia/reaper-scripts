@@ -416,6 +416,7 @@ class Song {
     loaderDiv = null;
     playStateDiv = null;
     clockDiv = null;
+    chordsStyle =  "EN";
     decoratedChords = true;
     bpm = 0;
     lastClockTime = "";
@@ -425,6 +426,7 @@ class Song {
     static STATUSPOLLING = 2000;
 
     constructor(type) {
+        
         this.type = type;
         wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
@@ -438,6 +440,35 @@ class Song {
             
     }
 
+    
+    saveProjectSettings() {
+        this.settings = {
+            barsPerRow: this.barsPerRow,
+            decoratedChords: this.decoratedChords,
+            chordsStyle: this.chordsStyle,
+        };
+        localStorage.setItem(
+            this.id,
+            JSON.stringify(this.settings)
+        );
+    }
+    
+    loadProjectSettings() {
+        console.log("LOAD SETTINGS:", this.id);
+    console.log("STORED:", localStorage.getItem(this.id));
+        this.settings = {
+            barsPerRow: this.barsPerRow,
+            decoratedChords: this.decoratedChords,
+            chordsStyle: this.chordsStyle,
+        };
+        const stored = localStorage.getItem(this.id);
+        this.settings = stored
+            ? { ...this.settings, ...JSON.parse(stored) }
+            : this.settings;
+        this.barsPerRow =  this.settings.barsPerRow;
+        this.decoratedChords = this.settings.decoratedChords;
+        this.chordsStyle = this.settings.chordsStyle;
+    }
     
     set chordsOffset(val) {
         this.internalChordsOffset = val;
@@ -545,6 +576,10 @@ class Song {
     }
     
     createTable() {
+        this.loadProjectSettings();
+        console.log(this.id);
+        console.log(localStorage.getItem(this.id));
+        console.log("DOPO LOAD:", this.barsPerRow);
         this.instantPositioning = true;
         if (this.type === "chords") {
             this.createTableChords();
@@ -583,6 +618,7 @@ class Song {
    
     increaseBars () {
         this.barsPerRow++;
+        this.saveProjectSettings();
         this.clear();
         this.parseJson();
         this.createTable();
@@ -593,6 +629,7 @@ class Song {
         if(this.barsPerRow<2) {
             this.barsPerRow = 2;
         }
+        this.saveProjectSettings();
         this.clear();
         this.parseJson();
         this.createTable();
