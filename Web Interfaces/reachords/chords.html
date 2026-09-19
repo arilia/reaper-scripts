@@ -17,6 +17,8 @@
             </div>
             <div class="bar_adjust" id="decrease_bars" title="Show fewer bars per row">−</div>
             <div class="bar_adjust" id="increase_bars" title="Show more bars per row">+</div>
+            &nbsp;&nbsp;&nbsp;
+            <div class="bar_adjust" id="decorated_chords" title="Toggle chords decoration">C⁷</div>
             <div class="clock" id="clock_div"></div>
             
         </div>
@@ -50,6 +52,7 @@
         const song = new Song(Song.CHORDS);
         document.getElementById("increase_bars").addEventListener("click",  function f() {song.increaseBars()});
         document.getElementById("decrease_bars").addEventListener("click",  function f() {song.decreaseBars()});
+        document.getElementById("decorated_chords").addEventListener("click",  function f() {song.toggleDecoratedChords()});
     </script>
 </html>
 
