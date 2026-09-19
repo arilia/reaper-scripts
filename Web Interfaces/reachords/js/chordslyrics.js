@@ -424,6 +424,9 @@ class Song {
     static CHORDS = "chords";
     static LYRICSDELTA = 0.5;
     static STATUSPOLLING = 2000;
+    static DEFAULT_BARS_PER_ROW = 4;
+    static DEFAULT_DECORATED_CHORDS = true;
+    static DEFAULT_CHORDS_STYLE = "EN";
 
     constructor(type) {
         
@@ -454,12 +457,10 @@ class Song {
     }
     
     loadProjectSettings() {
-        console.log("LOAD SETTINGS:", this.id);
-    console.log("STORED:", localStorage.getItem(this.id));
         this.settings = {
-            barsPerRow: this.barsPerRow,
-            decoratedChords: this.decoratedChords,
-            chordsStyle: this.chordsStyle,
+            barsPerRow: Song.DEFAULT_BARS_PER_ROW,
+            decoratedChords: Song.DEFAULT_DECORATED_CHORDS,
+            chordsStyle: Song.DEFAULT_CHORDS_STYLE,
         };
         const stored = localStorage.getItem(this.id);
         this.settings = stored
@@ -569,17 +570,12 @@ class Song {
 
     moveTo(val)
     {	
-//        console.log(val);
         this.translateY = val + this.translateY;
         const tableStyle = this.table.style;
         tableStyle.transform = "translateY(" + this.translateY + "px)";
     }
     
     createTable() {
-        this.loadProjectSettings();
-        console.log(this.id);
-        console.log(localStorage.getItem(this.id));
-        console.log("DOPO LOAD:", this.barsPerRow);
         this.instantPositioning = true;
         if (this.type === "chords") {
             this.createTableChords();
@@ -798,6 +794,7 @@ class Song {
     }
 
     parseJson() {
+        this.loadProjectSettings();
         const json = this.json;
         this.project = json.title;
         this.chordsOffset = json.chordsOffset * 1;
