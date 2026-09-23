@@ -422,6 +422,7 @@ class Song {
     lastClockTime = "";
     static LYRICS = "lyrics";
     static CHORDS = "chords";
+    static CLOCK = "clock";
     static LYRICSDELTA = 0.5;
     static STATUSPOLLING = 2000;
     static DEFAULT_BARS_PER_ROW = 4;
@@ -575,19 +576,34 @@ class Song {
         tableStyle.transform = "translateY(" + this.translateY + "px)";
     }
     
+    
+    changeLayout(layoutType) {
+        this.type = layoutType;
+        this.repaint();
+    }
+    
+    
     createTable() {
+        document.getElementById('change_to_chords').classList.remove('button_on');
+        document.getElementById('change_to_lyrics').classList.remove('button_on');
+        document.getElementById('change_to_clock').classList.remove('button_on');
+        document.getElementById('change_to_' + this.type).classList.add('button_on');
         this.instantPositioning = true;
-        if (this.type === "chords") {
+        if (this.type === Song.CHORDS) {
             this.createTableChords();
-        } else {
+        } 
+        if (this.type === Song.LYRICS)
+        {
             this.createTableLyrics();
         }
+        
         
     }
 
     createTableLyrics() {
         let lastEnd = 0;
-        
+        document.getElementById('bottom_bar').style.display = "none";
+        document.getElementById('bottom_curtain').style.bottom = "0";
         for (let lyric of this.lyrics)
         {
             let row;
@@ -615,9 +631,7 @@ class Song {
     increaseBars () {
         this.barsPerRow++;
         this.saveProjectSettings();
-        this.clear();
-        this.parseJson();
-        this.createTable();
+        this.repaint();
     }
     
     decreaseBars() {
@@ -626,12 +640,30 @@ class Song {
             this.barsPerRow = 2;
         }
         this.saveProjectSettings();
-        this.clear();
-        this.parseJson();
-        this.createTable();
+        this.repaint();
     } 
     
+    toggleDecoratedChords() {
+        this.decoratedChords = ! this.decoratedChords;
+        const button = document.getElementById('decorated_chords');
+        if(this.decoratedChords)
+        {
+            button.classList.add('button_on');
+        }
+        else
+        {
+            button.classList.remove('button_on');
+        }
+        this.saveProjectSettings();
+        this.repaint();
+    }
+    
+    
     createTableChords() {
+        document.getElementById('bottom_bar').style.display = "block";
+        document.getElementById('bottom_curtain').style.bottom = "4.5em";
+        const button = document.getElementById('decorated_chords');
+        if(this.decoratedChords) button.classList.add('button_on'); else button.classList.remove('button_on');
         let columnCount = 0;
         let row = null;
         for (const bar of this.bars)
@@ -746,6 +778,7 @@ class Song {
     }
 
     checkPlaying(position) {
+//        return;
         if (!this.complete) {
             return;
         }

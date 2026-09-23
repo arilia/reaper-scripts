@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>ReaChords</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../main.js"></script>
+        <script src="js/chordslyrics.js"></script>
+        <link rel="stylesheet" href="css/chordsandlyrics.css">
+    </head>
+    <body>
+        <div class="top_bar">
+            <div class="play_state stop" id="play_state">Stop</div>
+            <div class="scriptstatus_div" id="scriptstatus_div" onclick='wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad");'>
+                <div id="scriptstatus" class="scriptstatus">
+                </div>
+            </div>
+            <div class="bar_adjust" id="decrease_bars" title="Show fewer bars per row">−</div>
+            <div class="bar_adjust" id="increase_bars" title="Show more bars per row">+</div>
+            &nbsp;&nbsp;&nbsp;
+            <div class="bar_adjust" id="decorated_chords" title="Toggle chords decoration">C⁷</div>
+            <div class="bar_adjust" id="change_to_chords" title="Clock">CH</div>
+            <div class="bar_adjust" id="change_to_lyrics" title="Lyrics">LYR</div>
+            <div class="bar_adjust" id="change_to_clock" title="Chords">CLK</div>
+            <div class="clock" id="clock_div"></div>
+            
+        </div>
+        <div class="title_bar">
+            <h1 id="song_title" class ="song_title"></h1>
+        </div>
+        <div class="top_curtain">
+        </div>
+        
+        <div class="position_row" id="position_row">
+            <div id="position" class="position">&nbsp;</div>
+        </div>
+        
+        <div id='song' class="song">
+            <div id='chords' class='chords_table'></div>
+        </div>
+        
+        <div id="loader" class="loader">Loading...</div>
+        
+        <div class="bottom_curtain" id="bottom_curtain"> </div>
+        <div class="bottom_bar" id="bottom_bar">
+            <div class="lyrics_banner" id ="lyrics_banner"></div>
+        </div>
+        <div class="status_bar">
+            <div class="offset" id ="offset">&nbsp; </div>
+            <div class="latency" id ="latency">&nbsp; </div>
+        </div>
+    </body>
+    <script>
+
+        const song = new Song(Song.CHORDS);
+        document.getElementById("increase_bars").addEventListener("click",  function f() {song.increaseBars()});
+        document.getElementById("decrease_bars").addEventListener("click",  function f() {song.decreaseBars()});
+        document.getElementById("decorated_chords").addEventListener("click",  function f() {song.toggleDecoratedChords()});
+        document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.changeLayout(Song.LYRICS)});
+        document.getElementById("change_to_chords").addEventListener("click",  function f() {song.changeLayout(Song.CHORDS)});
+        document.getElementById("change_to_clock").addEventListener("click",  function f() {song.changeLayout(Song.CLOCK)});
+    </script>
+</html>
+

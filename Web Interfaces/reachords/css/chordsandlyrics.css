@@ -216,7 +216,7 @@ div.offset {
     background-color:  hsl(0, 30%, 40%);
 }
 
-.scriptstatus_div.active {
+.scriptstatus_div.active, .bar_adjust.button_on {
     background-color:  hsl(120, 25%, 35%);
 }
 
@@ -341,6 +341,7 @@ div.offset {
     margin-right: .1em;
 }
 
+
 @media (min-width: 0) and (max-width: 1024px) {
     .song {
         width: 90%;
@@ -349,13 +350,14 @@ div.offset {
 
 
 .lyric {
+    font-size: 120%;
     color: #666;
     border: none;
     text-align: center;
     padding: .5em;
     background-color: black;
     font-weight: bold;
-    height: 1.2em;
+    /*height: 1.2em;*/
     z-index: 10;
     margin-top: 2px;
     border-radius: 4px;
