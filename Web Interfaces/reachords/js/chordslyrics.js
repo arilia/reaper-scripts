@@ -428,6 +428,7 @@ class Song {
     static DEFAULT_BARS_PER_ROW = 4;
     static DEFAULT_DECORATED_CHORDS = true;
     static DEFAULT_CHORDS_STYLE = "EN";
+    static DEFAULT_TYPE = "chords";
 
     constructor(type) {
         
@@ -447,29 +448,59 @@ class Song {
     
     saveProjectSettings() {
         this.settings = {
-            barsPerRow: this.barsPerRow,
-            decoratedChords: this.decoratedChords,
-            chordsStyle: this.chordsStyle,
+            common: {
+                decoratedChords: this.decoratedChords,
+                chordsStyle: this.chordsStyle,
+                type: this.type
+            }
         };
+
+        this.settings[this.id] = {
+            barsPerRow: this.barsPerRow
+        };
+        const stored = JSON.parse(localStorage.getItem("reachords")) || {};
+        let settings = { ...stored };
+
+        settings.common = {
+            ...stored.common,
+            ...this.settings.common
+        };
+
+        settings[this.id] = {
+            ...stored[this.id],
+            ...this.settings[this.id]
+        };
+
         localStorage.setItem(
-            this.id,
-            JSON.stringify(this.settings)
+            "reachords",
+            JSON.stringify(settings)
         );
+        this.settings = settings;
     }
     
     loadProjectSettings() {
-        this.settings = {
-            barsPerRow: Song.DEFAULT_BARS_PER_ROW,
-            decoratedChords: Song.DEFAULT_DECORATED_CHORDS,
-            chordsStyle: Song.DEFAULT_CHORDS_STYLE,
+        let settings = {
+            common: {
+                decoratedChords: Song.DEFAULT_DECORATED_CHORDS,
+                chordsStyle: Song.DEFAULT_CHORDS_STYLE,
+                type: Song.DEFAULT_TYPE
+            },
+            [this.id]: {
+                barsPerRow: Song.DEFAULT_BARS_PER_ROW,
+            }
         };
-        const stored = localStorage.getItem(this.id);
-        this.settings = stored
-            ? { ...this.settings, ...JSON.parse(stored) }
-            : this.settings;
-        this.barsPerRow =  this.settings.barsPerRow;
-        this.decoratedChords = this.settings.decoratedChords;
-        this.chordsStyle = this.settings.chordsStyle;
+        
+        const stored = JSON.parse(localStorage.getItem("reachords"));
+        if(stored)
+        {
+            settings.common = stored.common ? stored.common  : settings.common;
+            settings[this.id] = stored[this.id] ? stored[this.id] : settings[this.id]
+        }
+        this.barsPerRow =  settings[this.id].barsPerRow;
+        this.decoratedChords = settings.common.decoratedChords;
+        this.chordsStyle = settings.common.chordsStyle;
+        this.type = settings.common.type;
+        this.settings = settings;
     }
     
     set chordsOffset(val) {
@@ -579,6 +610,7 @@ class Song {
     
     changeLayout(layoutType) {
         this.type = layoutType;
+        this.saveProjectSettings();
         this.repaint();
     }
     
@@ -596,14 +628,19 @@ class Song {
         {
             this.createTableLyrics();
         }
-        
+        if (this.type === Song.LYRICS)
+        {
+            
+        }
+        this.render();
+        this.complete = true;
         
     }
+ 
 
     createTableLyrics() {
         let lastEnd = 0;
-        document.getElementById('bottom_bar').style.display = "none";
-        document.getElementById('bottom_curtain').style.bottom = "0";
+        
         for (let lyric of this.lyrics)
         {
             let row;
@@ -623,8 +660,6 @@ class Song {
             this.rows.push(row);
             lastEnd = lyric.endTime;
         }
-        this.render();
-        this.complete = true;
     }
 
    
@@ -660,10 +695,7 @@ class Song {
     
     
     createTableChords() {
-        document.getElementById('bottom_bar').style.display = "block";
-        document.getElementById('bottom_curtain').style.bottom = "4.5em";
-        const button = document.getElementById('decorated_chords');
-        if(this.decoratedChords) button.classList.add('button_on'); else button.classList.remove('button_on');
+        
         let columnCount = 0;
         let row = null;
         for (const bar of this.bars)
@@ -690,8 +722,7 @@ class Song {
                 columnCount = 0;
             }
         }
-        this.render();
-        this.complete = true;
+        
     }
 
     clear() {
@@ -706,29 +737,67 @@ class Song {
     }
 
     render() {
-        
+        console.log(this.type);
         document.getElementById('song_title').textContent  = this.project;
-        if (this.type === Song.LYRICS) {
-            document.title = this.project + " - Lyrics";
-        } else {
-            document.getElementById('lyrics_banner').textContent  = "";
-            document.title = this.project + " - Chords";
-        }
+        
         this.table = document.createElement('div');
-        for (let row of this.rows) {
-            row.table = this.table;
-            row.render();
-        }
+        
 
-        const table = document.getElementById('chords')
-        this.table.classList.add("chords_table");
-        this.table.id = "chords";
-        this.table.style.setProperty("--maxbeats", this.maxBeats);
-        table.parentNode.replaceChild(this.table, table);
-        for (const chord of this.chords) {
-            chord.render();
-        }
-       
+        const content = document.getElementById('song_content')
+        
+        this.table.id = "song_content";
+        
+        switch(this.type) {
+            case Song.LYRICS:
+                for (let row of this.rows) {
+                    row.table = this.table;
+                    row.render();
+                }
+                this.table.classList.add("lyrics_table");
+                document.getElementById('bottom_bar').style.display = "none";
+                document.getElementById('big_clock').style.display = "none";
+                document.getElementById('bottom_curtain').style.bottom = "0";
+                document.getElementById('decorated_chords').style.visibility = "hidden";
+                document.getElementById('increase_bars').style.visibility = "hidden";
+                document.getElementById('decrease_bars').style.visibility = "hidden";
+                document.title = this.project + " - Lyrics";
+                content.parentNode.replaceChild(this.table, content);
+                break;
+            case Song.CHORDS:
+                 for (let row of this.rows) {
+                    row.table = this.table;
+                    row.render();
+                }
+                document.getElementById('bottom_bar').style.display = "block";
+                document.getElementById('bottom_curtain').style.bottom = "4.5em";
+                document.getElementById('big_clock').style.display = "none";
+                document.getElementById('decorated_chords').style.visibility = "visible";
+                document.getElementById('increase_bars').style.visibility = "visible";
+                document.getElementById('decrease_bars').style.visibility = "visible";
+                
+                const button = document.getElementById('decorated_chords');
+                if(this.decoratedChords) button.classList.add('button_on'); else button.classList.remove('button_on');
+                this.table.classList.add("chords_table");
+                document.getElementById('lyrics_banner').textContent  = "";
+                document.title = this.project + " - Chords";
+                this.table.style.setProperty("--maxbeats", this.maxBeats);
+                content.parentNode.replaceChild(this.table, content);
+                for (const chord of this.chords) {
+                    chord.render();
+                }
+                break;
+            case Song.CLOCK:
+                document.getElementById('big_clock').style.display = "flex";
+                document.getElementById('bottom_bar').style.display = "none";
+                document.getElementById('bottom_curtain').style.bottom = "0";
+                document.getElementById('decorated_chords').style.visibility = "hidden";
+                document.getElementById('increase_bars').style.visibility = "hidden";
+                document.getElementById('decrease_bars').style.visibility = "hidden";
+                document.title = this.project + " - Clock";
+                content.parentNode.replaceChild(this.table, content);
+                break;
+            }
+            
     }
     
     hideSong(hide) {

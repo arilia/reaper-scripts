@@ -225,7 +225,7 @@ div.offset {
     font-size: .6em;
 }
 
-.chords_table {
+.chords_table, .lyrics_table {
     background-color: black;
     font-size: 150%;
     /* border-collapse: collapse; */
@@ -240,6 +240,21 @@ div.offset {
     padding:2px;
 }
 
+.big_clock {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  color: white;
+     
+}
+
+.clock_content {
+   width:50%;
+   min-height:50%;
+background: gray;
+  }
 
 .bar {
     position: relative;
