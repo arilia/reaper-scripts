@@ -417,6 +417,7 @@ class Song {
     type = 'lyrics';
     project = "Song";
     complete = false;
+    lock = true;
     instantPositioning = false;
     lastTimestamp = null;
     targetPosition = null;
@@ -443,7 +444,7 @@ class Song {
     constructor(type) {
         
         this.type = type;
-        wwr_req("GET/PROJEXTSTATE/reaperchordsandlyrics/barsPerRow");
+        
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
         this.songDiv =  document.getElementById('song');
@@ -457,24 +458,30 @@ class Song {
     }
 
     play() {
+        if(this.lock) return;
+        
         wwr_req("1007;TRANSPORT");
     }
     
     pause() {
+        if(this.lock) return;
         wwr_req("1008;TRANSPORT");
     }
     
     stop() {
+        if(this.lock) return;
         wwr_req("1016;TRANSPORT");
         
     }
     
     
     forward() {
-        wwr_req("1016;40861;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
+        if(this.lock) return;
+        wwr_req("1016;40861;40042;TRANSPORT;SET/EXTSTATE/reachords/instant/1GET/EXTSTATE/reachords/status");
     }
     
     rewind() {
+        if(this.lock) return;
         if(this.playState === 0 && this.lastRecordedPosition === 0)
         {
             wwr_req("1016;40862;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
@@ -487,6 +494,7 @@ class Song {
     }
     
     prevBar() {
+        if(this.lock) return;
         wwr_req("1016;41043;TRANSPORT");
     }
     
@@ -848,6 +856,12 @@ class Song {
             
     }
     
+    toggleLock() {
+        this.lock = !this.lock;
+        const value = this.lock ? 1 : 0;
+        wwr_req("SET/EXTSTATE/reachords/lock/" +  value );
+    }
+    
     hideSong(hide) {
         //console.log(hide);
         this.songDiv.style.visibility = hide ? 'hidden' : 'visible';
@@ -1129,9 +1143,19 @@ function wwr_onreply(results, t0) {
                             song.setScriptActive(false);
                             break;
                         }
+                        song.bpm = status.bpm;
+                        song.lock = status.lock*1;
+                        if(song.lock) {
+                            document.getElementById('lock').classList.add('locked');
+                            document.getElementById('lock').classList.remove('unlocked');
+                        } else
+                        {
+                           document.getElementById('lock').classList.remove('locked');
+                            document.getElementById('lock').classList.add('unlocked'); 
+                        }
                         // Comparing server timestamps
                         // if they differ it means the script is not running
-                        song.bpm = status.bpm;
+                        
                         const isActive = status.timestamp !== song.lastTimestamp;
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
@@ -1145,6 +1169,7 @@ function wwr_onreply(results, t0) {
                                 song.hideSong(true);
                                 song.songReady = false; 
                                 song.version = status.version;
+                                
                                 song.id = status.projectid;
                                 wwr_req("GET/EXTSTATE/reachords/song");
                             }

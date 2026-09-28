@@ -22,6 +22,7 @@ local version = 0
 local chordsOffset = 0
 local lyricsOffset = 0
 local lastCheckTime = 0
+local lastCheckProjectId = ""
 local globalOffset = 0
 local projectName = ""
 local projectTitle  = ""
@@ -254,6 +255,7 @@ local function getSongJson()
   local measjs = getMeasuresJson()
   local length = reaper.GetProjectLength(0)
   
+  
   local json = "{"
   json = json .. '"chords":' .. chordjs
   json = json .. ', "lyrics":' .. lyrjs
@@ -264,6 +266,7 @@ local function getSongJson()
   json = json .. ', "lyricsOffset":' .. lyricsOffset 
   json = json .. ', "globalOffset":' .. globalOffset
   json = json .. ', "length":' .. length
+  
   json = json .. '}'
   return json
 end  
@@ -278,7 +281,9 @@ local function loop()
     local now = reaper.time_precise()
     
     -- Check the project just one time a second,
-    if now - lastCheckTime >= 1 then
+    
+    if (now - lastCheckTime >= 1)then
+        -- reaper.ShowConsoleMsg(reaper.time_precise() ..  "\n");
         lastCheckTime = now
 
         -- Use the saved project's file path as its id whenever possible: it's a
@@ -321,12 +326,14 @@ local function loop()
         end
         
         -- Write into status
+        local lock = reaper.GetExtState("reachords", "lock")
         local playPosition = reaper.GetPlayPosition()
         local bpm = reaper.TimeMap2_GetDividedBpmAtTime(0, playPosition)
         local statusJson = '{"bpm":' .. bpm
         statusJson = statusJson .. ', "version":' .. version
         statusJson = statusJson  .. ', "timestamp":' .. reaper.time_precise() 
-        statusJson = statusJson  .. ', "projectid": "'  ..  jsonEscape(projectId)
+        statusJson = statusJson  .. ', "projectid": "'  ..  jsonEscape(projectId) .. '"'
+        statusJson = statusJson  .. ', "lock": "'  ..  lock
         statusJson = statusJson  ..  '"}'  -- placeholder
         reaper.SetExtState("reachords", "status", statusJson, false)
         -- reaper.ShowConsoleMsg(statusJson .. "\n")

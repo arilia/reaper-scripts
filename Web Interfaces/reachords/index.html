@@ -22,6 +22,8 @@
             <div class="bar_adjust" id="change_to_chords" title="Clock">CH</div>
             <div class="bar_adjust" id="change_to_lyrics" title="Lyrics">LYR</div>
             <div class="bar_adjust" id="change_to_clock" title="Chords">CLK</div>
+            &nbsp;&nbsp;&nbsp;
+            <div class="bar_adjust lock" id="lock" title="Lock" >LOCK</div>
             <div class="clock" id="clock_div"></div>
             
         </div>
@@ -94,6 +96,7 @@
         document.getElementById("prev_bar_button").addEventListener("click",  function f() {song.prevBar()});
         document.getElementById("rewind_button").addEventListener("click",  function f() {song.rewind()});
         document.getElementById("forward_button").addEventListener("click",  function f() {song.forward()});
+        document.getElementById("lock").addEventListener("click",  function f() {song.toggleLock()});
     </script>
 </html>
 

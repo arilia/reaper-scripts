@@ -465,6 +465,18 @@ div.offset {
     margin-right: .1em;
 }
 
+.bar_adjust.lock {
+    flex: 0 0 4em;
+    width: 4em;
+}
+
+.bar_adjust.lock.locked {
+    background-color:  hsl(120, 25%, 35%);
+}
+
+.bar_adjust.lock.unlocked {
+    background-color:  hsl(0, 55%, 40%);;
+}
 
 @media (min-width: 0) and (max-width: 1024px) {
     .song {
