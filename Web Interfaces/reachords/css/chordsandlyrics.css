@@ -1,3 +1,8 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+}
+
 .song {
     width: 70%;
     margin: 20px auto;
@@ -14,7 +19,7 @@
     font-size: 1.3em;
     font-weight: bold;
     color: #eee;
-        margin-left: auto;
+    margin-left: auto;
     margin-right: 1em;
 }
 
@@ -240,21 +245,112 @@ div.offset {
     padding:2px;
 }
 
+/* Contenitore principale */
 .big_clock {
+    position: fixed;
+
+    width: 40vw;
+    height: 40vh;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
     display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 100vh;
-  color: white;
-     
+    flex-direction: column;
+    background-color: hsl(0, 0%, 30%);
+    color: #eee;
 }
 
-.clock_content {
-   width:50%;
-   min-height:50%;
-background: gray;
-  }
+
+/* Rettangolo superiore */
+.display {
+    flex: 1;
+    padding: 3em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Parte superiore: tempo + BPM/bar */
+.big_time {
+    display: flex;
+    font-size: 3em;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+/* Zona del testo centrale */
+.last_marker {
+    flex: 1;
+
+    width: 90%;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Pulsanti sotto il rettangolo */
+.controls {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 12px;
+}
+
+.controls button {
+    display: flex;
+    background-color: hsl(120, 25%, 35%);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin: .5em;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+    align-items: center;  
+    transition: background-color 0.08s, transform 0.08s;
+}
+
+
+
+
+#prev_bar_button {
+    background-color: hsl(210, 45%, 38%);
+}
+
+#pause_button {
+     background-color: hsl(45, 60%, 40%);
+}
+
+#play_button {
+    background-color: hsl(120, 45%, 35%);
+}
+
+#stop_button {
+    background-color: hsl(0, 55%, 40%);
+}
+
+#prev_song_button{
+    background-color: hsl(210, 45%, 38%);
+}
+
+#next_song_button{
+    background-color: hsl(210, 45%, 38%);
+}
+
+
+.controls button:active {
+    background-color: hsl(0, 0%, 22%) !important;
+    transform: translateY(1px);
+}
+
+
 
 .bar {
     position: relative;
@@ -266,6 +362,8 @@ background: gray;
     border-bottom: 4px solid black;
 
 }
+
+
 
 
 .beat {

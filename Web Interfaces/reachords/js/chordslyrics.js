@@ -175,9 +175,16 @@ class Marker {
         this.div.classList.add('marker');
         this.div.style.border = "1px solid rgb(" + this.color + ")";
         this.div.style.background = "rgba(" + this.color + ", .3)";
-        if(this.row.div) this.row.div.append(this.div);
+        if(this.row && this.row.div) this.row.div.append(this.div);
         
     }
+    
+    isOver(position) {
+        if(position >= this.position) {
+            return true;
+        }
+    }
+    
 }
 
 class Chord {
@@ -416,6 +423,8 @@ class Song {
     loaderDiv = null;
     playStateDiv = null;
     clockDiv = null;
+    bigTimeDiv = null;
+    lastMarker = null;
     chordsStyle =  "EN";
     decoratedChords = true;
     bpm = 0;
@@ -440,11 +449,41 @@ class Song {
         this.loaderDiv = document.getElementById('loader');
         this.playStateDiv = document.getElementById('play_state');
         this.clockDiv = document.getElementById('clock_div');
+        this.bigTimeDiv = document.getElementById('big_time');
 //        const rowBox = document.getElementById('position_row').getBoundingClientRect()
 //        this.targetPosition = rowBox.top + rowBox.height / 2;
             
     }
 
+    play() {
+        wwr_req_recur("1007;TRANSPORT");
+    }
+    
+    pause() {
+        wwr_req_recur("1008;TRANSPORT");
+    }
+    
+    stop() {
+        wwr_req_recur("1016;TRANSPORT");
+        
+    }
+    
+    
+    forward() {
+        wwr_req_recur("1016;40861;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
+    }
+    
+    rewind() {
+        if(this.playState === 0 && this.lastRecordedPosition === 0)
+        {
+            wwr_req_recur("1016;40862;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
+        }
+        else
+        {
+            wwr_req_recur("1016;40042;TRANSPORT");
+        }
+        
+    }
     
     saveProjectSettings() {
         this.settings = {
@@ -520,7 +559,7 @@ class Song {
     }
     
     get lyricsOffset() {
-        if(this.type === Song.CHORDS || this.playState === 0 || this.playState === 2 || this.playState === 6)
+        if(this.type !== Song.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
         {
             return 0;
         }
@@ -737,7 +776,6 @@ class Song {
     }
 
     render() {
-        console.log(this.type);
         document.getElementById('song_title').textContent  = this.project;
         
         this.table = document.createElement('div');
@@ -753,6 +791,7 @@ class Song {
                     row.table = this.table;
                     row.render();
                 }
+                this.clockDiv.style.visibility = "visible";
                 this.table.classList.add("lyrics_table");
                 document.getElementById('bottom_bar').style.display = "none";
                 document.getElementById('big_clock').style.display = "none";
@@ -760,6 +799,7 @@ class Song {
                 document.getElementById('decorated_chords').style.visibility = "hidden";
                 document.getElementById('increase_bars').style.visibility = "hidden";
                 document.getElementById('decrease_bars').style.visibility = "hidden";
+                document.getElementById('position_row').style.visibility = "visible";
                 document.title = this.project + " - Lyrics";
                 content.parentNode.replaceChild(this.table, content);
                 break;
@@ -768,13 +808,14 @@ class Song {
                     row.table = this.table;
                     row.render();
                 }
+                this.clockDiv.style.visibility = "visible";
                 document.getElementById('bottom_bar').style.display = "block";
                 document.getElementById('bottom_curtain').style.bottom = "4.5em";
                 document.getElementById('big_clock').style.display = "none";
                 document.getElementById('decorated_chords').style.visibility = "visible";
                 document.getElementById('increase_bars').style.visibility = "visible";
                 document.getElementById('decrease_bars').style.visibility = "visible";
-                
+                document.getElementById('position_row').style.visibility = "visible";
                 const button = document.getElementById('decorated_chords');
                 if(this.decoratedChords) button.classList.add('button_on'); else button.classList.remove('button_on');
                 this.table.classList.add("chords_table");
@@ -787,12 +828,14 @@ class Song {
                 }
                 break;
             case Song.CLOCK:
+                this.clockDiv.style.visibility = "hidden";
                 document.getElementById('big_clock').style.display = "flex";
                 document.getElementById('bottom_bar').style.display = "none";
                 document.getElementById('bottom_curtain').style.bottom = "0";
                 document.getElementById('decorated_chords').style.visibility = "hidden";
                 document.getElementById('increase_bars').style.visibility = "hidden";
                 document.getElementById('decrease_bars').style.visibility = "hidden";
+                document.getElementById('position_row').style.visibility = "hidden";
                 document.title = this.project + " - Clock";
                 content.parentNode.replaceChild(this.table, content);
                 break;
@@ -864,6 +907,7 @@ class Song {
         if(formattedTime !== this.lastClockTime)
         {
             this.clockDiv.innerHTML  = formattedTime + "<p class ='bpm'>" + this.bpm + " bpm</p>";
+            
             this.lastClockTime = formattedTime;
         }
         switch (this.type) {
@@ -877,7 +921,6 @@ class Song {
                 }
                 for (let lyric of this.lyrics) {
                     foundLyric = foundLyric || lyric.checkPlayingChords(position);
-                    
                 }
                 if(!foundLyric)
                 {
@@ -889,6 +932,31 @@ class Song {
                 
                 for (let lyric of this.lyrics) {
                     lyric.checkPlaying(position);
+                }
+                break;
+            case Song.CLOCK:
+                this.lastMarker = null;
+                this.bigTimeDiv.textContent  = formattedTime 
+                document.getElementById('big_clock_bpm').textContent = this.bpm + "bpm";
+//                document.getElementById('big_clock_bar').textContent = this. + "bpm";
+                for (let marker of this.markers) {
+                    if(!marker) continue;
+                    let isOver = marker.isOver(position);
+                    if(!isOver)
+                    {   
+                        break;
+                    }
+                    this.lastMarker = marker;
+                }
+                if(this.lastMarker) {
+                    if(this.lastMarker.div ===  null) {
+                        this.lastMarker.render();
+                    }
+                    document.getElementById('last_marker').innerHTML = "";
+                    document.getElementById('last_marker').append(this.lastMarker.div);
+                }
+                else {
+                    document.getElementById('last_marker').innerHTML = "";
                 }
                 break;
         }
@@ -903,12 +971,15 @@ class Song {
         this.lyricsOffset = json.lyricsOffset * 1;
         this.globalOffset = json.globalOffset * 1;
         const markers = json.markers;
+        
         for (let j in markers) {
+            
             const m = markers[j];
             const marker = new Marker(m);
             this.appendMarker(marker);
+            
         }
-
+        
 
         const bars = json.bars;
         let maxBeatPerRow = 0;

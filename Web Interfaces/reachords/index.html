@@ -49,11 +49,33 @@
                 <div class="offset" id ="offset">&nbsp; </div>
                 <div class="latency" id ="latency">&nbsp; </div>
             </div>
-            <div id="big_clock" class="big_clock">
-                <div class="clock_content">
-                BIG CLOCK
+            
+            <div class="big_clock" id="big_clock">
+                <div class="display">
+                    <div class="info">
+                        <div  class="big_time" id="big_time" >00:04:50</div>
+                        <div id="big_clock_bpm" >120Bpm</div>
+                        <!--<div id="big_clock_bar">bar: 4</div>-->
+                    </div>
+
+                    <div class="last_marker"  id="last_marker">
+                       
+                    </div>
+
                 </div>
+
+                <div class="controls">
+                    <button id="prev_bar_button">-1 bar</button>
+                    <button id="play_button">▶ play</button>
+                    <button id="pause_button">⏸ pause</button>
+                    <button id="stop_button">⏹ stop</button>
+                    <button id="rewind_button">⏮ prev</button>
+                    <button id="forward_button">⏭ next</button>
+                </div>
+
             </div>
+            
+            
     </body>
     <script>
 
@@ -64,6 +86,12 @@
         document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.changeLayout(Song.LYRICS)});
         document.getElementById("change_to_chords").addEventListener("click",  function f() {song.changeLayout(Song.CHORDS)});
         document.getElementById("change_to_clock").addEventListener("click",  function f() {song.changeLayout(Song.CLOCK)});
+        document.getElementById("play_button").addEventListener("click",  function f() {song.play()});
+        document.getElementById("pause_button").addEventListener("click",  function f() {song.pause()});
+        document.getElementById("stop_button").addEventListener("click",  function f() {song.stop()});
+        document.getElementById("prev_bar_button").addEventListener("click",  function f() {song.prevBar()});
+        document.getElementById("rewind_button").addEventListener("click",  function f() {song.rewind()});
+        document.getElementById("forward_button").addEventListener("click",  function f() {song.forward()});
     </script>
 </html>
 
