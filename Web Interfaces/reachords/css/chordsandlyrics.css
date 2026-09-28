@@ -317,8 +317,19 @@ div.offset {
     transition: background-color 0.08s, transform 0.08s;
 }
 
-
-
+.progress {
+    /*width: 100%;*/
+    
+    border-radius: 8px;
+    border: 1px solid #333;
+    margin: .5em;
+}
+.progress_fill {
+    border-radius: 7px;
+    background: #333;
+    height: 2em;
+    width: 5%;
+}
 
 #prev_bar_button {
     background-color: hsl(210, 45%, 38%);

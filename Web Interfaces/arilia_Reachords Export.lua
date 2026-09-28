@@ -252,6 +252,7 @@ local function getSongJson()
   local chordjs  = getChordsJson(tr)
   local markjs = getMarkersJson()
   local measjs = getMeasuresJson()
+  local length = reaper.GetProjectLength(0)
   
   local json = "{"
   json = json .. '"chords":' .. chordjs
@@ -262,6 +263,7 @@ local function getSongJson()
   json = json .. ', "chordsOffset":' .. chordsOffset 
   json = json .. ', "lyricsOffset":' .. lyricsOffset 
   json = json .. ', "globalOffset":' .. globalOffset
+  json = json .. ', "length":' .. length
   json = json .. '}'
   return json
 end  

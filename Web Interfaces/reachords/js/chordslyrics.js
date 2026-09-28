@@ -413,6 +413,7 @@ class Song {
     globalOffset = 0;
     version = -1;
     timestamp = -1;
+    length = 0;
     type = 'lyrics';
     project = "Song";
     complete = false;
@@ -456,33 +457,37 @@ class Song {
     }
 
     play() {
-        wwr_req_recur("1007;TRANSPORT");
+        wwr_req("1007;TRANSPORT");
     }
     
     pause() {
-        wwr_req_recur("1008;TRANSPORT");
+        wwr_req("1008;TRANSPORT");
     }
     
     stop() {
-        wwr_req_recur("1016;TRANSPORT");
+        wwr_req("1016;TRANSPORT");
         
     }
     
     
     forward() {
-        wwr_req_recur("1016;40861;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
+        wwr_req("1016;40861;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
     }
     
     rewind() {
         if(this.playState === 0 && this.lastRecordedPosition === 0)
         {
-            wwr_req_recur("1016;40862;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
+            wwr_req("1016;40862;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
         }
         else
         {
-            wwr_req_recur("1016;40042;TRANSPORT");
+            wwr_req("1016;40042;TRANSPORT");
         }
         
+    }
+    
+    prevBar() {
+        wwr_req("1016;41043;TRANSPORT");
     }
     
     saveProjectSettings() {
@@ -936,8 +941,10 @@ class Song {
                 break;
             case Song.CLOCK:
                 this.lastMarker = null;
-                this.bigTimeDiv.textContent  = formattedTime 
+                this.bigTimeDiv.textContent  = formattedTime;
                 document.getElementById('big_clock_bpm').textContent = this.bpm + "bpm";
+//                document.getElementById('progress_fill').textContent = 100*this.calculatedPosition/this.length;
+                document.getElementById('progress_fill').style.width = 100*this.calculatedPosition/this.length + "%";
 //                document.getElementById('big_clock_bar').textContent = this. + "bpm";
                 for (let marker of this.markers) {
                     if(!marker) continue;
@@ -970,6 +977,7 @@ class Song {
         this.chordsOffset = json.chordsOffset * 1;
         this.lyricsOffset = json.lyricsOffset * 1;
         this.globalOffset = json.globalOffset * 1;
+        this.length = json.length * 1;
         const markers = json.markers;
         
         for (let j in markers) {
