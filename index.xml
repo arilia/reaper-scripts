@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Arilia Scripts" commit="3afef50a52b5048a0505acf8f1281db3fec766de">
+<index version="1" name="Arilia Scripts" commit="c74eea9b009bfbe493c986f27c8c4a321098242e">
   <category name="Web Interfaces">
     <reapack name="arilia_Reachords Export.lua" type="script" desc="Reachords Export">
       <metadata>
@@ -30,6 +30,14 @@ Change ID
 Bar with offset bug fix
 jsonEscape fix]]></changelog>
         <source main="main">https://github.com/arilia/reaper-scripts/raw/3afef50a52b5048a0505acf8f1281db3fec766de/Web%20Interfaces/arilia_Reachords%20Export.lua</source>
+      </version>
+      <version name="1.0.7" author="arilia" time="2026-09-29T16:21:29Z">
+        <changelog><![CDATA[Initial release
+Change ID
+Bar with offset bug fix
+jsonEscape fix
+Clock]]></changelog>
+        <source main="main">https://github.com/arilia/reaper-scripts/raw/c74eea9b009bfbe493c986f27c8c4a321098242e/Web%20Interfaces/arilia_Reachords%20Export.lua</source>
       </version>
     </reapack>
     <reapack name="arilia_start.lua" type="script" desc="Reachords Start">
