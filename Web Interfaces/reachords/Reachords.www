@@ -1,6 +1,6 @@
 -- @description Reachords
 -- @author arilia
--- @version 1.0.5
+-- @version 1.0.6
 -- @link https://github.com/arilia/reaper-scripts
 -- @license GPL-3.0-or-later
 -- @changelog
@@ -8,7 +8,9 @@
 --   Change ID
 --   Bar with offset bug fix
 --   jsonEscape fix
+--   jsonEscape fix
 -- @provides
+--   index.html > reachords/chords.html
 --   chords.html > reachords/chords.html
 --   lyrics.html > reachords/lyrics.html
 --   js/chordslyrics.js > reachords/js/chordslyrics.js

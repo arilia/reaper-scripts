@@ -1,6 +1,6 @@
 -- @description Reachords Export
 -- @author arilia
--- @version 1.0.6
+-- @version 1.0.7
 -- @link https://github.com/arilia/reaper-scripts
 -- @license GPL-3.0-or-later
 -- @changelog
@@ -8,7 +8,7 @@
 --   Change ID
 --   Bar with offset bug fix
 --   jsonEscape fix
-
+--   Clock
 
 -- Option 1: auto-terminate this instance if the action is relaunched while
 -- already running (prevents duplicate defer loops if triggered again,

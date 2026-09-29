@@ -191,6 +191,7 @@ class Marker {
         const progressDiv = document.createElement("div");
         progressDiv.id = "marker_" + this.index + "_progress";
         progressDiv.classList.add('marker_progress');
+        progressDiv.style.background = "rgba(" + this.color + ", .8)";
         this.clockDiv = document.createElement("div");
         this.clockDiv.id = "clock_marker_" + this.index;
         this.clockDiv.textContent  = this.text;
@@ -1002,6 +1003,9 @@ class Song {
                 }
                 if(this.lastMarker === null) {
                     document.getElementById('last_marker').innerHTML = "";
+                } else {
+                    const progress = 100*(this.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration
+                    document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
                 }
                 break;
         }

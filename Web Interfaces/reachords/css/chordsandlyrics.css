@@ -479,9 +479,12 @@ div.offset {
 }
 
 .marker_progress {
-    background: red;
-    width: 50%;
-    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    bottom: 0;
+    width: 0%;
+    height: 20%;
 }
 
 @media (min-width: 0) and (max-width: 1032px) {
@@ -519,6 +522,7 @@ div.offset {
     grid-column: 1 / -1;
 }
 .marker {
+    position: relative;
     margin: .2em;
     margin-top: .5em;
     background: black;
