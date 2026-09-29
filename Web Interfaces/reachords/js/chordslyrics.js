@@ -157,25 +157,48 @@ class Row {
 
 class Marker {
     text = "";
+    index = 0;
     barNumber = 1;
     position = 0;
     color = '';
+    duration = 0;
     div = null;
+    clockDiv = null;
     row = null;
 
     constructor(m) {
+        this.index = m.index;
         this.text = m.text;
         this.color = m.color;
         this.barNumber = m.barNumber;
         this.position = m.position;
     }
+    
     render() {
         this.div = document.createElement("div");
+        this.div.id = "marker_" + this.index;
         this.div.textContent  = this.text;
         this.div.classList.add('marker');
         this.div.style.border = "1px solid rgb(" + this.color + ")";
         this.div.style.background = "rgba(" + this.color + ", .3)";
         if(this.row && this.row.div) this.row.div.append(this.div);
+        
+    }
+    
+    
+    renderForClock() {
+        if(this.clockDiv) return this.clockDiv;
+        const progressDiv = document.createElement("div");
+        progressDiv.id = "marker_" + this.index + "_progress";
+        progressDiv.classList.add('marker_progress');
+        this.clockDiv = document.createElement("div");
+        this.clockDiv.id = "clock_marker_" + this.index;
+        this.clockDiv.textContent  = this.text;
+        this.clockDiv.classList.add('marker');
+        this.clockDiv.style.border = "1px solid rgb(" + this.color + ")";
+        this.clockDiv.style.background = "rgba(" + this.color + ", .3)";
+        this.clockDiv.append(progressDiv);
+        return this.clockDiv;
         
     }
     
@@ -410,6 +433,7 @@ class Song {
     calculatedPosition = 0;
     playState = -1;
     lastPlayState = -1;
+    lastMarkerIndex = 0;
     globalOffset = 0;
     version = -1;
     timestamp = -1;
@@ -477,7 +501,7 @@ class Song {
     
     forward() {
         if(this.lock) return;
-        wwr_req("1016;40861;40042;TRANSPORT;SET/EXTSTATE/reachords/instant/1GET/EXTSTATE/reachords/status");
+        wwr_req("1016;40861;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
     }
     
     rewind() {
@@ -955,6 +979,7 @@ class Song {
                 break;
             case Song.CLOCK:
                 this.lastMarker = null;
+                
                 this.bigTimeDiv.textContent  = formattedTime;
                 document.getElementById('big_clock_bpm').textContent = this.bpm + "bpm";
 //                document.getElementById('progress_fill').textContent = 100*this.calculatedPosition/this.length;
@@ -969,14 +994,13 @@ class Song {
                     }
                     this.lastMarker = marker;
                 }
-                if(this.lastMarker) {
-                    if(this.lastMarker.div ===  null) {
-                        this.lastMarker.render();
-                    }
+                
+                if(this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
                     document.getElementById('last_marker').innerHTML = "";
-                    document.getElementById('last_marker').append(this.lastMarker.div);
+                    document.getElementById('last_marker').append(this.lastMarker.renderForClock());
+                    this.lastMarkerIndex = this.lastMarker.index;
                 }
-                else {
+                if(this.lastMarker === null) {
                     document.getElementById('last_marker').innerHTML = "";
                 }
                 break;
@@ -993,15 +1017,18 @@ class Song {
         this.globalOffset = json.globalOffset * 1;
         this.length = json.length * 1;
         const markers = json.markers;
-        
+        let previousMarker = null;
         for (let j in markers) {
             
             const m = markers[j];
             const marker = new Marker(m);
             this.appendMarker(marker);
-            
+            if(previousMarker) {
+                previousMarker.duration = marker.position - previousMarker.position;
+            }
+            previousMarker = marker;
         }
-        
+        previousMarker.duration = this.length - previousMarker.position;
 
         const bars = json.bars;
         let maxBeatPerRow = 0;

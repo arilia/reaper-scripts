@@ -148,8 +148,10 @@ local function getMarkersJson()
       local bar = reaper.format_timestr_pos( pos, '', 2 )
       bar, _, _ = bar:match("^(%-?%d+)%.(%d+)%.(%d+)")
       mark = mark .. '"' .. bar .. '": {' 
+      
       mark = mark .. '"barNumber":' .. bar
       mark = mark .. ', "position":' .. pos 
+      mark = mark .. ', "index":' .. markrgnindexnumber 
       mark = mark .. ', "text":"' .. jsonEscape(name) .. '"'
       mark = mark .. ', "color":"' .. r .. ", " .. g .. ", " .. b .. '"'
       mark = mark .. '}'
@@ -282,7 +284,7 @@ local function loop()
     
     -- Check the project just one time a second,
     
-    if (now - lastCheckTime >= 1)then
+    if (now - lastCheckTime >= 0)then
         -- reaper.ShowConsoleMsg(reaper.time_precise() ..  "\n");
         lastCheckTime = now
 

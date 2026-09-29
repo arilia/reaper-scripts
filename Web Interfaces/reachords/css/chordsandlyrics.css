@@ -253,7 +253,7 @@ div.offset {
     height: 40vh;
 
     left: 50%;
-    top: 50%;
+    top: 40%;
 
     transform: translate(-50%, -50%);
     border-radius: 5px;
@@ -478,9 +478,20 @@ div.offset {
     background-color:  hsl(0, 55%, 40%);;
 }
 
-@media (min-width: 0) and (max-width: 1024px) {
+.marker_progress {
+    background: red;
+    width: 50%;
+    height: 100%;
+}
+
+@media (min-width: 0) and (max-width: 1032px) {
     .song {
         width: 90%;
+    }
+    .big_clock {
+        top: 30%;
+         width: 80vw;
+         height: 30vh;
     }
 }
 
