@@ -434,7 +434,7 @@ class Song {
     calculatedPosition = 0;
     playState = -1;
     lastPlayState = -1;
-    lastMarkerIndex = 0;
+    viewManager = null;
     globalOffset = 0;
     version = -1;
     timestamp = -1;
@@ -449,16 +449,16 @@ class Song {
     songDiv = null;
     loaderDiv = null;
     playStateDiv = null;
-    clockDiv = null;
-    bigTimeDiv = null;
-    lastMarker = null;
-    chordsStyle =  "EN";
-    decoratedChords = true;
+//    clockDiv = null;  //TODO Move to ClockView
+//    bigTimeDiv = null;  //TODO Move to ClockView
+//    lastMarkerIndex = 0; //TODO Move to ClockView
+//    lastMarker = null; //TODO Move to ClockView   
+
+
+    chordsStyle =  "EN"; //TODO Move to ChordsView   
+    decoratedChords = true; //TODO Move to ChordsView  
     bpm = 0;
-    lastClockTime = "";
-    static LYRICS = "lyrics";
-    static CHORDS = "chords";
-    static CLOCK = "clock";
+    lastClockTime = ""; //TODO Move to ClockView 
     static LYRICSDELTA = 0.5;
     static STATUSPOLLING = 2000;
     static DEFAULT_BARS_PER_ROW = 4;
@@ -475,8 +475,8 @@ class Song {
         this.songDiv =  document.getElementById('song');
         this.loaderDiv = document.getElementById('loader');
         this.playStateDiv = document.getElementById('play_state');
-        this.clockDiv = document.getElementById('clock_div');
-        this.bigTimeDiv = document.getElementById('big_time');
+        this.clockDiv = document.getElementById('clock_div'); 
+//        this.bigTimeDiv = document.getElementById('big_time');  // TODO move to View
 //        const rowBox = document.getElementById('position_row').getBoundingClientRect()
 //        this.targetPosition = rowBox.top + rowBox.height / 2;
             
@@ -585,7 +585,7 @@ class Song {
     }
     
     get chordsOffset() {
-        if(this.type === Song.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
+        if(this.type === ViewManager.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
         {
             return 0;
         }
@@ -597,7 +597,7 @@ class Song {
     }
     
     get lyricsOffset() {
-        if(this.type !== Song.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
+        if(this.type !== ViewManager.LYRICS  || this.playState === 0 || this.playState === 2 || this.playState === 6)
         {
             return 0;
         }
@@ -698,14 +698,14 @@ class Song {
         document.getElementById('change_to_clock').classList.remove('button_on');
         document.getElementById('change_to_' + this.type).classList.add('button_on');
         this.instantPositioning = true;
-        if (this.type === Song.CHORDS) {
+        if (this.type === ViewManager.CHORDS ) {
             this.createTableChords();
         } 
-        if (this.type === Song.LYRICS)
+        if (this.type === ViewManager.LYRICS )
         {
             this.createTableLyrics();
         }
-        if (this.type === Song.LYRICS)
+        if (this.type === ViewManager.LYRICS )
         {
             
         }
@@ -824,7 +824,7 @@ class Song {
         this.table.id = "song_content";
         
         switch(this.type) {
-            case Song.LYRICS:
+            case ViewManager.LYRICS :
                 for (let row of this.rows) {
                     row.table = this.table;
                     row.render();
@@ -841,7 +841,7 @@ class Song {
                 document.title = this.project + " - Lyrics";
                 content.parentNode.replaceChild(this.table, content);
                 break;
-            case Song.CHORDS:
+            case ViewManager.CHORDS :
                  for (let row of this.rows) {
                     row.table = this.table;
                     row.render();
@@ -865,7 +865,7 @@ class Song {
                     chord.render();
                 }
                 break;
-            case Song.CLOCK:
+            case ViewManager.CLOCK :
                 this.clockDiv.style.visibility = "hidden";
                 document.getElementById('big_clock').style.display = "flex";
                 document.getElementById('bottom_bar').style.display = "none";
@@ -895,7 +895,7 @@ class Song {
     
     
     appendChord(chord) {
-        if (this.type === Song.LYRICS) {
+        if (this.type === ViewManager.LYRICS ) {
             return;
         }
         this.bars.forEach(function (bar) {
@@ -909,7 +909,7 @@ class Song {
     }
 
     appendBar(bar) {
-        if (this.type === Song.LYRICS) {
+        if (this.type === ViewManager.LYRICS ) {
             return;
         }
         bar.song = this;
@@ -922,7 +922,7 @@ class Song {
     }
 
     appendLyric(lyric) {
-        if (this.type === Song.CHORDS) {
+        if (this.type === ViewManager.CHORDS ) {
             //return;
         }
         lyric.song = this;
@@ -933,11 +933,9 @@ class Song {
         this.lastInsertedLyric = lyric;
     }
 
-    checkPlaying(position) {
-//        return;
-        if (!this.complete) {
-            return;
-        }
+
+    formatTime(position)
+    {
         let formattedTime = "";
         const time = (position - this.chordsOffset - this.lyricsOffset + this.globalOffset);
         if(time)
@@ -948,14 +946,23 @@ class Song {
         {
             formattedTime = "-" + formattedTime;
         }
+        return formattedTime;
+    }
+    
+    checkPlaying(position) {
+//        return;
+        if (!this.complete) {
+            return;
+        }
+        let formattedTime = this.formatTime(position);
+        
         if(formattedTime !== this.lastClockTime)
         {
             this.clockDiv.innerHTML  = formattedTime + "<p class ='bpm'>" + this.bpm + " bpm</p>";
-            
             this.lastClockTime = formattedTime;
         }
         switch (this.type) {
-            case Song.CHORDS:
+            case ViewManager.CHORDS :
                 let foundLyric = false;
                 for (let chord of this.chords) {
                     chord.checkPlaying(position);
@@ -972,41 +979,40 @@ class Song {
                     lyrics_banner.textContent = "";
                 }
                 break;
-            case Song.LYRICS:
+            case ViewManager.LYRICS :
                 
                 for (let lyric of this.lyrics) {
                     lyric.checkPlaying(position);
                 }
                 break;
-            case Song.CLOCK:
-                this.lastMarker = null;
-                
-                this.bigTimeDiv.textContent  = formattedTime;
-                document.getElementById('big_clock_bpm').textContent = this.bpm + "bpm";
-//                document.getElementById('progress_fill').textContent = 100*this.calculatedPosition/this.length;
-                document.getElementById('progress_fill').style.width = 100*this.calculatedPosition/this.length + "%";
-//                document.getElementById('big_clock_bar').textContent = this. + "bpm";
-                for (let marker of this.markers) {
-                    if(!marker) continue;
-                    let isOver = marker.isOver(position);
-                    if(!isOver)
-                    {   
-                        break;
-                    }
-                    this.lastMarker = marker;
-                }
-                
-                if(this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
-                    document.getElementById('last_marker').innerHTML = "";
-                    document.getElementById('last_marker').append(this.lastMarker.renderForClock());
-                    this.lastMarkerIndex = this.lastMarker.index;
-                }
-                if(this.lastMarker === null) {
-                    document.getElementById('last_marker').innerHTML = "";
-                } else {
-                    const progress = 100*(this.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration
-                    document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
-                }
+            case ViewManager.CLOCK :
+                this.viewManager.clockView.update(position);
+//                this.lastMarker = null;
+//                
+//                this.bigTimeDiv.textContent  = formattedTime;
+//                document.getElementById('big_clock_bpm').textContent = this.bpm + "bpm";
+//                document.getElementById('progress_fill').style.width = 100*this.calculatedPosition/this.length + "%";
+//                for (let marker of this.markers) {
+//                    if(!marker) continue;
+//                    let isOver = marker.isOver(position);
+//                    if(!isOver)
+//                    {   
+//                        break;
+//                    }
+//                    this.lastMarker = marker;
+//                }
+//                
+//                if(this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
+//                    document.getElementById('last_marker').innerHTML = "";
+//                    document.getElementById('last_marker').append(this.lastMarker.renderForClock());
+//                    this.lastMarkerIndex = this.lastMarker.index;
+//                }
+//                if(this.lastMarker === null) {
+//                    document.getElementById('last_marker').innerHTML = "";
+//                } else {
+//                    const progress = 100*(this.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration
+//                    document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
+//                }
                 break;
         }
         
@@ -1101,7 +1107,7 @@ class Song {
         
         document.getElementById('latency').innerHTML = "Latency: " +  delta.toFixed(1) + " ms";
         let offs =this.chordsOffset;
-        if(this.type === Song.LYRICS)
+        if(this.type === ViewManager.LYRICS )
         {
             offs = this.lyricsOffset;
         }
@@ -1132,6 +1138,76 @@ class Song {
         this.songReady = true; 
     }
 
+}
+
+
+class ClockView {
+    
+    bigClockDiv = null;
+    progressDiv = null;
+    bigTimeDiv = null;
+    song = null;
+    lastMarker = null;
+    lastMarkerContainer = null;
+    lastSongTime = null;
+    
+    constructor(song) {
+        this.song = song;
+        this.bigClockDiv = document.getElementById('big_clock_bpm'); 
+        this.progressDiv = document.getElementById('progress_fill');
+        this.bigTimeDiv = document.getElementById('big_time');  
+        this.lastMarkerContainer = document.getElementById('last_marker')
+    }
+    
+    update(position) {
+        const formattedTime = this.song.formatTime(position);
+        this.lastMarker = null;
+        if(formattedTime !== this.lastClockTime)
+        {
+            this.bigTimeDiv.textContent  = formattedTime ;
+            this.bigClockDiv.textContent = this.song.bpm + "bpm";
+            this.progressDiv.style.width = 100*this.song.calculatedPosition/this.song.length + "%";
+            this.lastClockTime = formattedTime;
+        }
+        
+//      TODO Bar number
+        for (let marker of this.song.markers) {
+            //TODO, the search of last marker can be done in the song.
+            if(!marker) continue;
+            let isOver = marker.isOver(position);
+            if(!isOver) break;
+            this.lastMarker = marker;
+        }
+
+        if(this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
+            this.lastMarkerContainer.innerHTML = "";
+            this.lastMarkerContainer.append(this.lastMarker.renderForClock());
+            this.lastMarkerIndex = this.lastMarker.index;
+        }
+        if(this.lastMarker === null) {
+            this.lastMarkerContainer.innerHTML = "";
+        } else {
+            const progress = 100*(this.song.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration
+            document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
+        }
+    }
+    
+}
+
+class ViewManager {
+    
+    static LYRICS = "lyrics";
+    static CHORDS = "chords";
+    static CLOCK = "clock";
+    song = null;
+    clockView = null
+    
+    constructor(song) {
+        this.song = song;
+        song.viewManager = this;
+        this.clockView = new ClockView(song);
+    }
+    
 }
 
 
@@ -1246,23 +1322,3 @@ function compareBar(a, b) {
 
 
 wwr_start();//Starts the Server
-
-//
-//setInterval(() => {
-//  const t0 = performance.now();
-//  fetch("../_/TRANSPORT;GET/EXTSTATE/reachords/status;", {cache:"no-store"})
-//    .then(resp => {
-//        const t1 = performance.now();
-//        const latency = ((t1 - t0)/2);
-//        
-//        return resp.text();
-//    })
-//    .then(results => {
-//        wwr_onreply(results); 
-//    })
-//    .catch(err => console.warn("fetch err", err));
-//  
-//}, 2000);
-//
-//
-//var frames =0;

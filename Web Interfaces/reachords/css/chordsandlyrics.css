@@ -487,7 +487,7 @@ div.offset {
     height: 20%;
 }
 
-@media (min-width: 0) and (max-width: 1032px) {
+@media (orientation: portrait) {
     .song {
         width: 90%;
     }

@@ -83,13 +83,15 @@
     </body>
     <script>
 
-        const song = new Song(Song.CHORDS);
+        const song = new Song(ViewManager.CHORDS);
+        
+        const viewManagerView = new ViewManager(song);
         document.getElementById("increase_bars").addEventListener("click",  function f() {song.increaseBars()});
         document.getElementById("decrease_bars").addEventListener("click",  function f() {song.decreaseBars()});
         document.getElementById("decorated_chords").addEventListener("click",  function f() {song.toggleDecoratedChords()});
-        document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.changeLayout(Song.LYRICS)});
-        document.getElementById("change_to_chords").addEventListener("click",  function f() {song.changeLayout(Song.CHORDS)});
-        document.getElementById("change_to_clock").addEventListener("click",  function f() {song.changeLayout(Song.CLOCK)});
+        document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.changeLayout(ViewManager.LYRICS)});
+        document.getElementById("change_to_chords").addEventListener("click",  function f() {song.changeLayout(ViewManager.CHORDS)});
+        document.getElementById("change_to_clock").addEventListener("click",  function f() {song.changeLayout(ViewManager.CLOCK)});
         document.getElementById("play_button").addEventListener("click",  function f() {song.play()});
         document.getElementById("pause_button").addEventListener("click",  function f() {song.pause()});
         document.getElementById("stop_button").addEventListener("click",  function f() {song.stop()});
