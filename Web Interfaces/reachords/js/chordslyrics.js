@@ -1149,7 +1149,7 @@ class ClockView {
     song = null;
     lastMarker = null;
     lastMarkerContainer = null;
-    lastSongTime = null;
+    lastClockTime = null;
     
     constructor(song) {
         this.song = song;
