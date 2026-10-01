@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Arilia Scripts" commit="c74eea9b009bfbe493c986f27c8c4a321098242e">
+<index version="1" name="Arilia Scripts" commit="f10ed5a73781e3de7ae8f77416f422c615a174e1">
   <category name="Web Interfaces">
     <reapack name="arilia_Reachords Export.lua" type="script" desc="Reachords Export">
       <metadata>
@@ -112,6 +112,17 @@ jsonEscape fix]]></changelog>
         <source file="reachords/lyrics.html">https://github.com/arilia/reaper-scripts/raw/3afef50a52b5048a0505acf8f1281db3fec766de/Web%20Interfaces/reachords/lyrics.html</source>
         <source file="reachords/js/chordslyrics.js">https://github.com/arilia/reaper-scripts/raw/3afef50a52b5048a0505acf8f1281db3fec766de/Web%20Interfaces/reachords/js/chordslyrics.js</source>
         <source file="reachords/css/chordsandlyrics.css">https://github.com/arilia/reaper-scripts/raw/3afef50a52b5048a0505acf8f1281db3fec766de/Web%20Interfaces/reachords/css/chordsandlyrics.css</source>
+      </version>
+      <version name="1.0.7" author="arilia" time="2026-10-01T14:48:44Z">
+        <changelog><![CDATA[Initial release
+Change ID
+Bar with offset bug fix
+jsonEscape fix
+jsonEscape fix
+Clock]]></changelog>
+        <source file="reachords/chords.html">https://github.com/arilia/reaper-scripts/raw/f10ed5a73781e3de7ae8f77416f422c615a174e1/Web%20Interfaces/reachords/index.html</source>
+        <source file="reachords/js/chordslyrics.js">https://github.com/arilia/reaper-scripts/raw/f10ed5a73781e3de7ae8f77416f422c615a174e1/Web%20Interfaces/reachords/js/chordslyrics.js</source>
+        <source file="reachords/css/chordsandlyrics.css">https://github.com/arilia/reaper-scripts/raw/f10ed5a73781e3de7ae8f77416f422c615a174e1/Web%20Interfaces/reachords/css/chordsandlyrics.css</source>
       </version>
     </reapack>
   </category>
