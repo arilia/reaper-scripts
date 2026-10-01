@@ -1112,7 +1112,7 @@ class Song {
             offs = this.lyricsOffset;
         }
         document.getElementById('offset').innerHTML = "Offset: " +  (1000*offs).toFixed(1) + " ms";
-        //console.log("net: " + (1000*this.networkOffset).toFixed(1) + " paint: " +  (1000*this.paintOffset).toFixed(1));
+
     }
 
     calculatePaintDelay(t0) {
