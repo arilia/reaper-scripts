@@ -1,6 +1,6 @@
 -- @description Reachords
 -- @author arilia
--- @version 1.0.7b
+-- @version 1.0.8
 -- @link https://github.com/arilia/reaper-scripts
 -- @license GPL-3.0-or-later
 -- @changelog
@@ -11,6 +11,7 @@
 --   jsonEscape fix
 --   Clock
 --   Bug
+--   Version Fix
 -- @provides
 --   index.html > reachords/index.html
 --   js/chordslyrics.js > reachords/js/chordslyrics.js
