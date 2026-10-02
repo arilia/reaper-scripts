@@ -40,8 +40,8 @@ class Bar {
     constructor(b) {
         this.number = b.number;
         this.song = null;
-        this.startTime = Math.round(Number(b.startTime) * 1000000) / 1000000;
-        this.endTime = Math.round(Number(b.endTime) * 1000000) / 1000000;
+        this.startTime = roundTime(b.startTime);
+        this.endTime = roundTime(b.endTime);
         this.beatDuration = b.numOfBeats;
         this.createBeats();
     }
@@ -171,7 +171,7 @@ class Marker {
         this.text = m.text;
         this.color = m.color;
         this.barNumber = m.barNumber;
-        this.position = m.position;
+        this.position = roundTime(m.position);
     }
     
     render() {
@@ -225,8 +225,8 @@ class Chord {
     song = null;
 
     constructor(c) {
-        this.startTime = Math.round(Number(c.startTime) * 1000000) / 1000000;
-        this.endTime = Math.round(Number(c.endTime) * 1000000) / 1000000;
+        this.startTime = roundTime(c.startTime);
+        this.endTime = roundTime(c.endTime);
         this.barNumber = c.barNumber;
         this.beatStart = c.beatStart;
         this.beatDuration = c.beatDuration;
@@ -644,6 +644,7 @@ class Song {
             this.playStateDiv.className = className;
             this.lastPlayState = this.playState;
         }
+        position = roundTime(position);
         const t0 = performance.now();
         this.checkPlaying(position);
         requestAnimationFrame(() => {
@@ -986,6 +987,7 @@ class Song {
                 }
                 break;
             case ViewManager.CLOCK :
+                
                 this.viewManager.clockView.update(position);
 //                this.lastMarker = null;
 //                
@@ -1175,6 +1177,7 @@ class ClockView {
         for (let marker of this.song.markers) {
             //TODO, the search of last marker can be done in the song.
             if(!marker) continue;
+            
             let isOver = marker.isOver(position);
             if(!isOver) break;
             this.lastMarker = marker;
@@ -1319,7 +1322,11 @@ function compareBar(a, b) {
     return 0;
 }
 
-
+function roundTime(time) {
+    const PRECISION = 1000000;
+    const formattedTime = Math.round(Number(time) * PRECISION) / PRECISION;
+    return formattedTime;
+}
 
 
 wwr_start();//Starts the Server
