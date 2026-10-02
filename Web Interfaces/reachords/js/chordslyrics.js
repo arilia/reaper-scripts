@@ -66,7 +66,7 @@ class Bar {
 
             
 //            const targetPosition = this.song.targetPosition;
-            const rowBox = document.getElementById('position_row').getBoundingClientRect()
+            const rowBox = document.getElementById('position_row_chords').getBoundingClientRect()
             const targetPosition = rowBox.top + rowBox.height / 2;
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
@@ -313,8 +313,8 @@ class Chord {
         } else {
             this.div.textContent = this.name;
         }
-        this.div.style.left = Number((this.beatStart - 1) * this.bar.width / this.bar.beats.length) + "px"
-        this.div.style.width = Number(this.beatDuration * this.bar.width / this.bar.beats.length) - 4 + "px"
+        this.div.style.left = Number((this.beatStart - 1) * this.bar.width / this.bar.beats.length) + "px";
+        this.div.style.width = Number(this.beatDuration * this.bar.width / this.bar.beats.length) - 4 + "px";
         this.bar.div.append(this.div);
     }
 }
@@ -351,7 +351,7 @@ class Lyric {
         }
         if (val) {
             this.calculateHeight();
-            const rowBox = document.getElementById('position_row').getBoundingClientRect()
+            const rowBox = document.getElementById('position_row_lyrics').getBoundingClientRect()
             const targetPosition = rowBox.top + rowBox.height / 2;
             
             const progress = this.height * (this.song.calculatedPosition - this.startTime) / this.duration;
@@ -447,7 +447,8 @@ class Song {
     instantPositioning = false;
     lastTimestamp = null;
     targetPosition = null;
-    songDiv = null;
+    songChordsDiv = null;
+    songLyricsDiv =  null;
     loaderDiv = null;
     playStateDiv = null;
     playingChord = null;
@@ -474,7 +475,8 @@ class Song {
         
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
-        this.songDiv =  document.getElementById('song');
+        this.songChordsDiv =  document.getElementById('song_chords');
+        this.songLyricsDiv =  document.getElementById('song_lyrics');
         this.loaderDiv = document.getElementById('loader');
         this.playStateDiv = document.getElementById('play_state');
         this.clockDiv = document.getElementById('clock_div'); 
@@ -823,63 +825,78 @@ class Song {
         this.table = document.createElement('div');
         
 
-        const content = document.getElementById('song_content')
         
+        let content = null;
         this.table.id = "song_content";
         
         switch(this.type) {
             case ViewManager.LYRICS :
+                this.table.id = 'song_content_lyrics';
                 for (let row of this.rows) {
                     row.table = this.table;
                     row.render();
                 }
                 this.clockDiv.style.visibility = "visible";
                 this.table.classList.add("lyrics_table");
-                document.getElementById('bottom_bar').style.display = "none";
-                document.getElementById('big_clock').hidden = true;
-                document.getElementById('bottom_curtain').style.bottom = "0";
+//                document.getElementById('bottom_bar').style.display = "none";
+                document.getElementById('big_clock_section').hidden = true;
+                document.getElementById('lyrics_section').hidden = false;
+                document.getElementById('chords_section').hidden = true;
+//                document.getElementById('bottom_curtain').style.bottom = "0";
                 document.getElementById('decorated_chords').style.visibility = "hidden";
                 document.getElementById('increase_bars').style.visibility = "hidden";
                 document.getElementById('decrease_bars').style.visibility = "hidden";
-                document.getElementById('position_row').style.visibility = "visible";
+//                document.getElementById('position_row').style.visibility = "visible";
                 document.title = this.project + " - Lyrics";
+                content = document.getElementById('song_content_lyrics');
                 content.parentNode.replaceChild(this.table, content);
+                
                 break;
             case ViewManager.CHORDS :
-                 for (let row of this.rows) {
-                    row.table = this.table;
-                    row.render();
-                }
+                this.table.id = 'song_content_chords';
                 this.clockDiv.style.visibility = "visible";
-                document.getElementById('bottom_bar').style.display = "block";
-                document.getElementById('bottom_curtain').style.bottom = "4.5em";
-                document.getElementById('big_clock').hidden = true;
+//                document.getElementById('bottom_bar').style.display = "block";
+//                document.getElementById('bottom_curtain').style.bottom = "4.5em";
+                document.getElementById('big_clock_section').hidden = true;
+                document.getElementById('lyrics_section').hidden = true;
+                document.getElementById('chords_section').hidden = false;;
                 document.getElementById('decorated_chords').style.visibility = "visible";
                 document.getElementById('increase_bars').style.visibility = "visible";
                 document.getElementById('decrease_bars').style.visibility = "visible";
-                document.getElementById('position_row').style.visibility = "visible";
+//                document.getElementById('position_row').style.visibility = "visible";
+                
                 const button = document.getElementById('decorated_chords');
                 if(this.decoratedChords) button.classList.add('button_on'); else button.classList.remove('button_on');
                 this.table.classList.add("chords_table");
                 document.getElementById('lyrics_banner').textContent  = "";
                 document.title = this.project + " - Chords";
                 this.table.style.setProperty("--maxbeats", this.maxBeats);
+                
+                content = document.getElementById('song_content_chords');
                 content.parentNode.replaceChild(this.table, content);
+                
+                for (let row of this.rows) {
+                    row.table = this.table;
+                    row.render();
+                }
                 for (const chord of this.chords) {
                     chord.render();
                 }
+                
                 break;
             case ViewManager.CLOCK :
                 this.clockDiv.style.visibility = "hidden";
-                document.getElementById('big_clock').hidden = false;
-                document.getElementById('bottom_bar').style.display = "none";
-                document.getElementById('bottom_curtain').style.bottom = "0";
+                document.getElementById('big_clock_section').hidden = false;
+                document.getElementById('lyrics_section').hidden = true;
+                document.getElementById('chords_section').hidden = true;;
+//                document.getElementById('bottom_bar').style.display = "none";
+//                document.getElementById('bottom_curtain').style.bottom = "0";
                 document.getElementById('decorated_chords').style.visibility = "hidden";
                 document.getElementById('increase_bars').style.visibility = "hidden";
                 document.getElementById('decrease_bars').style.visibility = "hidden";
-                document.getElementById('position_row').style.visibility = "hidden";
+//                document.getElementById('position_row').style.visibility = "hidden";
                 document.title = this.project + " - Clock";
-                content.parentNode.replaceChild(this.table, content);
+//                content.parentNode.replaceChild(this.table, content);
                 break;
             }
             
@@ -893,8 +910,9 @@ class Song {
     
     hideSong(hide) {
         //console.log(hide);
-        this.songDiv.style.visibility = hide ? 'hidden' : 'visible';
-        this.loaderDiv.style.visibility = hide ? 'visible' : 'hidden';
+        this.songChordsDiv.hidden = hide;
+        this.songLyricsDiv.hidden = hide;
+        this.loaderDiv.hidden = !hide;
     }
     
     
