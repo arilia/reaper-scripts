@@ -1038,8 +1038,9 @@ class Song {
             }
             previousMarker = marker;
         }
-        previousMarker.duration = this.length - previousMarker.position;
-
+        if(previousMarker) {
+            previousMarker.duration = this.length - previousMarker.position;
+        }
         const bars = json.bars;
         let maxBeatPerRow = 0;
         let beatPerRow = 0;
