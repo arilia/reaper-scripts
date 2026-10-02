@@ -263,6 +263,9 @@ div.offset {
     color: #eee;
 }
 
+.big_clock[hidden] {
+    display: none;
+}
 
 /* Rettangolo superiore */
 .display {

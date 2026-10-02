@@ -814,6 +814,7 @@ class Song {
         this.bars = [];
         this.lyrics = [];
         this.markers = [];
+        this.playingChord = null;
     }
 
     render() {
@@ -835,7 +836,7 @@ class Song {
                 this.clockDiv.style.visibility = "visible";
                 this.table.classList.add("lyrics_table");
                 document.getElementById('bottom_bar').style.display = "none";
-                document.getElementById('big_clock').style.display = "none";
+                document.getElementById('big_clock').hidden = true;
                 document.getElementById('bottom_curtain').style.bottom = "0";
                 document.getElementById('decorated_chords').style.visibility = "hidden";
                 document.getElementById('increase_bars').style.visibility = "hidden";
@@ -852,7 +853,7 @@ class Song {
                 this.clockDiv.style.visibility = "visible";
                 document.getElementById('bottom_bar').style.display = "block";
                 document.getElementById('bottom_curtain').style.bottom = "4.5em";
-                document.getElementById('big_clock').style.display = "none";
+                document.getElementById('big_clock').hidden = true;
                 document.getElementById('decorated_chords').style.visibility = "visible";
                 document.getElementById('increase_bars').style.visibility = "visible";
                 document.getElementById('decrease_bars').style.visibility = "visible";
@@ -870,7 +871,7 @@ class Song {
                 break;
             case ViewManager.CLOCK :
                 this.clockDiv.style.visibility = "hidden";
-                document.getElementById('big_clock').style.display = "flex";
+                document.getElementById('big_clock').hidden = false;
                 document.getElementById('bottom_bar').style.display = "none";
                 document.getElementById('bottom_curtain').style.bottom = "0";
                 document.getElementById('decorated_chords').style.visibility = "hidden";
@@ -974,7 +975,6 @@ class Song {
     
     
     checkPlaying(position) {
-//        return;
         if (!this.complete) {
             return;
         }
@@ -1075,7 +1075,7 @@ class Song {
             const chord = new Chord(c);
             this.appendChord(chord);
             if(previousChord) {
-                previousChord.nextChord = chord
+                previousChord.nextChord = chord;
             }
             previousChord = chord;
         }
@@ -1086,11 +1086,11 @@ class Song {
         const scriptstatus_div = document.getElementById('scriptstatus_div');
         const scriptstatus = document.getElementById('scriptstatus');
         if (active) {
-            scriptstatus.textContent  = "Script is Running..."
+            scriptstatus.textContent  = "Script is Running...";
             scriptstatus_div.classList.remove('inactive');
             scriptstatus_div.classList.add('active');       
         } else {
-            scriptstatus.innerHTML  = "Script is not running<br>Click Here to run."
+            scriptstatus.innerHTML  = "Script is not running<br>Click Here to run.";
             scriptstatus_div.classList.remove('active');
             scriptstatus_div.classList.add('inactive');    
         }
