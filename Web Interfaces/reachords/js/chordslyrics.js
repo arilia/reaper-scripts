@@ -223,6 +223,7 @@ class Chord {
     isPlaying = false;
     div = null;
     song = null;
+    nextChord = null;
 
     constructor(c) {
         this.startTime = roundTime(c.startTime);
@@ -285,12 +286,11 @@ class Chord {
     }
     
     set playing(val) {
-        this.isPlaying = val;
-        if (val && this.div !== null) {
-            this.div.classList.add('chord_playing');
-        } else {
-            this.div.classList.remove('chord_playing');
+        if(val === this.isPlaying) return;
+        if (this.div !== null) {
+            this.div.classList.toggle('chord_playing', val);
         }
+        this.isPlaying = val;
     }
 
     checkPlaying(position) {
@@ -300,6 +300,7 @@ class Chord {
         } else {
             this.playing = false;
         }
+        return this.isPlaying;
     }
 
     render()
@@ -449,6 +450,7 @@ class Song {
     songDiv = null;
     loaderDiv = null;
     playStateDiv = null;
+    playingChord = null;
 //    clockDiv = null;  //TODO Move to ClockView
 //    bigTimeDiv = null;  //TODO Move to ClockView
 //    lastMarkerIndex = 0; //TODO Move to ClockView
@@ -950,6 +952,27 @@ class Song {
         return formattedTime;
     }
     
+    
+    findPlayingChord(position)
+    {
+        if(this.playingChord && this.playingChord.checkPlaying(position)) {
+            return;
+        }
+        if(this.playingChord && this.playingChord.nextChord && this.playingChord.nextChord.checkPlaying(position)) {
+            this.playingChord = this.playingChord.nextChord;
+            return;
+        }
+        let found = false;
+        for (let chord of this.chords) {
+            found = chord.checkPlaying(position);
+            if(found) {
+                this.playingChord = chord;
+                return;
+            } 
+        }
+    }
+    
+    
     checkPlaying(position) {
 //        return;
         if (!this.complete) {
@@ -964,10 +987,9 @@ class Song {
         }
         switch (this.type) {
             case ViewManager.CHORDS :
+                this.findPlayingChord(position);
                 let foundLyric = false;
-                for (let chord of this.chords) {
-                    chord.checkPlaying(position);
-                }
+                
                 for (let bar of this.bars) {
                     bar.checkPlaying(position);
                 }
@@ -987,34 +1009,7 @@ class Song {
                 }
                 break;
             case ViewManager.CLOCK :
-                
                 this.viewManager.clockView.update(position);
-//                this.lastMarker = null;
-//                
-//                this.bigTimeDiv.textContent  = formattedTime;
-//                document.getElementById('big_clock_bpm').textContent = this.bpm + "bpm";
-//                document.getElementById('progress_fill').style.width = 100*this.calculatedPosition/this.length + "%";
-//                for (let marker of this.markers) {
-//                    if(!marker) continue;
-//                    let isOver = marker.isOver(position);
-//                    if(!isOver)
-//                    {   
-//                        break;
-//                    }
-//                    this.lastMarker = marker;
-//                }
-//                
-//                if(this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
-//                    document.getElementById('last_marker').innerHTML = "";
-//                    document.getElementById('last_marker').append(this.lastMarker.renderForClock());
-//                    this.lastMarkerIndex = this.lastMarker.index;
-//                }
-//                if(this.lastMarker === null) {
-//                    document.getElementById('last_marker').innerHTML = "";
-//                } else {
-//                    const progress = 100*(this.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration
-//                    document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
-//                }
                 break;
         }
         
@@ -1073,11 +1068,16 @@ class Song {
         }
 
         const chords = json.chords;
+        let previousChord = null;
         for (let j in chords)
         {
             const c = chords[j];
             const chord = new Chord(c);
             this.appendChord(chord);
+            if(previousChord) {
+                previousChord.nextChord = chord
+            }
+            previousChord = chord;
         }
     }
     
