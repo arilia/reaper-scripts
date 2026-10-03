@@ -3,10 +3,108 @@ body {
     min-height: 100vh;
 }
 
-.song {
+/*LYRICS SECTION*/
+
+.lyrics_section {
+    
+}
+
+
+.song_lyrics {
     width: 70%;
     margin: 20px auto;
 }
+
+
+.top_curtain_lyrics {
+    position: fixed;
+    top: 7.5em;
+    left: 0;
+    right: 0;
+    height: 6em;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    z-index: 20;
+    pointer-events: none;
+}
+
+
+
+.bottom_curtain_lyrics  {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 10em;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    z-index: 20;
+    pointer-events: none;
+}
+
+body:has(.bottom_bar) .bottom_curtain {
+    bottom: 4.5em;           /* only if .bottom_bar is present */
+}
+
+
+
+
+
+/*CHORDS SECTION*/
+
+.chords_section {
+    
+}
+
+
+.song_chords {
+    display: block;
+    width: 70%;
+    margin: 20px auto;
+}
+
+.top_curtain_chords {
+    position: fixed;
+    top: 7.5em;
+    left: 0;
+    right: 0;
+    height: 6em;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    z-index: 20;
+    pointer-events: none;
+}
+
+
+
+.bottom_curtain_chords  {
+    position: fixed;
+    left: 0;
+    right: 0;
+   bottom: 4.5em;  
+    height: 10em;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    z-index: 20;
+    pointer-events: none;
+}
+
+
+.bar_row {
+    display: grid;
+    justify-content: start;
+    grid-template-columns: repeat(var(--maxbeats), 1fr);
+    padding:2px;
+}
+
+.bottom_bar_chords {
+     position: fixed;
+     left: 0;
+     right: 0;
+     bottom: 1.2em;
+     background: #000;
+     z-index: 20;
+     height: 4.5em;
+}
+
+
+/* OTHER   */
 
 .clock {
     flex: 0 0 7em;
@@ -62,43 +160,8 @@ p.bpm {
 
 }
 
-.top_curtain {
-    position: fixed;
-    top: 7.5em;
-    left: 0;
-    right: 0;
-    height: 6em;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-    z-index: 20;
-    pointer-events: none;
-}
 
 
-
-.bottom_curtain {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 10em;
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-    z-index: 20;
-    pointer-events: none;
-}
-
-body:has(.bottom_bar) .bottom_curtain {
-    bottom: 4.5em;           /* only if .bottom_bar is present */
-}
-
-.bottom_bar {
-     position: fixed;
-     left: 0;
-     right: 0;
-     bottom: 1.2em;
-     background: #000;
-     z-index: 20;
-     height: 4.5em;
-}
 
 .status_bar {
      position: fixed;
@@ -238,15 +301,13 @@ div.offset {
 
 }
 
-.bar_row {
-    display: grid;
-    justify-content: start;
-    grid-template-columns: repeat(var(--maxbeats), 1fr);
-    padding:2px;
-}
 
-/* Contenitore principale */
-.big_clock {
+
+
+
+
+/* BIG CLOCK SECTION */
+.big_clock_section {
     position: fixed;
 
     width: 40vw;
@@ -263,7 +324,7 @@ div.offset {
     color: #eee;
 }
 
-.big_clock[hidden] {
+.big_clock_section[hidden] {
     display: none;
 }
 

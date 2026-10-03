@@ -400,6 +400,7 @@ class Lyric {
     }
     
     checkPlayingChords(position) {
+        
         if (position >= this.startTime && position < this.endTime) {
             const lyrics_banner = document.getElementById("lyrics_banner");
             lyrics_banner.textContent = this.text;
@@ -412,7 +413,7 @@ class Lyric {
 
 class Song {
     id = "";
-    table = null;
+    table = null; //TODO, move in View?
     lastInsertedLyric = null;
     bars = [];
     chords = [];
@@ -853,35 +854,33 @@ class Song {
                 
                 break;
             case ViewManager.CHORDS :
+                this.viewManager.chordsView.render();
                 this.table.id = 'song_content_chords';
-                this.clockDiv.style.visibility = "visible";
-//                document.getElementById('bottom_bar').style.display = "block";
-//                document.getElementById('bottom_curtain').style.bottom = "4.5em";
-                document.getElementById('big_clock_section').hidden = true;
-                document.getElementById('lyrics_section').hidden = true;
-                document.getElementById('chords_section').hidden = false;;
-                document.getElementById('decorated_chords').style.visibility = "visible";
-                document.getElementById('increase_bars').style.visibility = "visible";
-                document.getElementById('decrease_bars').style.visibility = "visible";
-//                document.getElementById('position_row').style.visibility = "visible";
-                
-                const button = document.getElementById('decorated_chords');
-                if(this.decoratedChords) button.classList.add('button_on'); else button.classList.remove('button_on');
-                this.table.classList.add("chords_table");
-                document.getElementById('lyrics_banner').textContent  = "";
-                document.title = this.project + " - Chords";
-                this.table.style.setProperty("--maxbeats", this.maxBeats);
-                
-                content = document.getElementById('song_content_chords');
-                content.parentNode.replaceChild(this.table, content);
-                
-                for (let row of this.rows) {
-                    row.table = this.table;
-                    row.render();
-                }
-                for (const chord of this.chords) {
-                    chord.render();
-                }
+//                this.clockDiv.style.visibility = "visible";
+//                document.getElementById('big_clock_section').hidden = true;
+//                document.getElementById('lyrics_section').hidden = true;
+//                document.getElementById('chords_section').hidden = false;;
+//                document.getElementById('decorated_chords').style.visibility = "visible";
+//                document.getElementById('increase_bars').style.visibility = "visible";
+//                document.getElementById('decrease_bars').style.visibility = "visible";
+//                
+//                const button = document.getElementById('decorated_chords');
+//                if(this.decoratedChords) button.classList.add('button_on'); else button.classList.remove('button_on');
+//                this.table.classList.add("chords_table");
+//                document.getElementById('lyrics_banner').textContent  = "";
+//                document.title = this.project + " - Chords";
+//                this.table.style.setProperty("--maxbeats", this.maxBeats);
+//                
+//                content = document.getElementById('song_content_chords');
+//                content.parentNode.replaceChild(this.table, content);
+//                
+//                for (let row of this.rows) {
+//                    row.table = this.table;
+//                    row.render();
+//                }
+//                for (const chord of this.chords) {
+//                    chord.render();
+//                }
                 
                 break;
             case ViewManager.CLOCK :
@@ -1162,6 +1161,56 @@ class Song {
 }
 
 
+class ChordsView {
+
+        song = null;
+        decoratedChords =  false;
+        static ELEMENTS = {
+            big_clock_section: true,
+            lyrics_section: true,
+            chords_section: false,
+            decorated_chords: true,
+            increase_bars: true,
+            decrease_bars: true
+        };
+    
+    constructor(song) {
+        this.song = song;
+    }
+    
+    render() {
+        const table = document.createElement('div');
+        this.song.table = table;
+        table.id = 'song_content_chords';
+        this.song.clockDiv.style.visibility = "visible";
+        document.getElementById('big_clock_section').hidden = true; //TODO Move to ViewManager
+        document.getElementById('lyrics_section').hidden = true; //TODO Move to ViewManager
+        document.getElementById('chords_section').hidden = false; //TODO Move to ViewManager
+        document.getElementById('decorated_chords').style.visibility = "visible";
+        document.getElementById('increase_bars').style.visibility = "visible";
+        document.getElementById('decrease_bars').style.visibility = "visible";
+
+        const button = document.getElementById('decorated_chords');
+        button.classList.toggle('button_on', this.decoratedChords);
+        table.classList.add("chords_table"); //TODO do better
+        document.getElementById('lyrics_banner').textContent  = "";
+        document.title = this.project + " - Chords";
+        table.style.setProperty("--maxbeats", this.song.maxBeats);
+
+        let content = document.getElementById('song_content_chords');
+        content.parentNode.replaceChild(table, content);
+
+        for (let row of this.song.rows) {
+            row.table = table;
+            row.render();
+        }
+        for (const chord of this.song.chords) {
+            chord.render();
+        }   
+        
+    }
+}
+
 class ClockView {
     
     bigClockDiv = null;
@@ -1222,12 +1271,14 @@ class ViewManager {
     static CHORDS = "chords";
     static CLOCK = "clock";
     song = null;
-    clockView = null
+    clockView = null;
+    chordsView = null;
     
     constructor(song) {
         this.song = song;
         song.viewManager = this;
         this.clockView = new ClockView(song);
+        this.chordsView = new ChordsView(song);
     }
     
 }

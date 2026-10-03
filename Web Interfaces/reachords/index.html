@@ -28,57 +28,61 @@
             
         </div>
         <div class="title_bar">
-            <h1 id="song_title" class ="song_title"></h1>
+            <h1 id="song_title" class ="song_title">&nbsp;</h1>
         </div>
-            <div class="top_curtain">
+        <div id="loader" class="loader">Loading...</div>
+        
+        <section  id="chords_section">
+            <div class="top_curtain_chords"></div>
+            <div class="position_row" id="position_row_chords">
+                <div id="position_chords" class="position">&nbsp;</div>
             </div>
-
-            <div class="position_row" id="position_row">
-                <div id="position" class="position">&nbsp;</div>
+            <div id='song_chords' class="song_chords">
+                <div id='song_content_chords' class='chords_table'></div>
             </div>
-
-            <div id='song' class="song">
-                <div id='song_content' class='chords_table'></div>
-            </div>
-
-            <div id="loader" class="loader">Loading...</div>
-
-            <div class="bottom_curtain" id="bottom_curtain"> </div>
-            <div class="bottom_bar" id="bottom_bar">
+            <div class="bottom_curtain_chords" id="bottom_curtain_chords"> </div>
+            <div class="bottom_bar_chords" id="bottom_bar_chords">
                 <div class="lyrics_banner" id ="lyrics_banner"></div>
             </div>
-            <div class="status_bar">
-                <div class="offset" id ="offset">&nbsp; </div>
-                <div class="latency" id ="latency">&nbsp; </div>
+        </section>
+        
+        <section id="lyrics_section">
+            <div class="top_curtain_lyrics"></div>
+            <div class="position_row" id="position_row_lyrics">
+                <div id="position_lyrics" class="position">&nbsp;</div>
             </div>
-            
-            <section class="big_clock" id="big_clock">
-                <div class="display">
-                    <div class="info">
-                        <div  class="big_time" id="big_time" >00:04:50</div>
-                        <div id="big_clock_bpm" >120Bpm</div>
-                        <!--<div id="big_clock_bar">bar: 4</div>-->
-                    </div>
+            <div id='song_lyrics' class="song_chords">
+                <div id='song_content_lyrics' class='chords_table'></div>
+            </div>
+            <div class="bottom_curtain_lyrics" id="bottom_curtain_lyrics"> </div>
+        </section>
 
-                    <div class="last_marker"  id="last_marker">
-                       
-                    </div>
+        <section class="big_clock_section" id="big_clock_section">
+            <div class="display">
+                <div class="info">
+                    <div  class="big_time" id="big_time" >00:04:50</div>
+                    <div id="big_clock_bpm" >120Bpm</div>
+                    <!--<div id="big_clock_bar">bar: 4</div>-->
+                </div>
+                <div class="last_marker"  id="last_marker"></div>
+            </div>
+            <div class="progress" id="progress">
+                <div class="progress_fill" id="progress_fill">&nbsp;</div>
+            </div>
+            <div class="controls">
+                <button id="prev_bar_button">-1 bar</button>
+                <button id="play_button">▶ play</button>
+                <button id="pause_button">⏸ pause</button>
+                <button id="stop_button">⏹ stop</button>
+                <button id="rewind_button">⏮ prev</button>
+                <button id="forward_button">⏭ next</button>
+            </div>
 
-                </div>
-                <div class="progress" id="progress">
-                    <div class="progress_fill" id="progress_fill">&nbsp;</div>
-                </div>
-                <div class="controls">
-                    <button id="prev_bar_button">-1 bar</button>
-                    <button id="play_button">▶ play</button>
-                    <button id="pause_button">⏸ pause</button>
-                    <button id="stop_button">⏹ stop</button>
-                    <button id="rewind_button">⏮ prev</button>
-                    <button id="forward_button">⏭ next</button>
-                </div>
-
-            </section>
-            
+        </section>  
+    <div class="status_bar">
+        <div class="offset" id ="offset">&nbsp; </div>
+        <div class="latency" id ="latency">&nbsp; </div>
+    </div>    
             
     </body>
     <script>
