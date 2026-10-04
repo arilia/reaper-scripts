@@ -336,8 +336,8 @@ class Lyric {
     nextLyric = null;
 
     constructor(c) {
-        this.startTime = c.startTime;
-        this.endTime = c.endTime;
+        this.startTime = roundTime(c.startTime);
+        this.endTime = roundTime(c.endTime);
         this.duration = this.endTime - this.startTime;
         this.text = c.text;
     }   
