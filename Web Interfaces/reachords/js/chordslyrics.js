@@ -419,12 +419,13 @@ class Song {
     chords = [];
     lyrics = [];
     rows = [];
+    markers = [];
+    
     networkBuf = [];
     paintBuf = [];
     songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
     json = "";
-    markers = [];
-    maxBeats = 16;
+    maxBeats = 16; // TODO
     barsPerRow = 4;
     translateY = 0;
     internalChordsOffset = 0;
@@ -699,21 +700,18 @@ class Song {
     
     
     createTable() {
-        document.getElementById('change_to_chords').classList.remove('button_on');
-        document.getElementById('change_to_lyrics').classList.remove('button_on');
-        document.getElementById('change_to_clock').classList.remove('button_on');
-        document.getElementById('change_to_' + this.type).classList.add('button_on');
+        document.getElementById('change_to_chords').classList.toggle('button_on', this.type === ViewManager.CHORDS );
+        document.getElementById('change_to_lyrics').classList.toggle('button_on', this.type === ViewManager.LYRICS );
+        document.getElementById('change_to_clock').classList.toggle('button_on', this.type === ViewManager.CLOCK );
         this.instantPositioning = true;
-        if (this.type === ViewManager.CHORDS ) {
-            this.createTableChords();
-        } 
-        if (this.type === ViewManager.LYRICS )
-        {
-            this.createTableLyrics();
-        }
-        if (this.type === ViewManager.LYRICS )
-        {
-            
+        switch(this.type) {
+        case ViewManager.LYRICS :
+            this.createLyricsTable();
+            break;
+        case ViewManager.CHORDS :
+            this.createChordsTable();
+            break;
+        
         }
         this.render();
         this.complete = true;
@@ -721,7 +719,7 @@ class Song {
     }
  
 
-    createTableLyrics() {
+    createLyricsTable() {
         let lastEnd = 0;
         
         for (let lyric of this.lyrics)
@@ -777,7 +775,7 @@ class Song {
     }
     
     
-    createTableChords() {
+    createChordsTable() {
         
         let columnCount = 0;
         let row = null;
@@ -833,8 +831,9 @@ class Song {
     
     hideSong(hide) {
         //console.log(hide);
-        this.songChordsDiv.hidden = hide;
-        this.songLyricsDiv.hidden = hide;
+//        this.songChordsDiv.hidden = hide;
+//        this.songLyricsDiv.hidden = hide;
+        if(hide) this.viewManager.hideAll();
         this.loaderDiv.hidden = !hide;
     }
     
@@ -1232,7 +1231,7 @@ class ClockView {
         if(this.lastMarker === null) {
             this.lastMarkerContainer.innerHTML = "";
         } else {
-            const progress = 100*(this.song.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration
+            const progress = 100*(this.song.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration;
             document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
         }
     }
@@ -1254,6 +1253,12 @@ class ViewManager {
         this.clockView = new ClockView(song);
         this.chordsView = new ChordsView(song);
         this.lyricsView = new LyricsView(song);
+    }
+    
+    hideAll() {
+        document.getElementById('chords_section').hidden = true;
+        document.getElementById('lyrics_section').hidden = true;
+        document.getElementById('big_clock_section').hidden = true;
     }
     
     
@@ -1307,11 +1312,6 @@ function wwr_onreply(results, t0) {
                 case "TRANSPORT":
                     song.playState = tok[1]*1;
                     song.recordedPosition = tok[2]*1;
-                    break;
-                case "PROJEXTSTATE":
-                    if (tok[2] === "barsPerRow" && 1 * tok[3] >= 1) {
-                        song.barsPerRow = Math.abs(Math.floor(tok[3]));
-                    }
                     break;
                 case "EXTSTATE":
                    if (tok[2] === "status" ) {
