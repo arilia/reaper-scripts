@@ -66,7 +66,7 @@ class Bar {
 
             
 //            const targetPosition = this.song.targetPosition;
-            const rowBox = document.getElementById('position_row_chords').getBoundingClientRect()
+            const rowBox = document.getElementById('position_row_chords').getBoundingClientRect();
             const targetPosition = rowBox.top + rowBox.height / 2;
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
@@ -264,7 +264,7 @@ class Chord {
             }
         }
         let modifiers = chordString.substring(index);
-        let bassIndex = modifiers.indexOf("/")
+        let bassIndex = modifiers.indexOf("/");
         let bass = "";
         if(bassIndex !== -1)
         {
@@ -351,7 +351,7 @@ class Lyric {
         }
         if (val) {
             this.calculateHeight();
-            const rowBox = document.getElementById('position_row_lyrics').getBoundingClientRect()
+            const rowBox = document.getElementById('position_row_lyrics').getBoundingClientRect();
             const targetPosition = rowBox.top + rowBox.height / 2;
             
             const progress = this.height * (this.song.calculatedPosition - this.startTime) / this.duration;
@@ -420,12 +420,11 @@ class Song {
     lyrics = [];
     rows = [];
     markers = [];
-    
     networkBuf = [];
     paintBuf = [];
     songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
     json = "";
-    maxBeats = 16; // TODO
+    maxBeats = 16; 
     barsPerRow = 4;
     translateY = 0;
     internalChordsOffset = 0;
@@ -449,17 +448,9 @@ class Song {
     instantPositioning = false;
     lastTimestamp = null;
     targetPosition = null;
-    songChordsDiv = null;
-    songLyricsDiv =  null;
     loaderDiv = null;
     playStateDiv = null;
     playingChord = null;
-//    clockDiv = null;  //TODO Move to ClockView
-//    bigTimeDiv = null;  //TODO Move to ClockView
-//    lastMarkerIndex = 0; //TODO Move to ClockView
-//    lastMarker = null; //TODO Move to ClockView   
-
-
     chordsStyle =  "EN"; //TODO Move to ChordsView   
     decoratedChords = true; //TODO Move to ChordsView  
     bpm = 0;
@@ -472,25 +463,16 @@ class Song {
     static DEFAULT_TYPE = "chords";
 
     constructor(type) {
-        
         this.type = type;
-        
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
-        this.songChordsDiv =  document.getElementById('song_chords');
-        this.songLyricsDiv =  document.getElementById('song_lyrics');
         this.loaderDiv = document.getElementById('loader');
         this.playStateDiv = document.getElementById('play_state');
         this.clockDiv = document.getElementById('clock_div'); 
-//        this.bigTimeDiv = document.getElementById('big_time');  // TODO move to View
-//        const rowBox = document.getElementById('position_row').getBoundingClientRect()
-//        this.targetPosition = rowBox.top + rowBox.height / 2;
-            
     }
 
     play() {
         if(this.lock) return;
-        
         wwr_req("1007;TRANSPORT");
     }
     
@@ -502,9 +484,7 @@ class Song {
     stop() {
         if(this.lock) return;
         wwr_req("1016;TRANSPORT");
-        
     }
-    
     
     forward() {
         if(this.lock) return;
@@ -569,7 +549,7 @@ class Song {
                 type: Song.DEFAULT_TYPE
             },
             [this.id]: {
-                barsPerRow: Song.DEFAULT_BARS_PER_ROW,
+                barsPerRow: Song.DEFAULT_BARS_PER_ROW
             }
         };
         
@@ -577,7 +557,7 @@ class Song {
         if(stored)
         {
             settings.common = stored.common ? stored.common  : settings.common;
-            settings[this.id] = stored[this.id] ? stored[this.id] : settings[this.id]
+            settings[this.id] = stored[this.id] ? stored[this.id] : settings[this.id];
         }
         this.barsPerRow =  settings[this.id].barsPerRow;
         this.decoratedChords = settings.common.decoratedChords;
@@ -631,19 +611,19 @@ class Song {
             switch(this.playState) {
                 case 1:
                     content  = "Playing";
-                    className  = "play_state play"
+                    className  = "play_state play";
                     break;
                 case 2:
                     content  = "Paused";
-                    className  = "play_state stop"
+                    className  = "play_state stop";
                     break;
                 case 5:
                     content  = "Recording";
-                    className  = "play_state rec"
+                    className  = "play_state rec";
                     break;
                 case 6:
                     content  = "Recording Paused";
-                    className  = "play_state rec"
+                    className  = "play_state rec";
                     break;
             }
             this.playStateDiv.textContent = content;
@@ -830,9 +810,6 @@ class Song {
     }
     
     hideSong(hide) {
-        //console.log(hide);
-//        this.songChordsDiv.hidden = hide;
-//        this.songLyricsDiv.hidden = hide;
         if(hide) this.viewManager.hideAll();
         this.loaderDiv.hidden = !hide;
     }
@@ -1189,7 +1166,7 @@ class ClockView {
         this.bigClockDiv = document.getElementById('big_clock_bpm'); 
         this.progressDiv = document.getElementById('progress_fill');
         this.bigTimeDiv = document.getElementById('big_time');  
-        this.lastMarkerContainer = document.getElementById('last_marker')
+        this.lastMarkerContainer = document.getElementById('last_marker');
     }
     
     
