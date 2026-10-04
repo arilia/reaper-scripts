@@ -328,6 +328,10 @@ div.offset {
     display: none;
 }
 
+.bar_adjust[hidden] {
+    visibility: hidden;
+}
+
 /* Rettangolo superiore */
 .display {
     flex: 1;
