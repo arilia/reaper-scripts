@@ -320,12 +320,17 @@ div.offset {
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    background-color: hsl(0, 0%, 30%);
-    color: #eee;
+    background-color: trensparent;
+    color: white;
 }
 
 .big_clock_section[hidden] {
     display: none;
+}
+
+#big_clock_bpm {
+    text-align: center;
+    color:#8a8a99
 }
 
 .bar_adjust[hidden] {
@@ -335,7 +340,8 @@ div.offset {
 /* Rettangolo superiore */
 .display {
     flex: 1;
-    padding: 3em;
+    padding-top: 3em;
+    padding-bottom: 3em;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -344,8 +350,9 @@ div.offset {
 
 /* Parte superiore: tempo + BPM/bar */
 .big_time {
+    font-variant-numeric: tabular-nums;
     display: flex;
-    font-size: 3em;
+    font-size: 52px;
     flex-direction: column;
     align-items: flex-start;
 }
@@ -355,7 +362,7 @@ div.offset {
 .last_marker {
     flex: 1;
 
-    width: 90%;
+    width: 100%;
     font-size: 2em;
     display: flex;
     align-items: center;
@@ -365,23 +372,29 @@ div.offset {
 
 /* Pulsanti sotto il rettangolo */
 .controls {
-    display: flex;
-    justify-content: space-between;
+    display:flex;
+    align-items:center;
+    justify-content:
+    space-between;
+    margin:12px 6px 40px;
 
-    margin-top: 12px;
+   
 }
 
 .controls button {
-    display: flex;
-    background-color: hsl(120, 25%, 35%);
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    margin: .5em;
-    color: white;
-    font-weight: bold;
-    font-size: 1.2em;
-    align-items: center;  
+    
+    
+    width:84px;
+    height:84px;
+    border:1px solid #33333d;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#b8b8c6;
+    font-size:32px;
+    line-height:1;
+    background: transparent;
     transition: background-color 0.08s, transform 0.08s;
 }
 
@@ -389,38 +402,36 @@ div.offset {
     /*width: 100%;*/
     
     border-radius: 8px;
-    border: 1px solid #333;
-    margin: .5em;
+    background: #111;
+    margin-top: .5em;
+    margin-bottom: .5em;
 }
 .progress_fill {
     border-radius: 7px;
-    background: #333;
-    height: 2em;
+    background: #ddd;
+    height: 10px;
     width: 5%;
 }
 
 #prev_bar_button {
-    background-color: hsl(210, 45%, 38%);
+    
 }
 
 #pause_button {
-     background-color: hsl(45, 60%, 40%);
 }
 
 #play_button {
-    background-color: hsl(120, 45%, 35%);
+    width:132px;
+    height:132px;
 }
 
 #stop_button {
-    background-color: hsl(0, 55%, 40%);
 }
 
 #prev_song_button{
-    background-color: hsl(210, 45%, 38%);
 }
 
 #next_song_button{
-    background-color: hsl(210, 45%, 38%);
 }
 
 
@@ -552,7 +563,7 @@ div.offset {
     bottom: 0;
     bottom: 0;
     width: 0%;
-    height: 20%;
+    height: 10%;
 }
 
 @media (orientation: portrait) {
@@ -596,11 +607,11 @@ div.offset {
     background: black;
     border-radius: 4px;
     display: inline-block;
-
+    width: 100%;
     color: white;
     text-align: left;
     font-size: .8em;
-    padding: .2em 3em .2em 3em ;
+    padding: .2em .3em .2em .3em ;
     border: 1px solid white;
 }
 

@@ -197,8 +197,11 @@ class Marker {
         this.clockDiv.id = "clock_marker_" + this.index;
         this.clockDiv.textContent  = this.text;
         this.clockDiv.classList.add('marker');
-        this.clockDiv.style.border = "1px solid rgb(" + this.color + ")";
-        this.clockDiv.style.background = "rgba(" + this.color + ", .3)";
+//        this.clockDiv.style.border = "1px solid rgb(" + this.color + ")";
+//        this.clockDiv.style.background = "rgba(" + this.color + ", .3)";
+        this.clockDiv.style.color = "rgba(" + this.color + ", 1)";
+        this.clockDiv.style.border = "0px"; 
+        this.clockDiv.style.background = "transparent";
         this.clockDiv.append(progressDiv);
         return this.clockDiv;
         
