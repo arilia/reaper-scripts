@@ -70,7 +70,8 @@ class Bar {
             const targetPosition = rowBox.top + rowBox.height / 2;
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
-            this.song.translate(targetPosition - top);
+//            this.song.translate(targetPosition - top);
+            this.song.viewManager.chordsView.translate(targetPosition - top);
 //            console.log(top);
         }
         this.isPlaying = val;
@@ -150,7 +151,7 @@ class Row {
                 element.render();
             }
         }
-        this.song.table.append(this.div);
+        this.song.viewManager.getTable().append(this.div);
     }
 }
 
@@ -356,7 +357,8 @@ class Lyric {
             
             const progress = this.height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
-            this.song.moveTo(targetPosition - this.top - progress);
+//            this.song.moveTo(targetPosition - this.top - progress);
+            this.song.viewManager.lyricsView.moveTo(targetPosition - this.top - progress);
         }
         this.isPlaying = val;
 
@@ -426,7 +428,6 @@ class Song {
     json = "";
     maxBeats = 16; 
     barsPerRow = 4;
-    translateY = 0;
     internalChordsOffset = 0;
     internallyricsOffset = 0;
     networkOffset = 0;
@@ -650,26 +651,26 @@ class Song {
         
     }
 
-    translate(val) {
-        this.translateY = val + this.translateY;
-        const tableStyle = this.table.style;
-        if (this.instantPositioning) {
-            tableStyle.willChange = 'none';
-        } else {
-            
-            tableStyle.willChange = 'transform';
-            tableStyle.transition = 'transform 400ms ease';
-        }
-        tableStyle.transform = "translateY(" + this.translateY + "px)";
-    }
+//    translate(val) {
+//        this.translateY = val + this.translateY;
+//        const tableStyle = this.table.style;
+//        if (this.instantPositioning) {
+//            tableStyle.willChange = 'none';
+//        } else {
+//            
+//            tableStyle.willChange = 'transform';
+//            tableStyle.transition = 'transform 400ms ease';
+//        }
+//        tableStyle.transform = "translateY(" + this.translateY + "px)";
+//    }
 
 
-    moveTo(val)
-    {	
-        this.translateY = val + this.translateY;
-        const tableStyle = this.table.style;
-        tableStyle.transform = "translateY(" + this.translateY + "px)";
-    }
+//    moveTo(val)
+//    {	
+//        this.translateY = val + this.translateY;
+//        const tableStyle = this.table.style;
+//        tableStyle.transform = "translateY(" + this.translateY + "px)";
+//    }
     
     
     changeLayout(layoutType) {
@@ -787,8 +788,11 @@ class Song {
     }
 
     clear() {
-        this.translateY = 0;
-        this.table = null;
+        this.viewManager.chordsView.translateY = 0;
+        this.viewManager.lyricsView.translateY = 0;
+        this.viewManager.chordsView.table = null; //TODO Move in view
+        this.viewManager.lyricsView.table = null;//TODO Move in view
+//        this.table = null;
         this.complete = false;
         this.rows = [];
         this.chords = [];
@@ -1038,6 +1042,9 @@ class Song {
 class LyricsView {
   
     song = null;
+    table = null;
+    translateY = 0;
+    
     ELEMENTS = {
         big_clock_section: false,
         lyrics_section: true,
@@ -1053,11 +1060,9 @@ class LyricsView {
     }
     
     render() {
-        Object.entries(this.ELEMENTS).forEach(([key, value]) => { 
-            document.getElementById(key).hidden = !value;
-        });
         const table = document.createElement('div');
-        this.song.table = table;
+//        this.song.table = table;
+        this.table = table;
         table.id = 'song_content_lyrics';
         for (let row of this.song.rows) {
             row.table = table;
@@ -1068,6 +1073,9 @@ class LyricsView {
         document.title = this.song.project + " - Lyrics";
         let content = document.getElementById('song_content_lyrics');
         content.parentNode.replaceChild(table, content);
+        Object.entries(this.ELEMENTS).forEach(([key, value]) => { 
+            document.getElementById(key).hidden = !value;
+        });
     }
     
     
@@ -1076,12 +1084,20 @@ class LyricsView {
             lyric.checkPlaying(position);
         }
     }
+    
+    moveTo(val)
+    {	
+        this.translateY = val + this.translateY;
+        const tableStyle = this.table.style;
+        tableStyle.transform = "translateY(" + this.translateY + "px)";
+    }
 }
 
 
 class ChordsView {
 
     song = null;
+    translateY = 0;
     decoratedChords =  false;
 
     ELEMENTS = {
@@ -1097,12 +1113,27 @@ class ChordsView {
         this.song = song;
     }
     
+    
+    translate(val) {
+        this.translateY = val + this.translateY;
+        const tableStyle = this.table.style;
+        if (this.instantPositioning) {
+            tableStyle.willChange = 'none';
+        } else {
+            
+            tableStyle.willChange = 'transform';
+            tableStyle.transition = 'transform 400ms ease';
+        }
+        tableStyle.transform = "translateY(" + this.translateY + "px)";
+    }
+    
     render() {
         Object.entries(this.ELEMENTS).forEach(([key, value]) => { 
             document.getElementById(key).hidden = !value;
         });
         const table = document.createElement('div');
         this.song.table = table;
+        this.table = table;
         table.id = 'song_content_chords';
         this.song.clockDiv.style.visibility = "visible";
         const button = document.getElementById('decorated_chords');
@@ -1238,6 +1269,19 @@ class ViewManager {
         document.getElementById('big_clock_section').hidden = true;
     }
     
+    getTable() {
+        switch(song.type) {
+        case ViewManager.LYRICS :
+            return this.lyricsView.table;
+            break;
+        case ViewManager.CHORDS :
+            return this.chordsView.table;
+            break;
+        case ViewManager.CLOCK :
+            return null;
+            break;
+        }
+    }
     
     updateView(type, position) {
         
