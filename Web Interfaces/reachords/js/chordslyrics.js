@@ -690,10 +690,10 @@ class Song {
         this.instantPositioning = true;
         switch(this.type) {
         case ViewManager.LYRICS :
-            this.createLyricsTable();
+            this.viewManager.lyricsView.createTable();
             break;
         case ViewManager.CHORDS :
-            this.createChordsTable();
+            this.viewManager.chordsView.createTable();
             break;
         
         }
@@ -702,31 +702,6 @@ class Song {
         
     }
  
-
-    createLyricsTable() {
-        let lastEnd = 0;
-        
-        for (let lyric of this.lyrics)
-        {
-            let row;
-            for (let marker of this.markers)
-            {
-                if (marker !== undefined && marker.position >= lastEnd && marker.position < lyric.endTime)
-                {
-                    const markerRow = new Row(this, Row.LYRICS_MARKER);
-                    markerRow.append(marker);
-                    this.rows.push(markerRow);
-//                    row = new Row(this, Row.LYRICS); // Probably not needed,
-//                    this.rows.push(row);             // TODO remove
-                }
-            }
-            row = new Row(this, Row.LYRICS);
-            row.append(lyric);
-            this.rows.push(row);
-            lastEnd = lyric.endTime;
-        }
-    }
-
    
     increaseBars () {
         this.barsPerRow++;
@@ -759,36 +734,6 @@ class Song {
     }
     
     
-    createChordsTable() {
-        
-        let columnCount = 0;
-        let row = null;
-        for (const bar of this.bars)
-        {
-            
-            columnCount++;
-            if (columnCount === 1) {
-                row = new Row(this);
-                this.rows.push(row);
-            }
-
-            if (this.markers[bar.number] !== undefined)
-            {
-
-                const markerRow = new Row(this, Row.MARKER);
-                markerRow.append(this.markers[bar.number]);
-                this.rows.push(markerRow);
-                columnCount = 1;
-                row = new Row(this);  // Needed to create a new line when there is a marker 
-                this.rows.push(row);  // In the middle of the line
-            }
-            row.append(bar);
-            if (columnCount === this.barsPerRow) {
-                columnCount = 0;
-            }
-        }
-        
-    }
 
     clear() {
         this.viewManager.chordsView.translateY = 0;
@@ -1062,6 +1007,31 @@ class LyricsView {
         
     }
     
+    
+    createTable() {
+        let lastEnd = 0;
+        
+        for (let lyric of this.song.lyrics)
+        {
+            let row;
+            for (let marker of this.song.markers)
+            {
+                if (marker !== undefined && marker.position >= lastEnd && marker.position < lyric.endTime)
+                {
+                    const markerRow = new Row(this.song, Row.LYRICS_MARKER);
+                    markerRow.append(marker);
+                    this.song.rows.push(markerRow);
+//                    row = new Row(this, Row.LYRICS); // Probably not needed,
+//                    this.rows.push(row);             // TODO remove
+                }
+            }
+            row = new Row(this.song, Row.LYRICS);
+            row.append(lyric);
+            this.song.rows.push(row);
+            lastEnd = lyric.endTime;
+        }
+    }
+    
     render() {
         const table = document.createElement('div');
 //        this.song.table = table;
@@ -1102,6 +1072,8 @@ class ChordsView {
     song = null;
     translateY = 0;
     decoratedChords =  false;
+    rows = [];
+    teble = null;
 
     ELEMENTS = {
         big_clock_section: false,
@@ -1116,6 +1088,35 @@ class ChordsView {
         this.song = song;
     }
     
+    createTable() {
+        let columnCount = 0;
+        let row = null;
+        for (const bar of this.song.bars)
+        {
+            
+            columnCount++;
+            if (columnCount === 1) {
+                row = new Row(this.song);
+                this.song.rows.push(row);
+            }
+
+            if (this.song.markers[bar.number] !== undefined)
+            {
+
+                const markerRow = new Row(this.song, Row.MARKER);
+                markerRow.append(this.song.markers[bar.number]);
+                this.song.rows.push(markerRow);
+                columnCount = 1;
+                row = new Row(this.song);  // Needed to create a new line when there is a marker 
+                this.song.rows.push(row);  // In the middle of the line
+            }
+            row.append(bar);
+            if (columnCount === this.song.barsPerRow) {
+                columnCount = 0;
+            }
+        }
+        
+    }
     
     translate(val) {
         this.translateY = val + this.translateY;
