@@ -654,27 +654,6 @@ class Song {
         
     }
 
-//    translate(val) {
-//        this.translateY = val + this.translateY;
-//        const tableStyle = this.table.style;
-//        if (this.instantPositioning) {
-//            tableStyle.willChange = 'none';
-//        } else {
-//            
-//            tableStyle.willChange = 'transform';
-//            tableStyle.transition = 'transform 400ms ease';
-//        }
-//        tableStyle.transform = "translateY(" + this.translateY + "px)";
-//    }
-
-
-//    moveTo(val)
-//    {	
-//        this.translateY = val + this.translateY;
-//        const tableStyle = this.table.style;
-//        tableStyle.transform = "translateY(" + this.translateY + "px)";
-//    }
-    
     
     changeLayout(layoutType) {
         this.type = layoutType;
