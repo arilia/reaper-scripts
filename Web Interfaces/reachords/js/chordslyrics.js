@@ -449,7 +449,7 @@ class Song {
     project = "Song";
     complete = false;
     lock = true;
-    instantPositioning = false;
+//    instantPositioning = false;
     lastTimestamp = null;
     targetPosition = null;
     loaderDiv = null;
@@ -647,7 +647,7 @@ class Song {
         // Skip the animated transition for the very first positioning after a
         // song rebuild. Without this, the page would visibly scroll from the top
         // down to the current playhead position before the user sees it settled.
-        this.instantPositioning = false;
+        this.viewManager.instantPositioning = false;
         if (this.songReady) {          
             this.hideSong(false);
         }
@@ -666,7 +666,7 @@ class Song {
         document.getElementById('change_to_chords').classList.toggle('button_on', this.type === ViewManager.CHORDS );
         document.getElementById('change_to_lyrics').classList.toggle('button_on', this.type === ViewManager.LYRICS );
         document.getElementById('change_to_clock').classList.toggle('button_on', this.type === ViewManager.CLOCK );
-        this.instantPositioning = true;
+        this.viewManager.instantPositioning = true;
         switch(this.type) {
         case ViewManager.LYRICS :
             this.viewManager.lyricsView.createTable();
@@ -969,7 +969,8 @@ class Song {
 class LyricsView {
   
     song = null;
-    table = null;
+    table = null; // TODO
+    viewManager = null;
     translateY = 0;
     
     ELEMENTS = {
@@ -1051,8 +1052,9 @@ class ChordsView {
     song = null;
     translateY = 0;
     decoratedChords =  false;
-    rows = [];
-    teble = null;
+    viewManager = null;
+    rows = []; // TODO
+    table = null; //TODO
 
     ELEMENTS = {
         big_clock_section: false,
@@ -1100,7 +1102,7 @@ class ChordsView {
     translate(val) {
         this.translateY = val + this.translateY;
         const tableStyle = this.table.style;
-        if (this.instantPositioning) {
+        if (this.viewManager.instantPositioning) {
             tableStyle.willChange = 'none';
         } else {
             
@@ -1165,6 +1167,7 @@ class ClockView {
     song = null;
     lastMarker = null;
     lastMarkerContainer = null;
+    viewManager = null;
     lastClockTime = null;
     ELEMENTS = {
         big_clock_section: true,
@@ -1234,6 +1237,7 @@ class ViewManager {
     static LYRICS = "lyrics";
     static CHORDS = "chords";
     static CLOCK = "clock";
+    instantPositioning = false;
     song = null;
     clockView = null;
     chordsView = null;
@@ -1242,8 +1246,11 @@ class ViewManager {
         this.song = song;
         song.viewManager = this;
         this.clockView = new ClockView(song);
+        this.clockView.viewManager = this;
         this.chordsView = new ChordsView(song);
+        this.chordsView.viewManager = this;
         this.lyricsView = new LyricsView(song);
+        this.lyricsView.viewManager = this;
     }
     
     hideAll() {
