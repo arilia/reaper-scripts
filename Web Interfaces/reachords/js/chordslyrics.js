@@ -217,6 +217,11 @@ class Marker {
 
 class Chord {
     name = "C";
+    root = "";
+    accidental = "";
+    quality = "";
+    modifiers = "";
+    bass = "";
     beatDuration = 4;
     bar = null;
     barNumber = 1;
@@ -279,31 +284,17 @@ class Chord {
                 modifiers = modifiers.substring(0, bassIndex);
             }
         }
-        let chordJson = {
-            root: root,
-            accidental: accidental,
-            quality: quality,
-            modifiers: modifiers,
-            bass: bass
-        };
+        this.root = root;
+        this.root = accidental;
+        this.root = quality;
+        this.root = modifiers;
+        this.root = bass;
+        
         return  root + accidental + quality + "<sup>" + modifiers + "</sup><sub>" + bass + "</sub>" ;
     }
     
-//    set playing(val) {
-//        if(val === this.isPlaying) return;
-//        if (this.div !== null) {
-//            this.div.classList.toggle('chord_playing', val);
-//        }
-//        this.isPlaying = val;
-//    }
-
     checkPlaying(position) {
-
-        if (position >= this.startTime && position < this.endTime) {
-            this.isPlaying = true;
-        } else {
-            this.isPlaying = false;
-        }
+        this.isPlaying = (position >= this.startTime && position < this.endTime);
         return this.isPlaying;
     }
 
@@ -405,8 +396,8 @@ class Lyric {
 
 class Song {
     id = "";
-    table = null; //TODO, move in View?
-    lastInsertedLyric = null;
+    table = null; 
+    lastInsertedLyric = null; 
     bars = [];
     chords = [];
     lyrics = [];
@@ -436,7 +427,6 @@ class Song {
     project = "Song";
     complete = false;
     lock = true;
-//    instantPositioning = false;
     lastTimestamp = null;
     targetPosition = null;
     loaderDiv = null;
@@ -650,9 +640,9 @@ class Song {
     
     
     createTable() {
-        document.getElementById('change_to_chords').classList.toggle('button_on', this.type === ViewManager.CHORDS );
-        document.getElementById('change_to_lyrics').classList.toggle('button_on', this.type === ViewManager.LYRICS );
-        document.getElementById('change_to_clock').classList.toggle('button_on', this.type === ViewManager.CLOCK );
+        document.getElementById('change_to_chords').ariaSelected = (this.type === ViewManager.CHORDS );
+        document.getElementById('change_to_lyrics').ariaSelected = (this.type === ViewManager.LYRICS );
+        document.getElementById('change_to_clock').ariaSelected = (this.type === ViewManager.CLOCK );
         this.viewManager.instantPositioning = true;
         switch(this.type) {
         case ViewManager.LYRICS :
@@ -1105,13 +1095,13 @@ class ChordsView {
             document.getElementById(key).hidden = !value;
         });
         const table = document.createElement('div');
-        this.song.table = table;
+//        this.songs.table = table;
         this.table = table;
         table.id = 'song_content_chords';
         this.song.clockDiv.style.visibility = "visible";
         const button = document.getElementById('decorated_chords');
         button.classList.toggle('button_on', this.decoratedChords);
-        table.classList.add("chords_table"); //TODO do better
+        table.classList.add("chords_table"); 
         document.getElementById('lyrics_banner').textContent  = "";
         document.title = this.song.project + " - Chords";
         table.style.setProperty("--maxbeats", this.song.maxBeats);

@@ -3,10 +3,80 @@ body {
     min-height: 100vh;
 }
 
+
+
+:root {
+  --surface:   #0c0c10;
+  --surface-2: #1a1a22;
+  --line:      #1f1f27;
+  --btn-line:  #33333d;
+  --line-3:    #3a3a46;
+  --text:      #fff;
+  --text-dim:  #8a8a99;
+    --text-btn:  #b8b8c6;
+}
+
+
+.tabs {
+  /*position: fixed;*/
+  /*top: 0;*/
+  width: 100%;
+        
+        
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;          /* schede tutte della stessa larghezza, per 3 o 4 */
+  gap: 6px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  z-index: 30;
+}
+
+.tab {
+  height: 56px;
+  min-width: 0;
+  padding: 0;
+  font: inherit;
+  font-size: clamp(16px, 2.6vw, 20px);
+  font-weight: 500;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  cursor: pointer;
+  touch-action: manipulation;       /* niente zoom con il doppio tocco */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.tab[aria-selected="true"] {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--line-3);
+}
+
+.tab:active {
+  background: var(--surface-2);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--text-dim);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .tab:not([aria-selected="true"]):hover { color: var(--text); }
+}
+
+
+
 /*LYRICS SECTION*/
 
-.lyrics_section {
-    
+#lyrics_section {
+    overflow: hidden;  
 }
 
 
@@ -50,11 +120,13 @@ body:has(.bottom_bar) .bottom_curtain {
 
 /*CHORDS SECTION*/
 
-.chords_section {
-    
+#chords_section {
+  overflow: hidden;  
 }
 
-
+.song_content_chords {
+    z-index: 1;
+}
 .song_chords {
     display: block;
     width: 70%;
@@ -128,24 +200,27 @@ p.bpm {
      font-weight: normal;
 }
 .top_bar {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    align-items: flex-start; 
-    padding-top: .6em; 
-    background: #000;
-    width: 100%;
-    z-index: 20;
-    height: 4.5em;
+     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
 
 }
 
+.top_bar .group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+
 .title_bar {
     display: flex;
-    position: fixed;
-    top: 4.5em;
+    /*position: fixed;*/
+    /*top: 4.5em;*/
     left: 0;
     right: 0;
     
@@ -523,26 +598,23 @@ div.offset {
     z-index: 20;
 }
 
-.bar_adjust {
-    flex: 0 0 2.5em;
-    width: 2.5em;
-    height: 2.5em;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    background-color: hsl(0, 0%, 30%);
-    color: #ddd;
-    font-weight: bold;
-    /*font-size: 1.4em;*/
-    line-height: 1;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    margin-left: .1em;
-    margin-right: .1em;
+.round-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font: inherit;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text-btn);
+  background: transparent;
+  border: 1px solid var(--btn-line);
+  border-radius: 50%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
+.round-btn:active { background: var(--surface-2); }
 
 .bar_adjust.lock {
     flex: 0 0 4em;

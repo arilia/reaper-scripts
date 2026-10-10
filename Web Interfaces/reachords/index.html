@@ -9,21 +9,26 @@
         <link rel="stylesheet" href="css/chordsandlyrics.css">
     </head>
     <body>
+        <nav class="tabs" role="tablist" aria-label="View">
+            <button class="tab" role="tab" aria-selected="true" data-page="chords" id="change_to_chords" >Chords</button>
+            <button class="tab" role="tab" aria-selected="false" data-page="lyrics" id="change_to_lyrics" >Lyrics</button>
+            <button class="tab" role="tab" aria-selected="false" data-page="clock" id="change_to_clock" >Clock</button>
+        </nav>
         <div class="top_bar">
-            <div class="play_state stop" id="play_state">Stop</div>
-            <div class="scriptstatus_div" id="scriptstatus_div" onclick='wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad");'>
-                <div id="scriptstatus" class="scriptstatus">
+            <div class="group">
+                <div class="play_state stop" id="play_state">Stop</div>
+                <div class="scriptstatus_div" id="scriptstatus_div" onclick='wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad");'>
+                    <div id="scriptstatus" class="scriptstatus">
+                    </div>
                 </div>
+                <div class="round-btn" id="decrease_bars" title="Show fewer bars per row">−</div>
+                <div class="round-btn" id="increase_bars" title="Show more bars per row">+</div>
+                &nbsp;&nbsp;&nbsp;
+                <div class="round-btn" id="decorated_chords" title="Toggle chords decoration">C⁷</div>
+
+                &nbsp;&nbsp;&nbsp;
+                <div class="bar_adjust lock" id="lock" title="Lock" >LOCK</div>
             </div>
-            <div class="bar_adjust" id="decrease_bars" title="Show fewer bars per row">−</div>
-            <div class="bar_adjust" id="increase_bars" title="Show more bars per row">+</div>
-            &nbsp;&nbsp;&nbsp;
-            <div class="bar_adjust" id="decorated_chords" title="Toggle chords decoration">C⁷</div>
-            <div class="bar_adjust" id="change_to_chords" title="Clock">CH</div>
-            <div class="bar_adjust" id="change_to_lyrics" title="Lyrics">LYR</div>
-            <div class="bar_adjust" id="change_to_clock" title="Chords">CLK</div>
-            &nbsp;&nbsp;&nbsp;
-            <div class="bar_adjust lock" id="lock" title="Lock" >LOCK</div>
             <div class="clock" id="clock_div"></div>
             
         </div>
@@ -33,28 +38,28 @@
         <div id="loader" class="loader">Loading...</div>
         
         <section  id="chords_section" hidden>
-            <div class="top_curtain_chords"></div>
+            <!--<div class="top_curtain_chords"></div>-->
             <div class="position_row" id="position_row_chords">
                 <div id="position_chords" class="position">&nbsp;</div>
             </div>
             <div id='song_chords' class="song_chords">
                 <div id='song_content_chords' class='chords_table'></div>
             </div>
-            <div class="bottom_curtain_chords" id="bottom_curtain_chords"> </div>
+            <!--<div class="bottom_curtain_chords" id="bottom_curtain_chords"> </div>-->
             <div class="bottom_bar_chords" id="bottom_bar_chords">
                 <div class="lyrics_banner" id ="lyrics_banner"></div>
             </div>
         </section>
         
         <section id="lyrics_section" hidden>
-            <div class="top_curtain_lyrics"></div>
+            <!--<div class="top_curtain_lyrics"></div>-->
             <div class="position_row" id="position_row_lyrics">
                 <div id="position_lyrics" class="position">&nbsp;</div>
             </div>
             <div id='song_lyrics' class="song_chords">
                 <div id='song_content_lyrics' class='chords_table'></div>
             </div>
-            <div class="bottom_curtain_lyrics" id="bottom_curtain_lyrics"> </div>
+            <!--<div class="bottom_curtain_lyrics" id="bottom_curtain_lyrics"> </div>-->
         </section>
 
         <section class="big_clock_section" id="big_clock_section" hidden>
