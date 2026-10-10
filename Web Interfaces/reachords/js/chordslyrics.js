@@ -289,38 +289,25 @@ class Chord {
         return  root + accidental + quality + "<sup>" + modifiers + "</sup><sub>" + bass + "</sub>" ;
     }
     
-    set playing(val) {
-        if(val === this.isPlaying) return;
-        if (this.div !== null) {
-            this.div.classList.toggle('chord_playing', val);
-        }
-        this.isPlaying = val;
-    }
+//    set playing(val) {
+//        if(val === this.isPlaying) return;
+//        if (this.div !== null) {
+//            this.div.classList.toggle('chord_playing', val);
+//        }
+//        this.isPlaying = val;
+//    }
 
     checkPlaying(position) {
 
         if (position >= this.startTime && position < this.endTime) {
-            this.playing = true;
+            this.isPlaying = true;
         } else {
-            this.playing = false;
+            this.isPlaying = false;
         }
         return this.isPlaying;
     }
 
-    render()
-    {
-        this.div = document.createElement('div');
-        this.div.classList.add('chord');
-        if(song.decoratedChords)
-        {
-            this.div.innerHTML  = this.formattedName;
-        } else {
-            this.div.textContent = this.name;
-        }
-        this.div.style.left = Number((this.beatStart - 1) * this.bar.width / this.bar.beats.length) + "px";
-        this.div.style.width = Number(this.beatDuration * this.bar.width / this.bar.beats.length) - 4 + "px";
-        this.bar.div.append(this.div);
-    }
+
 }
 
 
@@ -804,21 +791,21 @@ class Song {
     
     findPlayingChord(position)
     {
+        let foundChord =  null;
         if(this.playingChord && this.playingChord.checkPlaying(position)) {
-            return;
+            foundChord = this.playingChord;
+        } else if(this.playingChord && this.playingChord.nextChord && this.playingChord.nextChord.checkPlaying(position)) {
+            foundChord = this.playingChord.nextChord;
+        } else {
+            for (let chord of this.chords) {
+                if(chord.checkPlaying(position)) { 
+                    foundChord = chord;
+                    break;
+                }
+            }
         }
-        if(this.playingChord && this.playingChord.nextChord && this.playingChord.nextChord.checkPlaying(position)) {
-            this.playingChord = this.playingChord.nextChord;
-            return;
-        }
-        let found = false;
-        for (let chord of this.chords) {
-            found = chord.checkPlaying(position);
-            if(found) {
-                this.playingChord = chord;
-                return;
-            } 
-        }
+        this.playingChord = foundChord;
+        this.viewManager.chordsView.highLightChord(foundChord);
     }
     
     
@@ -1053,6 +1040,7 @@ class ChordsView {
     translateY = 0;
     decoratedChords =  false;
     viewManager = null;
+    highLightedChord = null;
     rows = []; // TODO
     table = null; //TODO
 
@@ -1136,9 +1124,39 @@ class ChordsView {
             row.render();
         }
         for (const chord of this.song.chords) {
-            chord.render();
+            this.renderChord(chord);
         }   
         
+    }
+    
+    
+    renderChord(chord)
+    {
+        chord.div = document.createElement('div');
+        chord.div.classList.add('chord');
+        if(song.decoratedChords) //TODO
+        {
+            chord.div.innerHTML  = chord.formattedName;
+        } else {
+            chord.div.textContent = chord.name;
+        }
+        chord.div.style.left = Number((chord.beatStart - 1) * chord.bar.width / chord.bar.beats.length) + "px";
+        chord.div.style.width = Number(chord.beatDuration * chord.bar.width / chord.bar.beats.length) - 4 + "px";
+        chord.bar.div.append(chord.div);
+    }
+    
+    
+    highLightChord(chord) {
+        if (this.highlightedChord === chord) return;
+        if (this.highLightedChord) {
+            this.highLightedChord.div.classList.remove("chord_playing");
+        }
+
+        this.highLightedChord = chord;
+
+        if (chord) {
+            chord.div.classList.add("chord_playing");
+        }
     }
     
     update(position) {
