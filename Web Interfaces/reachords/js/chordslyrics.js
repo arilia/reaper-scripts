@@ -382,7 +382,6 @@ class Song {
     bars = [];
     chords = [];
     lyrics = [];
-    rows = [];
     markers = [];
     networkBuf = [];
     paintBuf = [];
@@ -613,11 +612,7 @@ class Song {
     }
 
     
-    changeLayout(layoutType) {
-        this.type = layoutType;
-        this.saveProjectSettings();
-        this.repaint();
-    }
+    
     
     
     createTable() {
@@ -917,6 +912,7 @@ class LyricsView {
     table = null; // TODO
     viewManager = null;
     translateY = 0;
+    rows = [];
     
     ELEMENTS = {
         big_clock_section: false,
@@ -945,14 +941,14 @@ class LyricsView {
                 {
                     const markerRow = new Row(this.song, Row.LYRICS_MARKER);
                     markerRow.append(marker);
-                    this.song.rows.push(markerRow);
+                    this.rows.push(markerRow);
 //                    row = new Row(this, Row.LYRICS); // Probably not needed,
 //                    this.rows.push(row);             // TODO remove
                 }
             }
             row = new Row(this.song, Row.LYRICS);
             row.append(lyric);
-            this.song.rows.push(row);
+            this.rows.push(row);
             lastEnd = lyric.endTime;
         }
     }
@@ -962,7 +958,7 @@ class LyricsView {
 //        this.song.table = table;
         this.table = table;
         table.id = 'song_content_lyrics';
-        for (let row of this.song.rows) {
+        for (let row of this.rows) {
             row.table = table;
             row.render();
         }
@@ -1120,9 +1116,7 @@ class ChordsView {
         if (this.highLightedChord) {
             this.highLightedChord.div.classList.remove("chord_playing");
         }
-
         this.highLightedChord = chord;
-
         if (chord) {
             chord.div.classList.add("chord_playing");
         }
@@ -1183,7 +1177,6 @@ class ClockView {
     }
     
     renderMarker(marker) {
-//        if(this.clockDiv) return this.clockDiv;
         const progressDiv = document.createElement("div");
         progressDiv.id = "marker_" + marker.index + "_progress";
         progressDiv.classList.add('marker_progress');
@@ -1191,12 +1184,12 @@ class ClockView {
         const div = document.createElement("div");
         div.id = "clock_marker_" + marker.index;
         div.textContent  = marker.text;
-        div.classList.add('marker');
-//        this.clockDiv.style.border = "1px solid rgb(" + this.color + ")";
-//        this.clockDiv.style.background = "rgba(" + this.color + ", .3)";
-        div.style.color = "rgba(" + marker.color + ", 1)";
-        div.style.border = "0px"; 
-        div.style.background = "transparent";
+        div.classList.add('clock_marker');
+        div.style.border = "1px solid rgb(" + marker.color + ")";
+        div.style.background = "rgba(" + marker.color + ", .1)";
+//        div.style.color = "rgba(" + marker.color + ", 1)";
+//        div.style.border = "0px"; 
+//        div.style.background = "transparent";
         div.append(progressDiv);
         return div;
         
@@ -1244,6 +1237,7 @@ class ViewManager {
     static LYRICS = "lyrics";
     static CHORDS = "chords";
     static CLOCK = "clock";
+    active = "lyrics";
     instantPositioning = false;
     song = null;
     clockView = null;
@@ -1264,6 +1258,33 @@ class ViewManager {
         document.getElementById('chords_section').hidden = true;
         document.getElementById('lyrics_section').hidden = true;
         document.getElementById('big_clock_section').hidden = true;
+    }
+    
+    changeLayout(layoutType) {  // TODO Move to Layout Manager
+        this.active = layoutType;
+        this.song.type = layoutType;
+        this.song.saveProjectSettings();
+        this.song.repaint();
+    }
+    
+    
+    createTable() { // TODO, at the moment not used
+        document.getElementById('change_to_chords').ariaSelected = (this.active === ViewManager.CHORDS );
+        document.getElementById('change_to_lyrics').ariaSelected = (this.active === ViewManager.LYRICS );
+        document.getElementById('change_to_clock').ariaSelected = (this.active === ViewManager.CLOCK );
+        this.instantPositioning = true;
+        switch(this.active) {
+        case ViewManager.LYRICS :
+            this.lyricsView.createTable();
+            break;
+        case ViewManager.CHORDS :
+            this.chordsView.createTable();
+            break;
+        
+        }
+        this.song.render();
+        this.song.complete = true;
+        
     }
     
     getTable() {

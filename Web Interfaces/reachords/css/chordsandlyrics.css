@@ -728,19 +728,23 @@ div.offset {
     grid-row: span 1;
     grid-column: 1 / -1;
 }
-.marker {
+.marker, .clock_marker{
     position: relative;
     margin: .2em;
     margin-top: .5em;
     background: black;
     border-radius: 4px;
     display: inline-block;
-    width: 100%;
+    /*width: 100%;*/
     color: white;
     text-align: left;
     font-size: .8em;
     padding: .2em .3em .2em .3em ;
     border: 1px solid white;
+}
+
+.clock_marker {
+    width: 100%
 }
 
 .command-button {
