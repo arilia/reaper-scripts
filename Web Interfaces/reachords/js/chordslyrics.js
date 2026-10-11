@@ -448,7 +448,7 @@ class Song {
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
         this.loaderDiv = document.getElementById('loader');
-        this.playStateDiv = document.getElementById('play_state');
+//        this.playStateDiv = document.getElementById('play_state');
         this.clockDiv = document.getElementById('clock_div'); 
     }
 
@@ -585,32 +585,32 @@ class Song {
             position += elapsedTime / 1000;
             this.calculatedPosition = position;
         }
-        if(this.playState !== this.lastPlayState)
-        {
-            let content ="Stopped";
-            let className = "play_state stop";
-            switch(this.playState) {
-                case 1:
-                    content  = "Playing";
-                    className  = "play_state play";
-                    break;
-                case 2:
-                    content  = "Paused";
-                    className  = "play_state stop";
-                    break;
-                case 5:
-                    content  = "Recording";
-                    className  = "play_state rec";
-                    break;
-                case 6:
-                    content  = "Recording Paused";
-                    className  = "play_state rec";
-                    break;
-            }
-            this.playStateDiv.textContent = content;
-            this.playStateDiv.className = className;
-            this.lastPlayState = this.playState;
-        }
+//        if(this.playState !== this.lastPlayState) //TODO Move from Song.
+//        {
+//            let content ="Stopped";
+//            let className = "play_state stop";
+//            switch(this.playState) {
+//                case 1:
+//                    content  = "Playing";
+//                    className  = "play_state play";
+//                    break;
+//                case 2:
+//                    content  = "Paused";
+//                    className  = "play_state stop";
+//                    break;
+//                case 5:
+//                    content  = "Recording";
+//                    className  = "play_state rec";
+//                    break;
+//                case 6:
+//                    content  = "Recording Paused";
+//                    className  = "play_state rec";
+//                    break;
+//            }
+//            this.playStateDiv.textContent = content;
+//            this.playStateDiv.className = className;
+//            this.lastPlayState = this.playState;
+//        }
         position = roundTime(position);
         const t0 = performance.now();
         this.checkPlaying(position);
@@ -676,15 +676,7 @@ class Song {
     
     toggleDecoratedChords() {
         this.decoratedChords = ! this.decoratedChords;
-        const button = document.getElementById('decorated_chords');
-        if(this.decoratedChords)
-        {
-            button.classList.add('button_on');
-        }
-        else
-        {
-            button.classList.remove('button_on');
-        }
+        document.getElementById('decorated_chords').ariaPressed = this.decoratedChords;
         this.saveProjectSettings();
         this.repaint();
     }
@@ -804,10 +796,9 @@ class Song {
             return;
         }
         let formattedTime = this.formatTime(position);
-        
         if(formattedTime !== this.lastClockTime)
         {
-            this.clockDiv.innerHTML  = formattedTime + "<p class ='bpm'>" + this.bpm + " bpm</p>";
+            this.clockDiv.innerHTML  = formattedTime;// + "<p class ='bpm'>" + this.bpm + " bpm</p>";
             this.lastClockTime = formattedTime;
         }
         this.viewManager.updateView(this.type, position);
@@ -884,16 +875,12 @@ class Song {
         this.scriptActive = active;
         const scriptstatus_div = document.getElementById('scriptstatus_div');
         const scriptstatus = document.getElementById('scriptstatus');
+        scriptstatus_div.classList.toggle('inactive', !this.scriptActive);
         if (active) {
             scriptstatus.textContent  = "Script is Running...";
-            scriptstatus_div.classList.remove('inactive');
-            scriptstatus_div.classList.add('active');       
         } else {
-            scriptstatus.innerHTML  = "Script is not running<br>Click Here to run.";
-            scriptstatus_div.classList.remove('active');
-            scriptstatus_div.classList.add('inactive');    
+            scriptstatus.textContent  = "Click to run script";
         }
-        
     }
     
     calculateNetwordDelay(t0) {

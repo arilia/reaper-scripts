@@ -14,6 +14,13 @@ body {
   --text:      #fff;
   --text-dim:  #8a8a99;
     --text-btn:  #b8b8c6;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  font-family: var(--font);
+  -webkit-text-size-adjust: 100%;   /* evita ingrandimenti automatici del testo su iOS */
+  text-size-adjust: 100%;
 }
 
 
@@ -179,18 +186,14 @@ body:has(.bottom_bar) .bottom_curtain {
 /* OTHER   */
 
 .clock {
-    flex: 0 0 7em;
-    width: 7em;
-    box-sizing: border-box;
-    text-align: center;
-    padding: .3em 0;
-    border-radius: 6px;
-    background-color: hsl(0, 0%, 30%);
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #eee;
-    margin-left: auto;
-    margin-right: 1em;
+    padding: 6px 14px;
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-variant-numeric: tabular-nums;   /* le cifre non ballano mentre scorrono */
+    white-space: nowrap;
 }
 
 p.bpm {
@@ -206,6 +209,7 @@ p.bpm {
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 14px;
+    padding-right: 14px;
 
 }
 
@@ -319,28 +323,22 @@ div.offset {
     left: 50%;
 }
 
-.play_state,
- .scriptstatus_div{
-    flex: 0 0 8em;
-    width: 8em;
-    box-sizing: border-box;
-    text-align: center;
-    padding: .6em 0;
-    border-radius: 6px;
-    font-weight: bold;
-    color: #ddd;
-    height: 2.5em;
-    margin-left: 1em;
-    margin-right: 1em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .scriptstatus_div{
-    
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--state);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    pointer-events: none;
+    user-select: none;
+    color:  rgb(74, 222, 128);
     cursor: pointer;
 }
+
 
 .play_state.stop {
      background-color: hsl(0, 0%, 40%);
@@ -356,13 +354,16 @@ div.offset {
 
 
 .scriptstatus_div.inactive {
-    background-color:  hsl(0, 30%, 40%);
+    color:  rgb(222, 128, 74);
 }
 
-.scriptstatus_div.active, .bar_adjust.button_on {
-    background-color:  hsl(120, 25%, 35%);
+.scriptstatus_div span {
+    background-color:  rgb(74, 222, 128);
 }
 
+.scriptstatus_div.inactive span {
+    background-color:  rgb(222, 128, 74);
+}
 
 .scriptstatus {
     font-size: .6em;
@@ -616,18 +617,28 @@ div.offset {
 }
 .round-btn:active { background: var(--surface-2); }
 
-.bar_adjust.lock {
-    flex: 0 0 4em;
-    width: 4em;
+
+.toggle {
+  height: 44px;
+  min-width: 64px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 21px;
+  font-weight: 500;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--btn-line);
+  border-radius: 12px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.toggle[aria-pressed="true"] {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: #6b6b78;
 }
 
-.bar_adjust.lock.locked {
-    background-color:  hsl(120, 25%, 35%);
-}
 
-.bar_adjust.lock.unlocked {
-    background-color:  hsl(0, 55%, 40%);;
-}
 
 .marker_progress {
     position: absolute;

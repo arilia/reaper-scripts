@@ -16,15 +16,16 @@
         </nav>
         <div class="top_bar">
             <div class="group">
-                <div class="play_state stop" id="play_state">Stop</div>
-                <div class="scriptstatus_div" id="scriptstatus_div" onclick='wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad");'>
+                <!--<div class="play_state stop" id="play_state" >Stop</div>-->
+                <div class="scriptstatus_div" id="scriptstatus_div" >
+                    <span class="scriptstatus_span" style="width:10px;height:10px;border-radius:50%"></span>
                     <div id="scriptstatus" class="scriptstatus">
                     </div>
                 </div>
                 <div class="round-btn" id="decrease_bars" title="Show fewer bars per row">−</div>
                 <div class="round-btn" id="increase_bars" title="Show more bars per row">+</div>
                 &nbsp;&nbsp;&nbsp;
-                <div class="round-btn" id="decorated_chords" title="Toggle chords decoration">C⁷</div>
+               <button class="toggle" id="decorated_chords" aria-pressed="false" aria-label="Accordi decorati">C&#x2077;</button>
 
                 &nbsp;&nbsp;&nbsp;
                 <div class="bar_adjust lock" id="lock" title="Lock" >LOCK</div>
@@ -108,6 +109,8 @@
         document.getElementById("rewind_button").addEventListener("click",  function f() {song.rewind()});
         document.getElementById("forward_button").addEventListener("click",  function f() {song.forward()});
         document.getElementById("lock").addEventListener("click",  function f() {song.toggleLock()});
+        document.getElementById("scriptstatus_div").addEventListener("click",  function f() {fdsfdasfds; wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad")});
+        
     </script>
 </html>
 
