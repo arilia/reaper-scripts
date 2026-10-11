@@ -1086,8 +1086,7 @@ class ChordsView {
         this.table = table;
         table.id = 'song_content_chords';
         this.song.clockDiv.style.visibility = "visible";
-        const button = document.getElementById('decorated_chords');
-        button.classList.toggle('button_on', this.decoratedChords);
+        document.getElementById('decorated_chords').ariaPressed = this.song.decoratedChords;
         table.classList.add("chords_table"); 
         document.getElementById('lyrics_banner').textContent  = "";
         document.title = this.song.project + " - Chords";
@@ -1335,14 +1334,15 @@ function wwr_onreply(results, t0) {
                         }
                         song.bpm = status.bpm;
                         song.lock = status.lock*1;
-                        if(song.lock) {
-                            document.getElementById('lock').classList.add('locked');
-                            document.getElementById('lock').classList.remove('unlocked');
-                        } else
-                        {
-                           document.getElementById('lock').classList.remove('locked');
-                            document.getElementById('lock').classList.add('unlocked'); 
-                        }
+                        document.getElementById('lock').ariaPressed = song.lock===1;
+//                        if(song.lock) {
+//                            document.getElementById('lock').classList.add('locked');
+//                            document.getElementById('lock').classList.remove('unlocked');
+//                        } else
+//                        {
+//                           document.getElementById('lock').classList.remove('locked');
+//                            document.getElementById('lock').classList.add('unlocked'); 
+//                        }
                         // Comparing server timestamps
                         // if they differ it means the script is not running
                         

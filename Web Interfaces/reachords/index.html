@@ -28,7 +28,7 @@
                <button class="toggle" id="decorated_chords" aria-pressed="false" aria-label="Accordi decorati">C&#x2077;</button>
 
                 &nbsp;&nbsp;&nbsp;
-                <div class="bar_adjust lock" id="lock" title="Lock" >LOCK</div>
+                
             </div>
             <div class="clock" id="clock_div"></div>
             
@@ -76,12 +76,13 @@
                 <div class="progress_fill" id="progress_fill">&nbsp;</div>
             </div>
             <div class="controls">
-                <button id="prev_bar_button">⏮</button>
-                <button id="pause_button">⏸</button>
-                <button id="stop_button">⏹</button>
-                <button id="rewind_button">⏮</button>
-                <button id="play_button">▶</button>
-                <button id="forward_button">⏭</button>
+                <button id="prev_bar_button" class="transport_button">⏮</button>
+                <button id="pause_button" class="transport_button">⏸</button>
+                <button id="stop_button" class="transport_button">⏹</button>
+                <button id="rewind_button" class="transport_button">⏮</button>
+                <button id="play_button" class="transport_button">▶</button>
+                <button id="forward_button" class="transport_button">⏭</button>
+                <button class="lock_button" id="lock" title="Lock" ></button>
             </div>
 
         </section>  

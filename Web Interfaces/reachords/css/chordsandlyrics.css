@@ -6,15 +6,17 @@ body {
 
 
 :root {
-  --surface:   #0c0c10;
-  --surface-2: #1a1a22;
-  --line:      #1f1f27;
-  --btn-line:  #33333d;
-  --line-3:    #3a3a46;
-  --text:      #fff;
-  --text-dim:  #8a8a99;
+    --surface:   #0c0c10;
+    --surface-2: #1a1a22;
+    --line:      #1f1f27;
+    --btn-line:  #33333d;
+    --line-3:    #3a3a46;
+    --text:      #fff;
+    --text-dim:  #8a8a99;
     --text-btn:  #b8b8c6;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --danger:    #fb7185;
+    --lock-size: 84px;
 }
 
 html {
@@ -240,6 +242,46 @@ p.bpm {
 }
 
 
+.lock_button {
+    width: var(--lock-size);
+    height: var(--lock-size);
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font-family: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols 2", system-ui, sans-serif;
+    font-size: calc(var(--lock-size) * 0.45);
+    line-height: 1;
+    border-radius: 20px;
+    border: 1px solid;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: background-color .15s, border-color .15s, color .15s, transform .08s;
+    
+}
+
+.lock_button::before { content: "\1F513\FE0E"; }              /* lucchetto aperto */
+.lock_button[aria-pressed="true"]::before { content: "\1F512\FE0E"; }  /* chiuso */
+
+.lock_button[aria-pressed="false"] {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: rgba(251, 113, 133, .16);
+}
+
+button.lock_button[aria-pressed="true"] {
+  color: #e6e6ee;
+  border-color: #4a4a58;
+  background: var(--surface-2);
+}
+
+.lock-btn:active { transform: scale(.97); }
+
+.lock-btn:focus-visible {
+  outline: 2px solid #8a8a99;
+  outline-offset: 3px;
+}
+
 
 
 .status_bar {
@@ -457,7 +499,7 @@ div.offset {
    
 }
 
-.controls button {
+.transport_button {
     
     
     width:84px;
@@ -473,6 +515,9 @@ div.offset {
     background: transparent;
     transition: background-color 0.08s, transform 0.08s;
 }
+
+
+.round-btn[hidden] { display: none !important; }
 
 .progress {
     /*width: 100%;*/
@@ -700,7 +745,7 @@ div.offset {
 
 .command-button {
     position: absolute;
-    z-index: 30;
+    /*z-index: 30;*/
 }
 
 .lyric_marker_row .marker {
