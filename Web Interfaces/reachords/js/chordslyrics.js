@@ -187,26 +187,7 @@ class Marker {
     }
     
     
-    renderForClock() {
-        if(this.clockDiv) return this.clockDiv;
-        const progressDiv = document.createElement("div");
-        progressDiv.id = "marker_" + this.index + "_progress";
-        progressDiv.classList.add('marker_progress');
-        progressDiv.style.background = "rgba(" + this.color + ", .8)";
-        this.clockDiv = document.createElement("div");
-        this.clockDiv.id = "clock_marker_" + this.index;
-        this.clockDiv.textContent  = this.text;
-        this.clockDiv.classList.add('marker');
-//        this.clockDiv.style.border = "1px solid rgb(" + this.color + ")";
-//        this.clockDiv.style.background = "rgba(" + this.color + ", .3)";
-        this.clockDiv.style.color = "rgba(" + this.color + ", 1)";
-        this.clockDiv.style.border = "0px"; 
-        this.clockDiv.style.background = "transparent";
-        this.clockDiv.append(progressDiv);
-        return this.clockDiv;
-        
-    }
-    
+   
     isOver(position) {
         if(position >= this.position) {
             return true;
@@ -1064,6 +1045,18 @@ class ChordsView {
         
     }
     
+    renderMarker(marker) {  //TODO athe the moment not used
+        this.div = document.createElement("div");
+        this.div.id = "marker_" + this.index;
+        this.div.textContent  = this.text;
+        this.div.classList.add('marker');
+        this.div.style.border = "1px solid rgb(" + this.color + ")";
+        this.div.style.background = "rgba(" + this.color + ", .3)";
+        if(this.row && this.row.div) this.row.div.append(this.div);
+        
+    }
+    
+    
     translate(val) {
         this.translateY = val + this.translateY;
         const tableStyle = this.table.style;
@@ -1189,6 +1182,26 @@ class ClockView {
         document.title = this.song.project + " - Clock";
     }
     
+    renderMarker(marker) {
+//        if(this.clockDiv) return this.clockDiv;
+        const progressDiv = document.createElement("div");
+        progressDiv.id = "marker_" + marker.index + "_progress";
+        progressDiv.classList.add('marker_progress');
+        progressDiv.style.background = "rgba(" + marker.color + ", .8)";
+        const div = document.createElement("div");
+        div.id = "clock_marker_" + marker.index;
+        div.textContent  = marker.text;
+        div.classList.add('marker');
+//        this.clockDiv.style.border = "1px solid rgb(" + this.color + ")";
+//        this.clockDiv.style.background = "rgba(" + this.color + ", .3)";
+        div.style.color = "rgba(" + marker.color + ", 1)";
+        div.style.border = "0px"; 
+        div.style.background = "transparent";
+        div.append(progressDiv);
+        return div;
+        
+    }
+    
     update(position) {
         
         const formattedTime = this.song.formatTime(position);
@@ -1213,7 +1226,7 @@ class ClockView {
 
         if(this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
             this.lastMarkerContainer.innerHTML = "";
-            this.lastMarkerContainer.append(this.lastMarker.renderForClock());
+            this.lastMarkerContainer.append(this.renderMarker(this.lastMarker));
             this.lastMarkerIndex = this.lastMarker.index;
         }
         if(this.lastMarker === null) {
