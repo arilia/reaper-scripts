@@ -1024,7 +1024,7 @@ class ChordsView {
             columnCount++;
             if (columnCount === 1) {
                 row = new Row(this.song);
-                this.song.rows.push(row);
+                this.rows.push(row);
             }
 
             if (this.song.markers[bar.number] !== undefined)
@@ -1032,10 +1032,10 @@ class ChordsView {
 
                 const markerRow = new Row(this.song, Row.MARKER);
                 markerRow.append(this.song.markers[bar.number]);
-                this.song.rows.push(markerRow);
+                this.rows.push(markerRow);
                 columnCount = 1;
                 row = new Row(this.song);  // Needed to create a new line when there is a marker 
-                this.song.rows.push(row);  // In the middle of the line
+                this.rows.push(row);  // In the middle of the line
             }
             row.append(bar);
             if (columnCount === this.song.barsPerRow) {
@@ -1088,7 +1088,7 @@ class ChordsView {
         let content = document.getElementById('song_content_chords');
         content.parentNode.replaceChild(table, content);
 
-        for (let row of this.song.rows) {
+        for (let row of this.rows) {
             row.table = table;
             row.render();
         }
