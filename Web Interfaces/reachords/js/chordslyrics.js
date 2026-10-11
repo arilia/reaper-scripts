@@ -1346,7 +1346,7 @@ function wwr_onreply(results, t0) {
                         // Comparing server timestamps
                         // if they differ it means the script is not running
                         
-                        const isActive = status.timestamp !== song.lastTimestamp;
+                        const isActive = (status.timestamp !== song.lastTimestamp);
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
                         status.projectid = simple_unescape(status.projectid);

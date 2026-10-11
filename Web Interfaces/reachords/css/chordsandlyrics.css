@@ -375,7 +375,7 @@ div.offset {
     color: var(--state);
     border: 1px solid var(--line);
     border-radius: 999px;
-    pointer-events: none;
+    /*pointer-events: none;*/
     user-select: none;
     color:  rgb(74, 222, 128);
     cursor: pointer;
