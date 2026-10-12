@@ -477,7 +477,7 @@ class Song {
         };
 
         this.settings[this.id] = {
-            barsPerRow: this.barsPerRow
+            barsPerRow: this.viewManager.chordsView.barsPerRow
         };
         const stored = JSON.parse(localStorage.getItem("reachords")) || {};
         let settings = { ...stored };
@@ -517,7 +517,7 @@ class Song {
             settings.common = stored.common ? stored.common  : settings.common;
             settings[this.id] = stored[this.id] ? stored[this.id] : settings[this.id];
         }
-        this.barsPerRow =  settings[this.id].barsPerRow;
+        this.viewManager.chordsView.barsPerRow =  settings[this.id].barsPerRow;
         this.viewManager.chordsView.decoratedChords = settings.common.decoratedChords;
         this.viewManager.chordsView.chordsStyle = settings.common.chordsStyle;
         this.type = settings.common.type;
@@ -795,7 +795,7 @@ class Song {
             if (beatPerRow > maxBeatPerRow) {
                 maxBeatPerRow = beatPerRow;
             }
-            if (barInRow >= this.barsPerRow) {
+            if (barInRow >= this.viewManager.chordsView.barsPerRow) {
                 beatPerRow = 0;
                 barInRow = 0;
             }
@@ -1014,7 +1014,7 @@ class ChordsView {
         
     }
     
-    renderMarker(marker) {  //TODO athe the moment not used
+    renderMarker(marker) {  //TODO at the the moment not used
         this.div = document.createElement("div");
         this.div.id = "marker_" + this.index;
         this.div.textContent  = this.text;
