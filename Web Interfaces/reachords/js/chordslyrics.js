@@ -266,10 +266,10 @@ class Chord {
             }
         }
         this.root = root;
-        this.root = accidental;
-        this.root = quality;
-        this.root = modifiers;
-        this.root = bass;
+        this.accidental = accidental;
+        this.quality = quality;
+        this.modifiers = modifiers;
+        this.bass = bass;
         
         return  root + accidental + quality + "<sup>" + modifiers + "</sup><sub>" + bass + "</sub>" ;
     }
@@ -1099,7 +1099,7 @@ class ChordsView {
     {
         chord.div = document.createElement('div');
         chord.div.classList.add('chord');
-        if(song.decoratedChords) //TODO
+        if(this.song.decoratedChords) //TODO
         {
             chord.div.innerHTML  = chord.formattedName;
         } else {
@@ -1112,7 +1112,7 @@ class ChordsView {
     
     
     highLightChord(chord) {
-        if (this.highlightedChord === chord) return;
+        if (this.highLightedChord === chord) return;
         if (this.highLightedChord) {
             this.highLightedChord.div.classList.remove("chord_playing");
         }
@@ -1288,7 +1288,7 @@ class ViewManager {
     }
     
     getTable() {
-        switch(song.type) {
+        switch(this.song.type) {
         case ViewManager.LYRICS :
             return this.lyricsView.table;
             break;
