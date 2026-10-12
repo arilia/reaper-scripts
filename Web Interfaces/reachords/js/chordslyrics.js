@@ -108,8 +108,8 @@ class Row {
     bars = [];
     div = null;
     type = "";
-    song = "";
-    table = "";
+    view = "";
+//    table = "";
     number = 0;
     elements = [];
     static MARKER = "marker";
@@ -123,10 +123,10 @@ class Row {
         element.row = this;
     }
 
-    constructor(song, type = Row.CHORDS) {
+    constructor(view, type = Row.CHORDS) {
         this.type = type;
-        this.song = song;
-        this.number = song.rows.length + 1;
+        this.view = view;
+        this.number = view.rows.length + 1;
     }
 
     render() {
@@ -151,7 +151,7 @@ class Row {
                 element.render();
             }
         }
-        this.song.viewManager.getTable().append(this.div);
+        this.view.table.append(this.div);
     }
 }
 
@@ -939,14 +939,12 @@ class LyricsView {
             {
                 if (marker !== undefined && marker.position >= lastEnd && marker.position < lyric.endTime)
                 {
-                    const markerRow = new Row(this.song, Row.LYRICS_MARKER);
+                    const markerRow = new Row(this, Row.LYRICS_MARKER);
                     markerRow.append(marker);
                     this.rows.push(markerRow);
-//                    row = new Row(this, Row.LYRICS); // Probably not needed,
-//                    this.rows.push(row);             // TODO remove
                 }
             }
-            row = new Row(this.song, Row.LYRICS);
+            row = new Row(this, Row.LYRICS);
             row.append(lyric);
             this.rows.push(row);
             lastEnd = lyric.endTime;
@@ -1019,18 +1017,18 @@ class ChordsView {
             
             columnCount++;
             if (columnCount === 1) {
-                row = new Row(this.song);
+                row = new Row(this);
                 this.rows.push(row);
             }
 
             if (this.song.markers[bar.number] !== undefined)
             {
 
-                const markerRow = new Row(this.song, Row.MARKER);
+                const markerRow = new Row(this, Row.MARKER);
                 markerRow.append(this.song.markers[bar.number]);
                 this.rows.push(markerRow);
                 columnCount = 1;
-                row = new Row(this.song);  // Needed to create a new line when there is a marker 
+                row = new Row(this);  // Needed to create a new line when there is a marker 
                 this.rows.push(row);  // In the middle of the line
             }
             row.append(bar);
@@ -1287,19 +1285,19 @@ class ViewManager {
         
     }
     
-    getTable() {
-        switch(this.song.type) {
-        case ViewManager.LYRICS :
-            return this.lyricsView.table;
-            break;
-        case ViewManager.CHORDS :
-            return this.chordsView.table;
-            break;
-        case ViewManager.CLOCK :
-            return null;
-            break;
-        }
-    }
+//    getTable() {
+//        switch(this.song.type) {
+//        case ViewManager.LYRICS :
+//            return this.lyricsView.table;
+//            break;
+//        case ViewManager.CHORDS :
+//            return this.chordsView.table;
+//            break;
+//        case ViewManager.CLOCK :
+//            return null;
+//            break;
+//        }
+//    }
     
     updateView(type, position) {
         
