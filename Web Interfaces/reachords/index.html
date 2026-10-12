@@ -97,9 +97,9 @@
         const song = new Song(ViewManager.CHORDS);
         
         const viewManagerView = new ViewManager(song);
-        document.getElementById("increase_bars").addEventListener("click",  function f() {song.increaseBars()});
-        document.getElementById("decrease_bars").addEventListener("click",  function f() {song.decreaseBars()});
-        document.getElementById("decorated_chords").addEventListener("click",  function f() {song.toggleDecoratedChords()});
+        document.getElementById("increase_bars").addEventListener("click",  function f() {song.viewManager.chordsView.increaseBars()});
+        document.getElementById("decrease_bars").addEventListener("click",  function f() {song.viewManager.chordsView.decreaseBars()});
+        document.getElementById("decorated_chords").addEventListener("click",  function f() {song.viewManager.chordsView.toggleDecoratedChords()});
         document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.LYRICS)});
         document.getElementById("change_to_chords").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CHORDS)});
         document.getElementById("change_to_clock").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CLOCK)});

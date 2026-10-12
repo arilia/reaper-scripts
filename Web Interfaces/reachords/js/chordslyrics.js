@@ -388,7 +388,6 @@ class Song {
     songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
     json = "";
     maxBeats = 16; 
-    barsPerRow = 4;
     internalChordsOffset = 0;
     internallyricsOffset = 0;
     networkOffset = 0;
@@ -412,8 +411,6 @@ class Song {
     loaderDiv = null;
     playStateDiv = null;
     playingChord = null;
-    chordsStyle =  "EN"; //TODO Move to ChordsView   
-    decoratedChords = true; //TODO Move to ChordsView  
     bpm = 0;
     lastClockTime = ""; //TODO Move to ClockView 
     static LYRICSDELTA = 0.5;
@@ -473,8 +470,8 @@ class Song {
     saveProjectSettings() {
         this.settings = {
             common: {
-                decoratedChords: this.decoratedChords,
-                chordsStyle: this.chordsStyle,
+                decoratedChords: this.viewManager.chordsView.decoratedChords,
+                chordsStyle: this.viewManager.chordsView.chordsStyle,
                 type: this.type
             }
         };
@@ -521,8 +518,8 @@ class Song {
             settings[this.id] = stored[this.id] ? stored[this.id] : settings[this.id];
         }
         this.barsPerRow =  settings[this.id].barsPerRow;
-        this.decoratedChords = settings.common.decoratedChords;
-        this.chordsStyle = settings.common.chordsStyle;
+        this.viewManager.chordsView.decoratedChords = settings.common.decoratedChords;
+        this.viewManager.chordsView.chordsStyle = settings.common.chordsStyle;
         this.type = settings.common.type;
         this.settings = settings;
     }
@@ -635,27 +632,7 @@ class Song {
     }
  
    
-    increaseBars () {
-        this.barsPerRow++;
-        this.saveProjectSettings();
-        this.repaint();
-    }
     
-    decreaseBars() {
-        this.barsPerRow--;
-        if(this.barsPerRow<2) {
-            this.barsPerRow = 2;
-        }
-        this.saveProjectSettings();
-        this.repaint();
-    } 
-    
-    toggleDecoratedChords() {
-        this.decoratedChords = ! this.decoratedChords;
-        document.getElementById('decorated_chords').ariaPressed = this.decoratedChords;
-        this.saveProjectSettings();
-        this.repaint();
-    }
     
     
 
@@ -666,7 +643,8 @@ class Song {
         this.viewManager.lyricsView.table = null;//TODO Move in view
 //        this.table = null;
         this.complete = false;
-        this.rows = [];
+        this.viewManager.chordsView.rows = [];
+        this.viewManager.lyricsView.rows = [];
         this.chords = [];
         this.bars = [];
         this.lyrics = [];
@@ -767,7 +745,7 @@ class Song {
     }
     
     
-    checkPlaying(position) {
+    checkPlaying(position) {  // TODO Move to View? Ii is used both in lyrics and chords
         if (!this.complete) {
             return;
         }
@@ -890,8 +868,6 @@ class Song {
             this.paintBuf.shift();
         }
         this.paintOffset = trimmedMean(this.paintBuf)/1000;
-        
-        //console.log(this.paintOffset);
     }
     
     repaint() {
@@ -953,7 +929,6 @@ class LyricsView {
     
     render() {
         const table = document.createElement('div');
-//        this.song.table = table;
         this.table = table;
         table.id = 'song_content_lyrics';
         for (let row of this.rows) {
@@ -995,6 +970,9 @@ class ChordsView {
     highLightedChord = null;
     rows = []; // TODO
     table = null; //TODO
+    chordsStyle =  "EN"; 
+    barsPerRow = 4;
+    decoratedChords = true; 
 
     ELEMENTS = {
         big_clock_section: false,
@@ -1014,16 +992,13 @@ class ChordsView {
         let row = null;
         for (const bar of this.song.bars)
         {
-            
             columnCount++;
             if (columnCount === 1) {
                 row = new Row(this);
                 this.rows.push(row);
             }
-
             if (this.song.markers[bar.number] !== undefined)
             {
-
                 const markerRow = new Row(this, Row.MARKER);
                 markerRow.append(this.song.markers[bar.number]);
                 this.rows.push(markerRow);
@@ -1032,7 +1007,7 @@ class ChordsView {
                 this.rows.push(row);  // In the middle of the line
             }
             row.append(bar);
-            if (columnCount === this.song.barsPerRow) {
+            if (columnCount === this.barsPerRow) {
                 columnCount = 0;
             }
         }
@@ -1073,7 +1048,7 @@ class ChordsView {
         this.table = table;
         table.id = 'song_content_chords';
         this.song.clockDiv.style.visibility = "visible";
-        document.getElementById('decorated_chords').ariaPressed = this.song.decoratedChords;
+        document.getElementById('decorated_chords').ariaPressed = this.decoratedChords;
         table.classList.add("chords_table"); 
         document.getElementById('lyrics_banner').textContent  = "";
         document.title = this.song.project + " - Chords";
@@ -1097,7 +1072,7 @@ class ChordsView {
     {
         chord.div = document.createElement('div');
         chord.div.classList.add('chord');
-        if(this.song.decoratedChords) //TODO
+        if(this.decoratedChords) 
         {
             chord.div.innerHTML  = chord.formattedName;
         } else {
@@ -1120,6 +1095,9 @@ class ChordsView {
         }
     }
     
+    
+    
+    
     update(position) {
         this.song.findPlayingChord(position);
         let foundLyric = false;
@@ -1136,6 +1114,31 @@ class ChordsView {
             lyrics_banner.textContent = "";
         }
     }
+    
+    
+    increaseBars () {
+        this.barsPerRow++;
+        this.song.saveProjectSettings(); //TODO move to adedicated Object
+        this.song.repaint();
+    }
+    
+    decreaseBars() {
+        this.barsPerRow--;
+        if(this.barsPerRow<2) {
+            this.barsPerRow = 2;
+        }
+        this.song.saveProjectSettings();
+        this.song.repaint();
+    } 
+    
+    toggleDecoratedChords() {
+        this.decoratedChords = ! this.decoratedChords;
+        document.getElementById('decorated_chords').ariaPressed = this.decoratedChords;
+        this.song.saveProjectSettings();
+        this.song.repaint();
+    }
+    
+    
 }
 
 class ClockView {
