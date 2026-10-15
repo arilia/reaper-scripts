@@ -475,6 +475,10 @@ class Song {
         }
 
     }
+    
+    jumpToMarker(marker) {
+        wwr_req("SET/POS/" + marker.position + ";TRANSPORT");
+    }
 
     prevBar() {
         if (this.lock)
@@ -1195,7 +1199,8 @@ class ClockView {
         markerSpan.textContent = marker.text;
         div.append(markerSpan); 
         div.classList.add('clock_marker');
-        
+        const songTmp = this.song; 
+        div.addEventListener("click",  function f() {songTmp.jumpToMarker(marker);});
         
         div.style.setProperty("--marker-border-color", "rgba(" + marker.color + ", 0)");
         div.style.setProperty("--marker-bg-color", "rgba(" + marker.color + ", .1)");

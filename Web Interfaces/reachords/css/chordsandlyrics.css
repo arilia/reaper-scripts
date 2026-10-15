@@ -197,7 +197,7 @@ body:has(.bottom_bar) .bottom_curtain {
 
 
 #clock_markers {
-    font-size: 2em;
+    /*font-size: 1em;*/
     overflow: clip;
     align-content: center;
     /*overflow-y: auto;  Vertical scroll */
@@ -774,7 +774,7 @@ div.offset {
     align-items: center;
     color: white;
     text-align: left;
-    font-size: .8em;
+    font-size: 1em;
     height: 32px;
     padding: 5px 8px 5px 8px ;
     border: 1px solid;
@@ -785,7 +785,7 @@ div.offset {
 .clock_marker {
     width: 90%;
     
-    font-size: .5em;
+    font-size: 1em;
 }
 
 .clock_marker_dot {
@@ -800,6 +800,7 @@ div.offset {
 }
 
 .marker_text {
+    color: f2f2f7;
     display: flex;
     height:26px;
     text-align: center;
