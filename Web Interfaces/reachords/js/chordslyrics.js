@@ -1182,23 +1182,31 @@ class ClockView {
 
     renderMarker(marker) {
         const progressDiv = document.createElement("div");
+        const dotSpan = document.createElement("span");
+        const markerSpan = document.createElement("span");
+        markerSpan.classList.add('marker_text');
+        dotSpan.classList.add('clock_marker_dot');
         progressDiv.id = "marker_" + marker.index + "_progress";
         progressDiv.classList.add('marker_progress');
         progressDiv.style.background = "rgba(" + marker.color + ", .8)";
         const div = document.createElement("div");
         div.id = "clock_marker_" + marker.index;
         div.dataset.mode = "passed";
-        div.textContent = marker.text;
+        markerSpan.textContent = marker.text;
+        div.append(markerSpan); 
         div.classList.add('clock_marker');
         
-        div.style.setProperty("--marker-border-color", "rgb(" + marker.color + ")");
+        
+        div.style.setProperty("--marker-border-color", "rgba(" + marker.color + ", 0)");
         div.style.setProperty("--marker-bg-color", "rgba(" + marker.color + ", .1)");
+        dotSpan.style.setProperty("--marker-bg-color", "rgba(" + marker.color + ", 1)");
 //        div.style.border = "1px solid rgb(255, 255, 255, .3)";
 //        div.style.color = "rgba(" + marker.color + ", 1)";
 //        div.style.background = "rgba(255, 255,255, .05)";
 //        div.style.border = "0px"; 
 //        div.style.background = "transparent";
         div.append(progressDiv);
+        div.prepend(dotSpan);
         return div;
 
     }
@@ -1218,7 +1226,7 @@ class ClockView {
         const contentBox = contentDiv.getBoundingClientRect();
         const targetPosition = - markerBox.top + contentBox.top;
         
-        contentDiv.style.transform = "translateY(" + (targetPosition + 1) + "px)";
+        contentDiv.style.transform = "translateY(" + (targetPosition - 7) + "px)";
         
     }
 
