@@ -20,64 +20,66 @@ body {
 }
 
 html {
-  font-family: var(--font);
-  -webkit-text-size-adjust: 100%;   /* evita ingrandimenti automatici del testo su iOS */
-  text-size-adjust: 100%;
+    font-family: var(--font);
+    -webkit-text-size-adjust: 100%;   /* evita ingrandimenti automatici del testo su iOS */
+    text-size-adjust: 100%;
 }
 
 
 .tabs {
-  /*position: fixed;*/
-  /*top: 0;*/
-  width: 100%;
-        
-        
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;          /* schede tutte della stessa larghezza, per 3 o 4 */
-  gap: 6px;
-  padding: 5px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  z-index: 30;
+    /*position: fixed;*/
+    /*top: 0;*/
+    width: 100%;
+
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;          /* schede tutte della stessa larghezza, per 3 o 4 */
+    gap: 6px;
+    padding: 5px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    z-index: 30;
 }
 
 .tab {
-  height: 56px;
-  min-width: 0;
-  padding: 0;
-  font: inherit;
-  font-size: clamp(16px, 2.6vw, 20px);
-  font-weight: 500;
-  color: var(--text-dim);
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 11px;
-  cursor: pointer;
-  touch-action: manipulation;       /* niente zoom con il doppio tocco */
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  white-space: nowrap;
+    height: 56px;
+    min-width: 0;
+    padding: 0;
+    font: inherit;
+    font-size: clamp(16px, 2.6vw, 20px);
+    font-weight: 500;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    cursor: pointer;
+    touch-action: manipulation;       /* niente zoom con il doppio tocco */
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    white-space: nowrap;
 }
 
 .tab[aria-selected="true"] {
-  color: var(--text);
-  background: var(--surface-2);
-  border-color: var(--line-3);
+    color: var(--text);
+    background: var(--surface-2);
+    border-color: var(--line-3);
 }
 
 .tab:active {
-  background: var(--surface-2);
+    background: var(--surface-2);
 }
 
 .tab:focus-visible {
-  outline: 2px solid var(--text-dim);
-  outline-offset: 2px;
+    outline: 2px solid var(--text-dim);
+    outline-offset: 2px;
 }
 
 @media (hover: hover) {
-  .tab:not([aria-selected="true"]):hover { color: var(--text); }
+    .tab:not([aria-selected="true"]):hover {
+        color: var(--text);
+    }
 }
 
 
@@ -85,7 +87,7 @@ html {
 /*LYRICS SECTION*/
 
 #lyrics_section {
-    overflow: hidden;  
+    overflow: hidden;
 }
 
 
@@ -130,7 +132,7 @@ body:has(.bottom_bar) .bottom_curtain {
 /*CHORDS SECTION*/
 
 #chords_section {
-  overflow: hidden;  
+    overflow: hidden;
 }
 
 .song_content_chords {
@@ -159,11 +161,12 @@ body:has(.bottom_bar) .bottom_curtain {
     position: fixed;
     left: 0;
     right: 0;
-   bottom: 4.5em;  
+    bottom: 4.5em;
     height: 10em;
     background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     z-index: 20;
     pointer-events: none;
+
 }
 
 
@@ -175,15 +178,28 @@ body:has(.bottom_bar) .bottom_curtain {
 }
 
 .bottom_bar_chords {
-     position: fixed;
-     left: 0;
-     right: 0;
-     bottom: 1.2em;
-     background: #000;
-     z-index: 20;
-     height: 4.5em;
+    background-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #000 50%,
+        #000 100%
+        );
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 1.2em;
+    /*background: #000;*/
+    z-index: 20;
+    height: 3em;
+    padding-top: 1em;
+    padding-bottom: .2em;
 }
 
+
+#clock_markers {
+    font-size: 2em;
+    /*overflow-y: auto;  Vertical scroll */
+}
 
 /* OTHER   */
 
@@ -202,10 +218,10 @@ p.bpm {
     margin-top: .3em;
     margin-bottom: 0;
     font-size: 70%;
-     font-weight: normal;
+    font-weight: normal;
 }
 .top_bar {
-     display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
@@ -216,10 +232,10 @@ p.bpm {
 }
 
 .top_bar .group {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 14px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
 }
 
 
@@ -229,11 +245,11 @@ p.bpm {
     /*top: 4.5em;*/
     left: 0;
     right: 0;
-    
+
     /*align-items: flex-start;*/
     padding-left: 1em;
-    padding-top: .6em; 
-    padding-bottom: .6em; 
+    padding-top: .6em;
+    padding-bottom: .6em;
     background: #000;
     width: 100%;
     z-index: 20;
@@ -257,42 +273,48 @@ p.bpm {
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     transition: background-color .15s, border-color .15s, color .15s, transform .08s;
-    
+
 }
 
-.lock_button::before { content: "\1F513\FE0E"; }              /* lucchetto aperto */
-.lock_button[aria-pressed="true"]::before { content: "\1F512\FE0E"; }  /* chiuso */
+.lock_button::before {
+    content: "\1F513\FE0E";
+}              /* lucchetto aperto */
+.lock_button[aria-pressed="true"]::before {
+    content: "\1F512\FE0E";
+}  /* chiuso */
 
 .lock_button[aria-pressed="false"] {
-  color: var(--danger);
-  border-color: var(--danger);
-  background: rgba(251, 113, 133, .16);
+    color: var(--danger);
+    border-color: var(--danger);
+    background: rgba(251, 113, 133, .16);
 }
 
 button.lock_button[aria-pressed="true"] {
-  color: #e6e6ee;
-  border-color: #4a4a58;
-  background: var(--surface-2);
+    color: #e6e6ee;
+    border-color: #4a4a58;
+    background: var(--surface-2);
 }
 
-.lock-btn:active { transform: scale(.97); }
+.lock-btn:active {
+    transform: scale(.97);
+}
 
 .lock-btn:focus-visible {
-  outline: 2px solid #8a8a99;
-  outline-offset: 3px;
+    outline: 2px solid #8a8a99;
+    outline-offset: 3px;
 }
 
 
 
 .status_bar {
-     position: fixed;
-     left: 0;
-     right: 0;
-     bottom: 0;
-     background: #bbb;
-     z-index: 20;
-     padding: .1em;
-     height: 1.2em;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #bbb;
+    z-index: 20;
+    padding: .1em;
+    height: 1.2em;
 }
 
 div.latency {
@@ -334,11 +356,12 @@ div.offset {
 
 .lyrics_banner {
     /*position: fixed;*/
+    vertical-align: middle;
     color: blue;
     font-size: 2em;
     font-weight: bold;
     /*top: 2em;*/
-    background: black;
+    background: transparent;
     text-align: center;
     width: 100%;
 }
@@ -383,7 +406,7 @@ div.offset {
 
 
 .play_state.stop {
-     background-color: hsl(0, 0%, 40%);
+    background-color: hsl(0, 0%, 40%);
 }
 
 .play_state.play {
@@ -493,15 +516,15 @@ div.offset {
     display:flex;
     align-items:center;
     justify-content:
-    space-between;
+        space-between;
     margin:12px 6px 40px;
 
-   
+
 }
 
 .transport_button {
-    
-    
+
+
     width:84px;
     height:84px;
     border:1px solid #33333d;
@@ -517,11 +540,13 @@ div.offset {
 }
 
 
-.round-btn[hidden] { display: none !important; }
+.round-btn[hidden] {
+    display: none !important;
+}
 
 .progress {
     /*width: 100%;*/
-    
+
     border-radius: 8px;
     background: #111;
     margin-top: .5em;
@@ -535,7 +560,7 @@ div.offset {
 }
 
 #prev_bar_button {
-    
+
 }
 
 #pause_button {
@@ -645,42 +670,44 @@ div.offset {
 }
 
 .round-btn {
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  font: inherit;
-  font-size: 24px;
-  line-height: 1;
-  color: var(--text-btn);
-  background: transparent;
-  border: 1px solid var(--btn-line);
-  border-radius: 50%;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font: inherit;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--text-btn);
+    background: transparent;
+    border: 1px solid var(--btn-line);
+    border-radius: 50%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
-.round-btn:active { background: var(--surface-2); }
+.round-btn:active {
+    background: var(--surface-2);
+}
 
 
 .toggle {
-  height: 44px;
-  min-width: 64px;
-  padding: 0 14px;
-  font: inherit;
-  font-size: 21px;
-  font-weight: 500;
-  color: var(--text-dim);
-  background: transparent;
-  border: 1px solid var(--btn-line);
-  border-radius: 12px;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+    height: 44px;
+    min-width: 64px;
+    padding: 0 14px;
+    font: inherit;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--btn-line);
+    border-radius: 12px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 .toggle[aria-pressed="true"] {
-  color: var(--text);
-  background: var(--surface-2);
-  border-color: #6b6b78;
+    color: var(--text);
+    background: var(--surface-2);
+    border-color: #6b6b78;
 }
 
 
@@ -700,8 +727,8 @@ div.offset {
     }
     .big_clock {
         top: 30%;
-         width: 80vw;
-         height: 30vh;
+        width: 80vw;
+        height: 30vh;
     }
 }
 
@@ -720,7 +747,7 @@ div.offset {
     border-radius: 4px;
     transition-property: color;
     transition-duration: 1s;
-    }
+}
 
 
 
@@ -757,7 +784,7 @@ div.offset {
     left:0;
 }
 
-    
+
 
 .chord_playing {
     border-color: darkgreen;

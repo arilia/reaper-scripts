@@ -38,7 +38,7 @@ class Bar {
     isPlaying = false;
 
     constructor(b) {
-        this.number = b.number;
+        this.number = Number(b.number);
         this.song = null;
         this.startTime = roundTime(b.startTime);
         this.endTime = roundTime(b.endTime);
@@ -64,7 +64,7 @@ class Bar {
         }
         if (val && !this.isPlaying) {
 
-            
+
 //            const targetPosition = this.song.targetPosition;
             const rowBox = document.getElementById('position_row_chords').getBoundingClientRect();
             const targetPosition = rowBox.top + rowBox.height / 2;
@@ -94,9 +94,12 @@ class Bar {
         this.div.style.setProperty("--beats", this.beats.length);
         const timeDiv = document.createElement('div');
         timeDiv.classList.add('time');
-        timeDiv.textContent  = this.number;
+        timeDiv.textContent = this.number;
         this.div.appendChild(timeDiv);
-        if(this.row.div) this.row.div.append(this.div); else console.log(this);
+        if (this.row.div)
+            this.row.div.append(this.div);
+        else
+            console.log(this);
         for (let beat of this.beats)
         {
             beat.render();
@@ -131,8 +134,8 @@ class Row {
 
     render() {
         this.div = document.createElement("div");
-        switch(this.type) {
-            case Row.CHORDS :
+        switch (this.type) {
+            case Row.CHORDS:
                 this.div.classList.add('bar_row');
                 break;
             case Row.LYRICS:
@@ -147,7 +150,7 @@ class Row {
         }
         this.div.id = "row_" + this.number;
         for (const element of this.elements) {
-            if(element !== undefined) {
+            if (element !== undefined) {
                 element.render();
             }
         }
@@ -174,26 +177,25 @@ class Marker {
         this.barNumber = m.barNumber;
         this.position = roundTime(m.position);
     }
-    
+
     render() {
         this.div = document.createElement("div");
         this.div.id = "marker_" + this.index;
-        this.div.textContent  = this.text;
+        this.div.textContent = this.text;
         this.div.classList.add('marker');
         this.div.style.border = "1px solid rgb(" + this.color + ")";
         this.div.style.background = "rgba(" + this.color + ", .3)";
-        if(this.row && this.row.div) this.row.div.append(this.div);
-        
+        if (this.row && this.row.div)
+            this.row.div.append(this.div);
+
     }
-    
-    
-   
+
     isOver(position) {
-        if(position >= this.position) {
+        if (position >= this.position) {
             return true;
         }
     }
-    
+
 }
 
 class Chord {
@@ -225,25 +227,24 @@ class Chord {
         this.formattedName = this.formatChord(c.text);
     }
 
-
     formatChord(chordString) {
         const notes = ["A", "B", "C", "D", "E", "F", "G", "A", "B"];
-        let root = chordString.substring(0,1);
-        if(notes.indexOf(root) === -1) { 
+        let root = chordString.substring(0, 1);
+        if (notes.indexOf(root) === -1) {
             return chordString;
         }
         let index = 1;
         let accidental = "";
         let quality = "";
-        
-        if(chordString[1] === "♯" || chordString[1] === "#") {
-            accidental = "♯" ;
+
+        if (chordString[1] === "♯" || chordString[1] === "#") {
+            accidental = "♯";
             index++;
-        } else if(chordString[1] === "b" || chordString[1] === "♭" ) {
-            accidental = "♭" ;
+        } else if (chordString[1] === "b" || chordString[1] === "♭") {
+            accidental = "♭";
             index++;
         }
-        
+
         const qualities = ["maj", "min", "sus", "add", "dim", "aug", "m"];
 
         for (const q of qualities) {
@@ -256,10 +257,10 @@ class Chord {
         let modifiers = chordString.substring(index);
         let bassIndex = modifiers.indexOf("/");
         let bass = "";
-        if(bassIndex !== -1)
+        if (bassIndex !== -1)
         {
-            const note = modifiers.substring(bassIndex+1,bassIndex+2);
-            if(notes.indexOf(note) !== -1)
+            const note = modifiers.substring(bassIndex + 1, bassIndex + 2);
+            if (notes.indexOf(note) !== -1)
             {
                 bass = modifiers.substring(bassIndex);
                 modifiers = modifiers.substring(0, bassIndex);
@@ -270,15 +271,14 @@ class Chord {
         this.quality = quality;
         this.modifiers = modifiers;
         this.bass = bass;
-        
-        return  root + accidental + quality + "<sup>" + modifiers + "</sup><sub>" + bass + "</sub>" ;
+
+        return  root + accidental + quality + "<sup>" + modifiers + "</sup><sub>" + bass + "</sub>";
     }
-    
+
     checkPlaying(position) {
         this.isPlaying = (position >= this.startTime && position < this.endTime);
         return this.isPlaying;
     }
-
 
 }
 
@@ -292,7 +292,7 @@ class Lyric {
     duration; //in seconds
     isPlaying = false;
     height = 0;
-    top =0;
+    top = 0;
     div = null;
     song = null;
     row = null;
@@ -303,10 +303,10 @@ class Lyric {
         this.endTime = roundTime(c.endTime);
         this.duration = this.endTime - this.startTime;
         this.text = c.text;
-    }   
+    }
 
     set playing(val) {
-        
+
         if (val) {
             this.div.classList.add('lyric_playing');
         } else {
@@ -316,7 +316,7 @@ class Lyric {
             this.calculateHeight();
             const rowBox = document.getElementById('position_row_lyrics').getBoundingClientRect();
             const targetPosition = rowBox.top + rowBox.height / 2;
-            
+
             const progress = this.height * (this.song.calculatedPosition - this.startTime) / this.duration;
 
 //            this.song.moveTo(targetPosition - this.top - progress);
@@ -330,13 +330,13 @@ class Lyric {
     {
         this.div = document.createElement('div');
         this.div.classList.add('lyric');
-        this.div.textContent  = this.text;
+        this.div.textContent = this.text;
         if (this.isPlaying)
         {
             this.div.classList.add('playing');
         }
         this.row.div.append(this.div);
-       
+
     }
 
     calculateHeight()
@@ -354,7 +354,7 @@ class Lyric {
     checkPlaying(position) {
         if (position >= this.startTime && position < this.endTime) {
             this.playing = true;
-            
+
 
         } else {
             this.playing = false;
@@ -362,23 +362,23 @@ class Lyric {
         }
         return this.isPlaying;
     }
-    
+
     checkPlayingChords(position) {
-        
+
         if (position >= this.startTime && position < this.endTime) {
             const lyrics_banner = document.getElementById("lyrics_banner");
             lyrics_banner.textContent = this.text;
             return true;
-        } 
+        }
         return false;
     }
-    
+
 }
 
 class Song {
     id = "";
-    table = null; 
-    lastInsertedLyric = null; 
+    table = null;
+    lastInsertedLyric = null;
     bars = [];
     chords = [];
     lyrics = [];
@@ -387,7 +387,7 @@ class Song {
     paintBuf = [];
     songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
     json = "";
-    maxBeats = 16; 
+    maxBeats = 16;
     internalChordsOffset = 0;
     internallyricsOffset = 0;
     networkOffset = 0;
@@ -426,47 +426,52 @@ class Song {
         setInterval(this.calculatePosition.bind(this), 50);
         this.loaderDiv = document.getElementById('loader');
 //        this.playStateDiv = document.getElementById('play_state');
-        this.clockDiv = document.getElementById('clock_div'); 
+        this.clockDiv = document.getElementById('clock_div');
     }
 
     play() {
-        if(this.lock) return;
+        if (this.lock)
+            return;
         wwr_req("1007;TRANSPORT");
     }
-    
+
     pause() {
-        if(this.lock) return;
+        if (this.lock)
+            return;
         wwr_req("1008;TRANSPORT");
     }
-    
+
     stop() {
-        if(this.lock) return;
+        if (this.lock)
+            return;
         wwr_req("1016;TRANSPORT");
     }
-    
+
     forward() {
-        if(this.lock) return;
+        if (this.lock)
+            return;
         wwr_req("1016;40861;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
     }
-    
+
     rewind() {
-        if(this.lock) return;
-        if(this.playState === 0 && this.lastRecordedPosition === 0)
+        if (this.lock)
+            return;
+        if (this.playState === 0 && this.lastRecordedPosition === 0)
         {
             wwr_req("1016;40862;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
-        }
-        else
+        } else
         {
             wwr_req("1016;40042;TRANSPORT");
         }
-        
+
     }
-    
+
     prevBar() {
-        if(this.lock) return;
+        if (this.lock)
+            return;
         wwr_req("1016;41043;TRANSPORT");
     }
-    
+
     saveProjectSettings() {
         this.settings = {
             common: {
@@ -480,7 +485,7 @@ class Song {
             barsPerRow: this.viewManager.chordsView.barsPerRow
         };
         const stored = JSON.parse(localStorage.getItem("reachords")) || {};
-        let settings = { ...stored };
+        let settings = {...stored};
 
         settings.common = {
             ...stored.common,
@@ -493,12 +498,12 @@ class Song {
         };
 
         localStorage.setItem(
-            "reachords",
-            JSON.stringify(settings)
-        );
+                "reachords",
+                JSON.stringify(settings)
+                );
         this.settings = settings;
     }
-    
+
     loadProjectSettings() {
         let settings = {
             common: {
@@ -510,52 +515,52 @@ class Song {
                 barsPerRow: Song.DEFAULT_BARS_PER_ROW
             }
         };
-        
+
         const stored = JSON.parse(localStorage.getItem("reachords"));
-        if(stored)
+        if (stored)
         {
-            settings.common = stored.common ? stored.common  : settings.common;
+            settings.common = stored.common ? stored.common : settings.common;
             settings[this.id] = stored[this.id] ? stored[this.id] : settings[this.id];
         }
-        this.viewManager.chordsView.barsPerRow =  settings[this.id].barsPerRow;
+        this.viewManager.chordsView.barsPerRow = settings[this.id].barsPerRow;
         this.viewManager.chordsView.decoratedChords = settings.common.decoratedChords;
         this.viewManager.chordsView.chordsStyle = settings.common.chordsStyle;
         this.type = settings.common.type;
         this.settings = settings;
     }
-    
+
     set chordsOffset(val) {
         this.internalChordsOffset = val;
     }
-    
+
     get chordsOffset() {
-        if(this.type === ViewManager.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
+        if (this.type === ViewManager.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
         {
             return 0;
         }
         return this.internalChordsOffset + this.networkOffset + this.paintOffset;
     }
-    
+
     set lyricsOffset(val) {
         this.internallyricsOffset = val;
     }
-    
+
     get lyricsOffset() {
-        if(this.type !== ViewManager.LYRICS  || this.playState === 0 || this.playState === 2 || this.playState === 6)
+        if (this.type !== ViewManager.LYRICS || this.playState === 0 || this.playState === 2 || this.playState === 6)
         {
             return 0;
         }
-        return this.internallyricsOffset + Song.LYRICSDELTA  + this.networkOffset +  this.paintOffset;
+        return this.internallyricsOffset + Song.LYRICSDELTA + this.networkOffset + this.paintOffset;
     }
-    
+
     set recordedPosition(position) {
         this.lastRecordedTime = Date.now();
-        this.calculatedPosition = position = this.lastRecordedPosition = position + this.chordsOffset + this.lyricsOffset; 
-        
+        this.calculatedPosition = position = this.lastRecordedPosition = position + this.chordsOffset + this.lyricsOffset;
+
     }
 
     calculatePosition() {
-    
+
         let position = this.lastRecordedPosition;
         if (this.playState === 1) {
             const elapsedTime = Date.now() - this.lastRecordedTime;
@@ -592,49 +597,40 @@ class Song {
         const t0 = performance.now();
         this.checkPlaying(position);
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            this.calculatePaintDelay(t0);
-            
-          });
+            requestAnimationFrame(() => {
+                this.calculatePaintDelay(t0);
+
+            });
         });
-        
+
         // Skip the animated transition for the very first positioning after a
         // song rebuild. Without this, the page would visibly scroll from the top
         // down to the current playhead position before the user sees it settled.
         this.viewManager.instantPositioning = false;
-        if (this.songReady) {          
+        if (this.songReady) {
             this.hideSong(false);
         }
-        
+
     }
 
-    
-    
-    
-    
     createTable() {
-        document.getElementById('change_to_chords').ariaSelected = (this.type === ViewManager.CHORDS );
-        document.getElementById('change_to_lyrics').ariaSelected = (this.type === ViewManager.LYRICS );
-        document.getElementById('change_to_clock').ariaSelected = (this.type === ViewManager.CLOCK );
+        document.getElementById('change_to_chords').ariaSelected = (this.type === ViewManager.CHORDS);
+        document.getElementById('change_to_lyrics').ariaSelected = (this.type === ViewManager.LYRICS);
+        document.getElementById('change_to_clock').ariaSelected = (this.type === ViewManager.CLOCK);
         this.viewManager.instantPositioning = true;
-        switch(this.type) {
-        case ViewManager.LYRICS :
-            this.viewManager.lyricsView.createTable();
-            break;
-        case ViewManager.CHORDS :
-            this.viewManager.chordsView.createTable();
-            break;
-        
+        switch (this.type) {
+            case ViewManager.LYRICS:
+                this.viewManager.lyricsView.createTable();
+                break;
+            case ViewManager.CHORDS :
+                this.viewManager.chordsView.createTable();
+                break;
+
         }
         this.render();
         this.complete = true;
-        
+
     }
- 
-   
-    
-    
-    
 
     clear() {
         this.viewManager.chordsView.translateY = 0;
@@ -653,24 +649,24 @@ class Song {
     }
 
     render() {
-        document.getElementById('song_title').textContent  = this.project;
+        document.getElementById('song_title').textContent = this.project;
         this.viewManager.renderView(this.type);
     }
-    
+
     toggleLock() {
         this.lock = !this.lock;
         const value = this.lock ? 1 : 0;
-        wwr_req("SET/EXTSTATE/reachords/lock/" +  value );
+        wwr_req("SET/EXTSTATE/reachords/lock/" + value);
     }
-    
+
     hideSong(hide) {
-        if(hide) this.viewManager.hideAll();
+        if (hide)
+            this.viewManager.hideAll();
         this.loaderDiv.hidden = !hide;
     }
-    
-    
+
     appendChord(chord) {
-        if (this.type === ViewManager.LYRICS ) {
+        if (this.type === ViewManager.LYRICS) {
             return;
         }
         this.bars.forEach(function (bar) {
@@ -684,7 +680,7 @@ class Song {
     }
 
     appendBar(bar) {
-        if (this.type === ViewManager.LYRICS ) {
+        if (this.type === ViewManager.LYRICS) {
             return;
         }
         bar.song = this;
@@ -697,23 +693,22 @@ class Song {
     }
 
     appendLyric(lyric) {
-        if (this.type === ViewManager.CHORDS ) {
+        if (this.type === ViewManager.CHORDS) {
             //return;
         }
         lyric.song = this;
-        if(this.lastInsertedLyric) {
+        if (this.lastInsertedLyric) {
             this.lastInsertedLyric.nextLyric = lyric;
         }
         this.lyrics.push(lyric);
         this.lastInsertedLyric = lyric;
     }
 
-
     formatTime(position)
     {
         let formattedTime = "";
         const time = (position - this.chordsOffset - this.lyricsOffset + this.globalOffset);
-        if(time)
+        if (time)
         {
             formattedTime = new Date(Math.abs(time) * 1000).toISOString().slice(14, 22);
         }
@@ -723,18 +718,17 @@ class Song {
         }
         return formattedTime;
     }
-    
-    
+
     findPlayingChord(position)
     {
-        let foundChord =  null;
-        if(this.playingChord && this.playingChord.checkPlaying(position)) {
+        let foundChord = null;
+        if (this.playingChord && this.playingChord.checkPlaying(position)) {
             foundChord = this.playingChord;
-        } else if(this.playingChord && this.playingChord.nextChord && this.playingChord.nextChord.checkPlaying(position)) {
+        } else if (this.playingChord && this.playingChord.nextChord && this.playingChord.nextChord.checkPlaying(position)) {
             foundChord = this.playingChord.nextChord;
         } else {
             for (let chord of this.chords) {
-                if(chord.checkPlaying(position)) { 
+                if (chord.checkPlaying(position)) {
                     foundChord = chord;
                     break;
                 }
@@ -743,43 +737,42 @@ class Song {
         this.playingChord = foundChord;
         this.viewManager.chordsView.highLightChord(foundChord);
     }
-    
-    
+
     checkPlaying(position) {  // TODO Move to View? Ii is used both in lyrics and chords
         if (!this.complete) {
             return;
         }
         let formattedTime = this.formatTime(position);
-        if(formattedTime !== this.lastClockTime)
+        if (formattedTime !== this.lastClockTime)
         {
-            this.clockDiv.innerHTML  = formattedTime;// + "<p class ='bpm'>" + this.bpm + " bpm</p>";
+            this.clockDiv.innerHTML = formattedTime;// + "<p class ='bpm'>" + this.bpm + " bpm</p>";
             this.lastClockTime = formattedTime;
         }
         this.viewManager.updateView(this.type, position);
-        
+
     }
 
     parseJson() {
         this.loadProjectSettings();
         const json = this.json;
         this.project = json.title;
-        this.chordsOffset = json.chordsOffset * 1;
-        this.lyricsOffset = json.lyricsOffset * 1;
-        this.globalOffset = json.globalOffset * 1;
-        this.length = json.length * 1;
+        this.chordsOffset = json.chordsOffset;
+        this.lyricsOffset = json.lyricsOffset;
+        this.globalOffset = json.globalOffset;
+        this.length = json.length;
         const markers = json.markers;
         let previousMarker = null;
         for (let j in markers) {
-            
+
             const m = markers[j];
             const marker = new Marker(m);
             this.appendMarker(marker);
-            if(previousMarker) {
+            if (previousMarker) {
                 previousMarker.duration = marker.position - previousMarker.position;
             }
             previousMarker = marker;
         }
-        if(previousMarker) {
+        if (previousMarker) {
             previousMarker.duration = this.length - previousMarker.position;
         }
         const bars = json.bars;
@@ -800,7 +793,7 @@ class Song {
                 barInRow = 0;
             }
         }
-        this.bars.sort(compareBar);
+        this.bars.sort((a, b) => (a.number - b.number));
         this.maxBeats = maxBeatPerRow;
 
         const lyrics = json.lyrics;
@@ -818,78 +811,81 @@ class Song {
             const c = chords[j];
             const chord = new Chord(c);
             this.appendChord(chord);
-            if(previousChord) {
+            if (previousChord) {
                 previousChord.nextChord = chord;
             }
             previousChord = chord;
         }
     }
-    
-    setScriptActive(active)  {
+
+    setScriptActive(active) {
         this.scriptActive = active;
         const scriptstatus_div = document.getElementById('scriptstatus_div');
         const scriptstatus = document.getElementById('scriptstatus');
         scriptstatus_div.classList.toggle('inactive', !this.scriptActive);
         if (active) {
-            scriptstatus.textContent  = "Script is Running...";
+            scriptstatus.textContent = "Script is Running...";
         } else {
-            scriptstatus.textContent  = "Click to run script";
+            scriptstatus.textContent = "Click to run script";
         }
     }
-    
+
     calculateNetwordDelay(t0) {
         const RTT_SAMPLES = 20;
         const t1 = (new Date).getTime();
-        const delta = (t1 - t0)/2;
-        
+        const delta = (t1 - t0) / 2;
+
         this.networkBuf.push(delta);
-        if(this.networkBuf.length > RTT_SAMPLES) {
+        if (this.networkBuf.length > RTT_SAMPLES) {
             this.networkBuf.shift();
         }
-        this.networkOffset = trimmedMean(this.networkBuf)/1000;
-        
-        document.getElementById('latency').innerHTML = "Latency: " +  delta.toFixed(1) + " ms";
-        let offs =this.chordsOffset;
-        if(this.type === ViewManager.LYRICS )
+        this.networkOffset = trimmedMean(this.networkBuf) / 1000;
+
+        document.getElementById('latency').innerHTML = "Latency: " + delta.toFixed(1) + " ms";
+        let offs = this.chordsOffset;
+        if (this.type === ViewManager.LYRICS)
         {
             offs = this.lyricsOffset;
         }
-        document.getElementById('offset').innerHTML = "Offset: " +  (1000*offs).toFixed(1) + " ms";
+        document.getElementById('offset').innerHTML = "Offset: " + (1000 * offs).toFixed(1) + " ms";
 
     }
 
     calculatePaintDelay(t0) {
         const RTT_SAMPLES = 20;
         const t1 = performance.now();
-        const delta = (t1 - t0)/2;
-        
+        const delta = (t1 - t0) / 2;
+
         this.paintBuf.push(delta);
-        if(this.paintBuf.length > RTT_SAMPLES) {
+        if (this.paintBuf.length > RTT_SAMPLES) {
             this.paintBuf.shift();
         }
-        this.paintOffset = trimmedMean(this.paintBuf)/1000;
+        this.paintOffset = trimmedMean(this.paintBuf) / 1000;
     }
-    
+
     repaint() {
         this.hideSong(true);
         this.songReady = false;
         this.clear();
         this.parseJson();
         this.createTable();
-        this.songReady = true; 
+        this.songReady = true;
     }
 
 }
 
 
+
+
+
 class LyricsView {
-  
+
     song = null;
     table = null; // TODO
     viewManager = null;
     translateY = 0;
     rows = [];
-    
+
     ELEMENTS = {
         big_clock_section: false,
         lyrics_section: true,
@@ -898,16 +894,15 @@ class LyricsView {
         increase_bars: false,
         decrease_bars: false
     };
-        
+
     constructor(song) {
         this.song = song;
-        
+
     }
-    
-    
+
     createTable() {
         let lastEnd = 0;
-        
+
         for (let lyric of this.song.lyrics)
         {
             let row;
@@ -926,7 +921,7 @@ class LyricsView {
             lastEnd = lyric.endTime;
         }
     }
-    
+
     render() {
         const table = document.createElement('div');
         this.table = table;
@@ -940,20 +935,19 @@ class LyricsView {
         document.title = this.song.project + " - Lyrics";
         let content = document.getElementById('song_content_lyrics');
         content.parentNode.replaceChild(table, content);
-        Object.entries(this.ELEMENTS).forEach(([key, value]) => { 
+        Object.entries(this.ELEMENTS).forEach(([key, value]) => {
             document.getElementById(key).hidden = !value;
         });
     }
-    
-    
+
     update(position) {
         for (let lyric of this.song.lyrics) {
             lyric.checkPlaying(position);
         }
     }
-    
+
     moveTo(val)
-    {	
+    {
         this.translateY = val + this.translateY;
         const tableStyle = this.table.style;
         tableStyle.transform = "translateY(" + this.translateY + "px)";
@@ -965,14 +959,14 @@ class ChordsView {
 
     song = null;
     translateY = 0;
-    decoratedChords =  false;
+    decoratedChords = false;
     viewManager = null;
     highLightedChord = null;
     rows = []; // TODO
     table = null; //TODO
-    chordsStyle =  "EN"; 
+    chordsStyle = "EN";
     barsPerRow = 4;
-    decoratedChords = true; 
+    decoratedChords = true;
 
     ELEMENTS = {
         big_clock_section: false,
@@ -982,11 +976,11 @@ class ChordsView {
         increase_bars: true,
         decrease_bars: true
     };
-    
+
     constructor(song) {
         this.song = song;
     }
-    
+
     createTable() {
         let columnCount = 0;
         let row = null;
@@ -1011,36 +1005,36 @@ class ChordsView {
                 columnCount = 0;
             }
         }
-        
+
     }
-    
+
     renderMarker(marker) {  //TODO at the the moment not used
         this.div = document.createElement("div");
         this.div.id = "marker_" + this.index;
-        this.div.textContent  = this.text;
+        this.div.textContent = this.text;
         this.div.classList.add('marker');
         this.div.style.border = "1px solid rgb(" + this.color + ")";
         this.div.style.background = "rgba(" + this.color + ", .3)";
-        if(this.row && this.row.div) this.row.div.append(this.div);
-        
+        if (this.row && this.row.div)
+            this.row.div.append(this.div);
+
     }
-    
-    
+
     translate(val) {
         this.translateY = val + this.translateY;
         const tableStyle = this.table.style;
         if (this.viewManager.instantPositioning) {
             tableStyle.willChange = 'none';
         } else {
-            
+
             tableStyle.willChange = 'transform';
             tableStyle.transition = 'transform 400ms ease';
         }
         tableStyle.transform = "translateY(" + this.translateY + "px)";
     }
-    
+
     render() {
-        Object.entries(this.ELEMENTS).forEach(([key, value]) => { 
+        Object.entries(this.ELEMENTS).forEach(([key, value]) => {
             document.getElementById(key).hidden = !value;
         });
         const table = document.createElement('div');
@@ -1049,8 +1043,8 @@ class ChordsView {
         table.id = 'song_content_chords';
         this.song.clockDiv.style.visibility = "visible";
         document.getElementById('decorated_chords').ariaPressed = this.decoratedChords;
-        table.classList.add("chords_table"); 
-        document.getElementById('lyrics_banner').textContent  = "";
+        table.classList.add("chords_table");
+        document.getElementById('lyrics_banner').textContent = "";
         document.title = this.song.project + " - Chords";
         table.style.setProperty("--maxbeats", this.song.maxBeats);
 
@@ -1063,18 +1057,17 @@ class ChordsView {
         }
         for (const chord of this.song.chords) {
             this.renderChord(chord);
-        }   
-        
+        }
+
     }
-    
-    
+
     renderChord(chord)
     {
         chord.div = document.createElement('div');
         chord.div.classList.add('chord');
-        if(this.decoratedChords) 
+        if (this.decoratedChords)
         {
-            chord.div.innerHTML  = chord.formattedName;
+            chord.div.innerHTML = chord.formattedName;
         } else {
             chord.div.textContent = chord.name;
         }
@@ -1082,10 +1075,10 @@ class ChordsView {
         chord.div.style.width = Number(chord.beatDuration * chord.bar.width / chord.bar.beats.length) - 4 + "px";
         chord.bar.div.append(chord.div);
     }
-    
-    
+
     highLightChord(chord) {
-        if (this.highLightedChord === chord) return;
+        if (this.highLightedChord === chord)
+            return;
         if (this.highLightedChord) {
             this.highLightedChord.div.classList.remove("chord_playing");
         }
@@ -1094,10 +1087,7 @@ class ChordsView {
             chord.div.classList.add("chord_playing");
         }
     }
-    
-    
-    
-    
+
     update(position) {
         this.song.findPlayingChord(position);
         let foundLyric = false;
@@ -1108,41 +1098,39 @@ class ChordsView {
         for (let lyric of this.song.lyrics) {
             foundLyric = foundLyric || lyric.checkPlayingChords(position);
         }
-        if(!foundLyric)
+        if (!foundLyric)
         {
             const lyrics_banner = document.getElementById("lyrics_banner");
             lyrics_banner.textContent = "";
         }
     }
-    
-    
-    increaseBars () {
+
+    increaseBars() {
         this.barsPerRow++;
         this.song.saveProjectSettings(); //TODO move to adedicated Object
         this.song.repaint();
     }
-    
+
     decreaseBars() {
         this.barsPerRow--;
-        if(this.barsPerRow<2) {
+        if (this.barsPerRow < 2) {
             this.barsPerRow = 2;
         }
         this.song.saveProjectSettings();
         this.song.repaint();
     } 
-    
+
     toggleDecoratedChords() {
-        this.decoratedChords = ! this.decoratedChords;
+        this.decoratedChords = !this.decoratedChords;
         document.getElementById('decorated_chords').ariaPressed = this.decoratedChords;
         this.song.saveProjectSettings();
         this.song.repaint();
     }
-    
-    
+
 }
 
 class ClockView {
-    
+
     bigClockDiv = null;
     progressDiv = null;
     bigTimeDiv = null;
@@ -1159,24 +1147,29 @@ class ClockView {
         increase_bars: false,
         decrease_bars: false
     };
-    
+
     constructor(song) {
         this.song = song;
-        this.bigClockDiv = document.getElementById('big_clock_bpm'); 
+        this.bigClockDiv = document.getElementById('big_clock_bpm');
         this.progressDiv = document.getElementById('progress_fill');
-        this.bigTimeDiv = document.getElementById('big_time');  
+        this.bigTimeDiv = document.getElementById('big_time');
         this.lastMarkerContainer = document.getElementById('last_marker');
     }
-    
-    
+
     render() {
-        Object.entries(this.ELEMENTS).forEach(([key, value]) => { 
+        Object.entries(this.ELEMENTS).forEach(([key, value]) => {
             document.getElementById(key).hidden = !value;
         });
         this.song.clockDiv.style.visibility = "hidden";
         document.title = this.song.project + " - Clock";
+        const markersDiv = document.getElementById("clock_markers");
+        for (let marker of this.song.markers) {
+
+            if (marker)
+                markersDiv.append(this.renderMarker(marker));
+        }
     }
-    
+
     renderMarker(marker) {
         const progressDiv = document.createElement("div");
         progressDiv.id = "marker_" + marker.index + "_progress";
@@ -1184,7 +1177,7 @@ class ClockView {
         progressDiv.style.background = "rgba(" + marker.color + ", .8)";
         const div = document.createElement("div");
         div.id = "clock_marker_" + marker.index;
-        div.textContent  = marker.text;
+        div.textContent = marker.text;
         div.classList.add('clock_marker');
         div.style.border = "1px solid rgb(" + marker.color + ")";
         div.style.background = "rgba(" + marker.color + ", .1)";
@@ -1193,48 +1186,49 @@ class ClockView {
 //        div.style.background = "transparent";
         div.append(progressDiv);
         return div;
-        
+
     }
-    
+
     update(position) {
-        
+
         const formattedTime = this.song.formatTime(position);
         this.lastMarker = null;
-        if(formattedTime !== this.lastClockTime)
+        if (formattedTime !== this.lastClockTime)
         {
-            this.bigTimeDiv.textContent  = formattedTime ;
+            this.bigTimeDiv.textContent = formattedTime;
             this.bigClockDiv.textContent = this.song.bpm + "bpm";
-            this.progressDiv.style.width = 100*this.song.calculatedPosition/this.song.length + "%";
+            this.progressDiv.style.width = 100 * this.song.calculatedPosition / this.song.length + "%";
             this.lastClockTime = formattedTime;
         }
-        
+
 //      TODO Bar number
         for (let marker of this.song.markers) {
             //TODO, the search of last marker can be done in the song.
-            if(!marker) continue;
-            
+            if (!marker)
+                continue;
             let isOver = marker.isOver(position);
-            if(!isOver) break;
+            if (!isOver)
+                break;
             this.lastMarker = marker;
         }
 
-        if(this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
+        if (this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
             this.lastMarkerContainer.innerHTML = "";
-            this.lastMarkerContainer.append(this.renderMarker(this.lastMarker));
+//            this.lastMarkerContainer.append(this.renderMarker(this.lastMarker));
             this.lastMarkerIndex = this.lastMarker.index;
         }
-        if(this.lastMarker === null) {
+        if (this.lastMarker === null) {
             this.lastMarkerContainer.innerHTML = "";
         } else {
-            const progress = 100*(this.song.calculatedPosition - this.lastMarker.position)/this.lastMarker.duration;
+            const progress = 100 * (this.song.calculatedPosition - this.lastMarker.position) / this.lastMarker.duration;
             document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
         }
     }
-    
+
 }
 
 class ViewManager {
-    
+
     static LYRICS = "lyrics";
     static CHORDS = "chords";
     static CLOCK = "clock";
@@ -1243,7 +1237,7 @@ class ViewManager {
     song = null;
     clockView = null;
     chordsView = null;
-    
+
     constructor(song) {
         this.song = song;
         song.viewManager = this;
@@ -1254,92 +1248,167 @@ class ViewManager {
         this.lyricsView = new LyricsView(song);
         this.lyricsView.viewManager = this;
     }
-    
+
     hideAll() {
         document.getElementById('chords_section').hidden = true;
         document.getElementById('lyrics_section').hidden = true;
         document.getElementById('big_clock_section').hidden = true;
     }
-    
+
     changeLayout(layoutType) {  // TODO Move to Layout Manager
         this.active = layoutType;
         this.song.type = layoutType;
         this.song.saveProjectSettings();
         this.song.repaint();
     }
-    
-    
+
     createTable() { // TODO, at the moment not used
-        document.getElementById('change_to_chords').ariaSelected = (this.active === ViewManager.CHORDS );
-        document.getElementById('change_to_lyrics').ariaSelected = (this.active === ViewManager.LYRICS );
-        document.getElementById('change_to_clock').ariaSelected = (this.active === ViewManager.CLOCK );
+        document.getElementById('change_to_chords').ariaSelected = (this.active === ViewManager.CHORDS);
+        document.getElementById('change_to_lyrics').ariaSelected = (this.active === ViewManager.LYRICS);
+        document.getElementById('change_to_clock').ariaSelected = (this.active === ViewManager.CLOCK);
         this.instantPositioning = true;
-        switch(this.active) {
-        case ViewManager.LYRICS :
-            this.lyricsView.createTable();
-            break;
-        case ViewManager.CHORDS :
-            this.chordsView.createTable();
-            break;
-        
+        switch (this.active) {
+            case ViewManager.LYRICS:
+                this.lyricsView.createTable();
+                break;
+            case ViewManager.CHORDS :
+                this.chordsView.createTable();
+                break;
+
         }
         this.song.render();
         this.song.complete = true;
-        
+
     }
-    
-//    getTable() {
-//        switch(this.song.type) {
-//        case ViewManager.LYRICS :
-//            return this.lyricsView.table;
-//            break;
-//        case ViewManager.CHORDS :
-//            return this.chordsView.table;
-//            break;
-//        case ViewManager.CLOCK :
-//            return null;
-//            break;
-//        }
-//    }
-    
+
     updateView(type, position) {
-        
-        switch(type) {
-        case ViewManager.LYRICS :
-            this.lyricsView.update(position);
-            break;
-        case ViewManager.CHORDS :
-            this.chordsView.update(position);
-            break;
-        case ViewManager.CLOCK :
-            this.clockView.update(position);
-            break;
+
+        switch (type) {
+            case ViewManager.LYRICS:
+                this.lyricsView.update(position);
+                break;
+            case ViewManager.CHORDS :
+                this.chordsView.update(position);
+                break;
+            case ViewManager.CLOCK :
+                this.clockView.update(position);
+                break;
         }
     }
-    
+
     renderView(type) {
-        switch(type) {
-        case ViewManager.LYRICS :
-            this.lyricsView.render();
-            break;
-        case ViewManager.CHORDS :
-            this.chordsView.render();
-            break;
-        case ViewManager.CLOCK :
-            this.clockView.render();
-            break;
+        switch (type) {
+            case ViewManager.LYRICS:
+                this.lyricsView.render();
+                break;
+            case ViewManager.CHORDS :
+                this.chordsView.render();
+                break;
+            case ViewManager.CLOCK :
+                this.clockView.render();
+                break;
         }
     }
 }
 
+class songSettingsManager {
+    
+    settings = {};
+    commonParameters = [];
+    songParameters = [];
+    song = null;
 
-function trimmedMean(arr, trimPct=0.1) {
-  if (!arr.length) return 0;
+    addCommonParameter(key, object) {
+        this.commonParameters.push({
+            key: key,
+            object: object,
+        });   
 
-  const a = arr.slice().sort((x,y)=>x-y);
-  const t = Math.floor(a.length * trimPct);
-  const mid = a.slice(t, a.length - t);
-  return mid.length ? mid.reduce((s,v)=>s+v,0)/mid.length : a.reduce((s,v)=>s+v,0)/a.length;
+    }
+    
+    addSongParameter(key, object) {
+        this.songParameters.push({
+            key: key,
+            object: object,
+        });   
+
+    }
+
+    saveProjectSettings() {
+        
+        for(let parameter of this.commonParameters) {
+            this.settings.common[parameter.key] = parameter.object[parameter.key];
+        }
+        for(let parameter of this.songParameters) {
+            this.settings[song.id] = parameter.object[parameter.key];
+        }
+        this.settings = {
+            common: {
+                decoratedChords: this.song.viewManager.chordsView.decoratedChords,
+                chordsStyle: this.song.viewManager.chordsView.chordsStyle,
+                type: this.song.viewManager.type,
+            }
+        };
+
+        this.settings[this.song.id] = {
+            barsPerRow: this.song.viewManager.chordsView.barsPerRow
+        };
+        const stored = JSON.parse(localStorage.getItem("reachords")) || {};
+        let settings = {...stored};
+
+        settings.common = {
+            ...stored.common,
+            ...this.settings.common
+        };
+
+        settings[this.song.id] = {
+            ...stored[this.song.id],
+            ...this.settings[this.song.id]
+        };
+
+        localStorage.setItem(
+                "reachords",
+                JSON.stringify(settings)
+                );
+        this.settings = settings;
+    }
+
+    loadProjectSettings() {
+        let settings = {
+            common: {
+                decoratedChords: Song.DEFAULT_DECORATED_CHORDS,
+                chordsStyle: Song.DEFAULT_CHORDS_STYLE,
+                type: Song.DEFAULT_TYPE
+            },
+            [this.song.id]: {
+                barsPerRow: Song.DEFAULT_BARS_PER_ROW
+            }
+        };
+
+        const stored = JSON.parse(localStorage.getItem("reachords"));
+        if (stored)
+        {
+            settings.common = stored.common ? stored.common : settings.common;
+            settings[this.song.id] = stored[this.song.id] ? stored[this.song.id] : settings[this.song.id];
+        }
+        this.song.viewManager.chordsView.barsPerRow = settings[this.song.id].barsPerRow;
+        this.song.viewManager.chordsView.decoratedChords = settings.common.decoratedChords;
+        this.song.viewManager.chordsView.chordsStyle = settings.common.chordsStyle;
+        this.type = settings.common.type;
+        this.settings = settings;
+    }
+}
+
+
+
+function trimmedMean(arr, trimPct = 0.1) {
+    if (!arr.length)
+        return 0;
+
+    const a = arr.slice().sort((x, y) => x - y);
+    const t = Math.floor(a.length * trimPct);
+    const mid = a.slice(t, a.length - t);
+    return mid.length ? mid.reduce((s, v) => s + v, 0) / mid.length : a.reduce((s, v) => s + v, 0) / a.length;
 }
 
 
@@ -1350,12 +1419,12 @@ function wwr_onreply(results, t0) {
         if (tok && tok.length > 0) {
             switch (tok[0]) {
                 case "TRANSPORT":
-                    song.playState = tok[1]*1;
-                    song.recordedPosition = tok[2]*1;
+                    song.playState = tok[1] * 1;
+                    song.recordedPosition = tok[2] * 1;
                     break;
                 case "EXTSTATE":
-                   if (tok[2] === "status" ) {
-                       
+                    if (tok[2] === "status") {
+
                         song.calculateNetwordDelay(t0);
                         let status = null;
                         try {
@@ -1368,55 +1437,45 @@ function wwr_onreply(results, t0) {
                             break;
                         }
                         song.bpm = status.bpm;
-                        song.lock = status.lock*1;
-                        document.getElementById('lock').ariaPressed = song.lock===1;
-//                        if(song.lock) {
-//                            document.getElementById('lock').classList.add('locked');
-//                            document.getElementById('lock').classList.remove('unlocked');
-//                        } else
-//                        {
-//                           document.getElementById('lock').classList.remove('locked');
-//                            document.getElementById('lock').classList.add('unlocked'); 
-//                        }
-                        // Comparing server timestamps
-                        // if they differ it means the script is not running
-                        
+                        song.lock = status.lock * 1;
+                        document.getElementById('lock').ariaPressed = song.lock === 1;
+
                         const isActive = (status.timestamp !== song.lastTimestamp);
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
                         status.projectid = simple_unescape(status.projectid);
                         if (isActive) {
-                            if(status.version !== song.version || status.projectid !== song.id)
+                            if (status.version !== song.version || status.projectid !== song.id)
                             {
                                 // Hide immediately on detecting a change, before the "song" data has
                                 // even been fetched — avoids a brief window where the old song is shown
                                 // with a playhead position that already belongs to the new one.
                                 song.hideSong(true);
-                                song.songReady = false; 
+                                song.songReady = false;
                                 song.version = status.version;
-                                
+
                                 song.id = status.projectid;
                                 wwr_req("GET/EXTSTATE/reachords/song");
                             }
                         }
                     }
-                    if (tok[2] === "song" ) {
-                        
+                    if (tok[2] === "song") {
+
                         let json = "";
-                        if(tok[3] !== "") {
+                        if (tok[3] !== "") {
 //                            console.log(tok[3]);
                             json = JSON.parse(simple_unescape(tok[3]));
                         }
-                        if(json){
-                            
+                        if (json) {
+
                             song.json = json;
                             song.clear();
                             song.parseJson();
                             song.createTable();
-                            song.songReady = true; 
+                            song.songReady = true;
                         }
-        
-                        
+
+
                     }
                     break;
             }
@@ -1424,17 +1483,6 @@ function wwr_onreply(results, t0) {
     }
 }
 
-
-
-
-function compareBar(a, b) {
-    if (a.number * 1 < b.number * 1) {
-        return -1;
-    } else if (a.number * 1 > b.number * 1) {
-        return 1;
-    }
-    return 0;
-}
 
 function roundTime(time) {
     const PRECISION = 1000000;

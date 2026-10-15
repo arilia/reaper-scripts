@@ -106,7 +106,7 @@ local function getChordsJson(tr)
             beat    = tonumber(beat)
             sub     = tonumber(sub)
         end
-        chordjs = chordjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"'
+        chordjs = chordjs .. '"' .. i .. '": { "text":'.. '"' .. jsonEscape(text) .. '"' 
         chordjs = chordjs .. ', "barNumber":' .. measure
         chordjs = chordjs .. ', "beatStart":'.. beat
         chordjs = chordjs .. ', "sub":'.. sub
