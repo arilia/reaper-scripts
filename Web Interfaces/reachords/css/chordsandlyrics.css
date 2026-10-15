@@ -198,9 +198,17 @@ body:has(.bottom_bar) .bottom_curtain {
 
 #clock_markers {
     font-size: 2em;
+    overflow: clip;
+    align-content: center;
     /*overflow-y: auto;  Vertical scroll */
 }
 
+
+
+#clock_markers_list {
+    transition: transform 1s;
+    position: relative;
+}
 /* OTHER   */
 
 .clock {
@@ -767,11 +775,23 @@ div.offset {
     text-align: left;
     font-size: .8em;
     padding: .2em .3em .2em .3em ;
-    border: 1px solid white;
+    border: 1px solid;
+    border-color: var(--marker-border-color, rgba(255,255,255,.3));
+    background-color: var(--marker-bg-color, rgba(255,255,255,.2));
 }
 
 .clock_marker {
-    width: 100%
+    width: 90%
+}
+
+.clock_marker[data-mode="passed"] {
+    background-color: rgba(255,255,255,.05);
+    border-color: rgba(255,255,255,.2);
+}
+
+.clock_marker[data-mode="future"] {
+    --marker-bg-color: rgba(255,255,255,.3);
+    --marker-border-color: rgba(255,255,255,.5);
 }
 
 .command-button {

@@ -166,6 +166,7 @@ class Marker {
     position = 0;
     color = '';
     duration = 0;
+    progress = 0;
     div = null;
     clockDiv = null;
     row = null;
@@ -190,8 +191,17 @@ class Marker {
 
     }
 
+    updateProgress(position) {
+        let progress = 0;
+        progress = 1 * (position - this.position) / this.duration;
+        if (progress < 0) progress = 0;
+        if (progress > 1) progress = 1;
+        this.progress = progress;
+        return progress;
+    }
+
     isOver(position) {
-        if (position >= this.position) {
+        if (position >= this.position + this.duration) {
             return true;
         }
     }
@@ -1162,7 +1172,7 @@ class ClockView {
         });
         this.song.clockDiv.style.visibility = "hidden";
         document.title = this.song.project + " - Clock";
-        const markersDiv = document.getElementById("clock_markers");
+        const markersDiv = document.getElementById("clock_markers_list");
         for (let marker of this.song.markers) {
 
             if (marker)
@@ -1177,11 +1187,15 @@ class ClockView {
         progressDiv.style.background = "rgba(" + marker.color + ", .8)";
         const div = document.createElement("div");
         div.id = "clock_marker_" + marker.index;
+        div.dataset.mode = "passed";
         div.textContent = marker.text;
         div.classList.add('clock_marker');
-        div.style.border = "1px solid rgb(" + marker.color + ")";
-        div.style.background = "rgba(" + marker.color + ", .1)";
+        
+        div.style.setProperty("--marker-border-color", "rgb(" + marker.color + ")");
+        div.style.setProperty("--marker-bg-color", "rgba(" + marker.color + ", .1)");
+//        div.style.border = "1px solid rgb(255, 255, 255, .3)";
 //        div.style.color = "rgba(" + marker.color + ", 1)";
+//        div.style.background = "rgba(255, 255,255, .05)";
 //        div.style.border = "0px"; 
 //        div.style.background = "transparent";
         div.append(progressDiv);
@@ -1189,10 +1203,28 @@ class ClockView {
 
     }
 
-    update(position) {
 
+    setProgress(marker, position) {
+        let progress = 100*marker.updateProgress(position) + '%';
+        document.getElementById("marker_" + marker.index + "_progress").style.width = progress;
+    }
+    
+    moveMarkerToTop(marker) {
+        const markerDiv =  document.getElementById("clock_marker_" + marker.index);
+        markerDiv.dataset.mode = "";
+        const containerDiv =  document.getElementById("clock_markers");
+        const contentDiv =  document.getElementById("clock_markers_list");
+        const markerBox = markerDiv.getBoundingClientRect();
+        const contentBox = contentDiv.getBoundingClientRect();
+        const targetPosition = - markerBox.top + contentBox.top;
+        
+        contentDiv.style.transform = "translateY(" + (targetPosition + 1) + "px)";
+        
+    }
+
+    update(position) {
         const formattedTime = this.song.formatTime(position);
-        this.lastMarker = null;
+//        this.lastMarker = null;
         if (formattedTime !== this.lastClockTime)
         {
             this.bigTimeDiv.textContent = formattedTime;
@@ -1202,15 +1234,32 @@ class ClockView {
         }
 
 //      TODO Bar number
+        let lastMarker = false;
         for (let marker of this.song.markers) {
             //TODO, the search of last marker can be done in the song.
+            
             if (!marker)
                 continue;
+//            console.log(marker.index + " - " + this.lastMarker?.index);
             let isOver = marker.isOver(position);
-            if (!isOver)
-                break;
-            this.lastMarker = marker;
+            this.setProgress(marker, position);
+            if (!isOver && !lastMarker) {
+                lastMarker = marker;
+//                console.log(marker.index);
+
+                if(marker !== this.lastMarker) {
+                    
+                    this.moveMarkerToTop(marker);
+                    this.lastMarker = marker;
+                    
+//                    console.log(this.lastMarker?.index);
+                }  
+                
+            }
+            
+            
         }
+
 
         if (this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
             this.lastMarkerContainer.innerHTML = "";
@@ -1220,8 +1269,7 @@ class ClockView {
         if (this.lastMarker === null) {
             this.lastMarkerContainer.innerHTML = "";
         } else {
-            const progress = 100 * (this.song.calculatedPosition - this.lastMarker.position) / this.lastMarker.duration;
-            document.getElementById("marker_" + this.lastMarker.index + "_progress").style.width = progress + "%";
+//            this.setProgress(this.lastMarker, position);
         }
     }
 
