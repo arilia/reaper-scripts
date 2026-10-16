@@ -6,13 +6,14 @@ body {
 
 
 :root {
-    --surface:   #0c0c10;
-    --surface-2: #1a1a22;
     --line:      #1f1f27;
-    --btn-line:  #33333d;
-    --line-3:    #3a3a46;
-    --text:      #fff;
+    --surface:   #0c0c10;
     --text-dim:  #8a8a99;
+    --surface-selected: #1a1a22;
+    --border-selected: #6b6b78;
+    --btn-line:  #33333d;
+    --text:      #fff;   /* main text */
+
     --text-btn:  #b8b8c6;
     --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --danger:    #fb7185;
@@ -21,20 +22,21 @@ body {
 
 html {
     font-family: var(--font);
-    -webkit-text-size-adjust: 100%;   /* evita ingrandimenti automatici del testo su iOS */
+    -webkit-text-size-adjust: 100%;   /* no auto zoom on iOS */
     text-size-adjust: 100%;
 }
 
 
+/************************/
+/*    NAVIGATION BAR    */
+/************************/
+
+
 .tabs {
-    /*position: fixed;*/
-    /*top: 0;*/
-    width: 100%;
-
-
     display: grid;
+    width: 100%;
     grid-auto-flow: column;
-    grid-auto-columns: 1fr;          /* schede tutte della stessa larghezza, per 3 o 4 */
+    grid-auto-columns: 1fr; 
     gap: 6px;
     padding: 5px;
     background: var(--surface);
@@ -55,7 +57,7 @@ html {
     border: 1px solid transparent;
     border-radius: 11px;
     cursor: pointer;
-    touch-action: manipulation;       /* niente zoom con il doppio tocco */
+    touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     white-space: nowrap;
@@ -63,12 +65,12 @@ html {
 
 .tab[aria-selected="true"] {
     color: var(--text);
-    background: var(--surface-2);
-    border-color: var(--line-3);
+    background: var(--surface-selected);
+    border-color: var(--border-selected);
 }
 
 .tab:active {
-    background: var(--surface-2);
+    background: var(--surface-selected);
 }
 
 .tab:focus-visible {
@@ -82,9 +84,107 @@ html {
     }
 }
 
+/************************/
+/*       TOP BAR        */
+/************************/
 
 
-/*LYRICS SECTION*/
+.top_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    padding-right: 14px;
+
+}
+
+.top_bar .group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.scriptstatus_div{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--state);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    user-select: none;
+    color:  rgb(74, 222, 128);
+    cursor: pointer;
+}
+
+.scriptstatus_div.inactive {
+    color:  rgb(222, 128, 74);
+}
+
+.scriptstatus_div span {
+    background-color:  rgb(74, 222, 128);
+}
+
+.scriptstatus_div.inactive span {
+    background-color:  rgb(222, 128, 74);
+}
+
+.scriptstatus {
+    font-size: .6em;
+}
+
+.round-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font: inherit;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--text-btn);
+    background: transparent;
+    border: 1px solid var(--btn-line);
+    border-radius: 50%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.round-btn:active {
+    background: var(--surface-selected);
+}
+.round-btn[hidden] {
+    display: none !important;
+}
+
+.toggle {
+    height: 44px;
+    min-width: 64px;
+    padding: 0 14px;
+    font: inherit;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--btn-line);
+    border-radius: 12px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.toggle[aria-pressed="true"] {
+    color: var(--text);
+    background: var(--surface-selected);
+    border-color: var(--border-selected);
+}
+
+
+/************************/
+/*    LYRICS SECTION    */
+/************************/
 
 #lyrics_section {
     overflow: hidden;
@@ -228,23 +328,7 @@ p.bpm {
     font-size: 70%;
     font-weight: normal;
 }
-.top_bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 14px;
-    padding-right: 14px;
 
-}
-
-.top_bar .group {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 14px;
-}
 
 
 .title_bar {
@@ -300,7 +384,7 @@ p.bpm {
 button.lock_button[aria-pressed="true"] {
     color: #e6e6ee;
     border-color: #4a4a58;
-    background: var(--surface-2);
+    background: var(--surface-selected);
 }
 
 .lock-btn:active {
@@ -396,21 +480,6 @@ div.offset {
     left: 50%;
 }
 
-.scriptstatus_div{
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 18px;
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--state);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    /*pointer-events: none;*/
-    user-select: none;
-    color:  rgb(74, 222, 128);
-    cursor: pointer;
-}
 
 
 .play_state.stop {
@@ -426,21 +495,8 @@ div.offset {
 }
 
 
-.scriptstatus_div.inactive {
-    color:  rgb(222, 128, 74);
-}
 
-.scriptstatus_div span {
-    background-color:  rgb(74, 222, 128);
-}
 
-.scriptstatus_div.inactive span {
-    background-color:  rgb(222, 128, 74);
-}
-
-.scriptstatus {
-    font-size: .6em;
-}
 
 .chords_table, .lyrics_table {
     background-color: black;
@@ -548,9 +604,7 @@ div.offset {
 }
 
 
-.round-btn[hidden] {
-    display: none !important;
-}
+
 
 .progress {
     /*width: 100%;*/
@@ -677,46 +731,6 @@ div.offset {
     z-index: 20;
 }
 
-.round-btn {
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    display: grid;
-    place-items: center;
-    font: inherit;
-    font-size: 24px;
-    line-height: 1;
-    color: var(--text-btn);
-    background: transparent;
-    border: 1px solid var(--btn-line);
-    border-radius: 50%;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-.round-btn:active {
-    background: var(--surface-2);
-}
-
-
-.toggle {
-    height: 44px;
-    min-width: 64px;
-    padding: 0 14px;
-    font: inherit;
-    font-size: 21px;
-    font-weight: 500;
-    color: var(--text-dim);
-    background: transparent;
-    border: 1px solid var(--btn-line);
-    border-radius: 12px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-.toggle[aria-pressed="true"] {
-    color: var(--text);
-    background: var(--surface-2);
-    border-color: #6b6b78;
-}
 
 
 
