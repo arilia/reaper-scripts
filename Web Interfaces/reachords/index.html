@@ -14,84 +14,84 @@
             <button class="tab" role="tab" aria-selected="false" data-page="lyrics" id="change_to_lyrics" >Lyrics</button>
             <button class="tab" role="tab" aria-selected="false" data-page="clock" id="change_to_clock" >Clock</button>
         </nav>
+        
+        
         <div class="top_bar">
             <div class="group">
-                <!--<div class="play_state stop" id="play_state" >Stop</div>-->
                 <div class="scriptstatus_div" id="scriptstatus_div" >
                     <span class="scriptstatus_span" style="width:10px;height:10px;border-radius:50%"></span>
                     <div id="scriptstatus" class="scriptstatus">
                     </div>
                 </div>
-                <div class="round-btn" id="decrease_bars" title="Show fewer bars per row">−</div>
-                <div class="round-btn" id="increase_bars" title="Show more bars per row">+</div>
-                &nbsp;&nbsp;&nbsp;
-               <button class="toggle" id="decorated_chords" aria-pressed="false" aria-label="Accordi decorati">C&#x2077;</button>
-
-                &nbsp;&nbsp;&nbsp;
-                
+                <button class="round-btn" id="decrease_bars" title="Show fewer bars per row">−</button>
+                <button class="round-btn" id="increase_bars" title="Show more bars per row">+</button>
+                <button class="toggle" id="decorated_chords" aria-pressed="false" aria-label="Accordi decorati">C&#x2077;</button>
             </div>
             <div class="clock" id="clock_div"></div>
-            
         </div>
+        
         <div class="title_bar">
             <h1 id="song_title" class ="song_title">&nbsp;</h1>
         </div>
         <div id="loader" class="loader">Loading...</div>
-        
-        <section  id="chords_section" hidden>
-            <!--<div class="top_curtain_chords"></div>-->
-            <div class="position_row" id="position_row_chords">
-                <div id="position_chords" class="position">&nbsp;</div>
-            </div>
-            <div id='song_chords' class="song_chords">
-                <div id='song_content_chords' class='chords_table'></div>
-            </div>
-            <!--<div class="bottom_curtain_chords" id="bottom_curtain_chords"> </div>-->
-            <div class="bottom_bar_chords" id="bottom_bar_chords">
-                <div class="lyrics_banner" id ="lyrics_banner"></div>
-            </div>
-        </section>
-        
-        <section id="lyrics_section" hidden>
-            <!--<div class="top_curtain_lyrics"></div>-->
-            <div class="position_row" id="position_row_lyrics">
-                <div id="position_lyrics" class="position">&nbsp;</div>
-            </div>
-            <div id='song_lyrics' class="song_chords">
-                <div id='song_content_lyrics' class='chords_table'></div>
-            </div>
-            <!--<div class="bottom_curtain_lyrics" id="bottom_curtain_lyrics"> </div>-->
-        </section>
+        <div id="sections">
+            <div id="sections_container">
+                <section  id="chords_section" hidden>
+                    <!--<div class="top_curtain_chords"></div>-->
+                    <div class="position_row" id="position_row_chords">
+                        <div id="position_chords" class="position">&nbsp;</div>
+                    </div>
+                    <div id='song_chords' class="song_chords">
+                        <div id='song_content_chords' class='chords_table'></div>
+                    </div>
+                    <!--<div class="bottom_curtain_chords" id="bottom_curtain_chords"> </div>-->
+                    <div class="bottom_bar_chords" id="bottom_bar_chords">
+                        <div class="lyrics_banner" id ="lyrics_banner"></div>
+                    </div>
+                </section>
 
-        <section class="big_clock_section" id="big_clock_section" hidden>
-            <div class="display">
-                <div class="info">
-                    <div  class="big_time" id="big_time" >00:04:50</div>
-                    <div id="big_clock_bpm" >120Bpm</div>
-                    <!--<div id="big_clock_bar">bar: 4</div>-->
-                </div>
-                <div class="last_marker"  id="last_marker"></div>
-            </div>
-            <div class="progress" id="progress">
-                <div class="progress_fill" id="progress_fill">&nbsp;</div>
-            </div>
-            <div class="controls">
-                <button id="prev_bar_button" class="transport_button">⏮</button>
-                <button id="pause_button" class="transport_button">⏸</button>
-                <button id="stop_button" class="transport_button">⏹</button>
-                <button id="rewind_button" class="transport_button">⏮</button>
-                <button id="play_button" class="transport_button">▶</button>
-                <button id="forward_button" class="transport_button">⏭</button>
-                <button class="lock_button" id="lock" title="Lock" ></button>
-            </div>
-            <div id="clock_markers">
-                
-                <div id="clock_markers_list">
-                    
-                </div>
-            </div>
+                <section id="lyrics_section" hidden>
+                    <!--<div class="top_curtain_lyrics"></div>-->
+                    <div class="position_row" id="position_row_lyrics">
+                        <div id="position_lyrics" class="position">&nbsp;</div>
+                    </div>
+                    <div id='song_lyrics' class="song_chords">
+                        <div id='song_content_lyrics' class='chords_table'></div>
+                    </div>
+                    <!--<div class="bottom_curtain_lyrics" id="bottom_curtain_lyrics"> </div>-->
+                </section>
 
-        </section>  
+                <section class="big_clock_section" id="big_clock_section" hidden>
+                    <div class="display">
+                        <div class="info">
+                            <div  class="big_time" id="big_time" >00:04:50</div>
+                            <div id="big_clock_bpm" >120Bpm</div>
+                            <!--<div id="big_clock_bar">bar: 4</div>-->
+                        </div>
+                        <div class="last_marker"  id="last_marker"></div>
+                    </div>
+                    <div class="progress" id="progress">
+                        <div class="progress_fill" id="progress_fill">&nbsp;</div>
+                    </div>
+                    <div class="controls">
+                        <button id="prev_bar_button" class="transport_button">⏮</button>
+                        <button id="pause_button" class="transport_button">⏸</button>
+                        <button id="stop_button" class="transport_button">⏹</button>
+                        <button id="rewind_button" class="transport_button">⏮</button>
+                        <button id="play_button" class="transport_button">▶</button>
+                        <button id="forward_button" class="transport_button">⏭</button>
+                        <button class="lock_button" id="lock" title="Lock" ></button>
+                    </div>
+                    <div id="clock_markers">
+
+                        <div id="clock_markers_list">
+
+                        </div>
+                    </div>
+
+                </section>  
+            </div>
+        </div>
     <div class="status_bar">
         <div class="offset" id ="offset">&nbsp; </div>
         <div class="latency" id ="latency">&nbsp; </div>

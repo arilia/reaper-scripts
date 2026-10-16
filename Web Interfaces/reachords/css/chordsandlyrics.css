@@ -181,23 +181,84 @@ html {
     border-color: var(--border-selected);
 }
 
+.clock {
+    padding: 6px 14px;
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
 
+/************************/
+/*      SECTIONS        */
+/************************/
+
+#sections {
+    /*background: red;*/
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+
+
+#sections_container {
+    /*background: red;*/
+    width: 50%;
+}
+
+@media (orientation: portrait) {
+    #sections_container {
+        width: 95%;
+    }
+/*    .big_clock {
+        top: 30%;
+        width: 80vw;
+        height: 30vh;
+    }*/
+}
 /************************/
 /*    LYRICS SECTION    */
 /************************/
 
 #lyrics_section {
     overflow: hidden;
+    width: 100%;
 }
 
+.lyrics_table {
+    background-color: black;
+    /*font-size: 150%;*/
+    /* border-collapse: collapse; */
+    transform: translateY(-1px);
+
+}
 
 .song_lyrics {
-    width: 70%;
+    /*width: 70%;*/
     margin: 20px auto;
 }
 
+.lyric {
+    font-size: 1.5em;
+    color: #666;
+    border: none;
+    text-align: center;
+    padding: .5em;
+    background-color: black;
+    font-weight: bold;
+    /*height: 1.2em;*/
+    z-index: 10;
+    margin-top: 2px;
+    border-radius: 4px;
+    transition-property: color;
+    transition-duration: 1s;
+}
 
-.top_curtain_lyrics {
+/*.top_curtain_lyrics {
     position: fixed;
     top: 7.5em;
     left: 0;
@@ -206,7 +267,7 @@ html {
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     z-index: 20;
     pointer-events: none;
-}
+}*/
 
 
 
@@ -227,12 +288,22 @@ body:has(.bottom_bar) .bottom_curtain {
 
 
 
+/************************/
+/*    CHORDS SECTION    */
+/************************/
 
-
-/*CHORDS SECTION*/
 
 #chords_section {
     overflow: hidden;
+    width: 100%;
+}
+
+.chords_table {
+    background-color: black;
+    font-size: 150%;
+    /* border-collapse: collapse; */
+    transform: translateY(-1px);
+
 }
 
 .song_content_chords {
@@ -240,7 +311,7 @@ body:has(.bottom_bar) .bottom_curtain {
 }
 .song_chords {
     display: block;
-    width: 70%;
+    /*width: 70%;*/
     margin: 20px auto;
 }
 
@@ -295,233 +366,18 @@ body:has(.bottom_bar) .bottom_curtain {
     padding-bottom: .2em;
 }
 
-
-#clock_markers {
-    /*font-size: 1em;*/
-    overflow: clip;
-    align-content: center;
-    /*overflow-y: auto;  Vertical scroll */
-}
+/************************/
+/*  BIG CLOCK  SECTION  */
+/************************/
 
 
-
-#clock_markers_list {
-    transition: transform 1s;
-    position: relative;
-}
-/* OTHER   */
-
-.clock {
-    padding: 6px 14px;
-    font-size: 30px;
-    font-weight: 500;
-    color: var(--text);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    font-variant-numeric: tabular-nums;   /* le cifre non ballano mentre scorrono */
-    white-space: nowrap;
-}
-
-p.bpm {
-    margin-top: .3em;
-    margin-bottom: 0;
-    font-size: 70%;
-    font-weight: normal;
-}
-
-
-
-.title_bar {
-    display: flex;
-    /*position: fixed;*/
-    /*top: 4.5em;*/
-    left: 0;
-    right: 0;
-
-    /*align-items: flex-start;*/
-    padding-left: 1em;
-    padding-top: .6em;
-    padding-bottom: .6em;
-    background: #000;
-    width: 100%;
-    z-index: 20;
-    height: 2em;
-
-}
-
-
-.lock_button {
-    width: var(--lock-size);
-    height: var(--lock-size);
-    padding: 0;
-    display: grid;
-    place-items: center;
-    font-family: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols 2", system-ui, sans-serif;
-    font-size: calc(var(--lock-size) * 0.45);
-    line-height: 1;
-    border-radius: 20px;
-    border: 1px solid;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    transition: background-color .15s, border-color .15s, color .15s, transform .08s;
-
-}
-
-.lock_button::before {
-    content: "\1F513\FE0E";
-}              /* lucchetto aperto */
-.lock_button[aria-pressed="true"]::before {
-    content: "\1F512\FE0E";
-}  /* chiuso */
-
-.lock_button[aria-pressed="false"] {
-    color: var(--danger);
-    border-color: var(--danger);
-    background: rgba(251, 113, 133, .16);
-}
-
-button.lock_button[aria-pressed="true"] {
-    color: #e6e6ee;
-    border-color: #4a4a58;
-    background: var(--surface-selected);
-}
-
-.lock-btn:active {
-    transform: scale(.97);
-}
-
-.lock-btn:focus-visible {
-    outline: 2px solid #8a8a99;
-    outline-offset: 3px;
-}
-
-
-
-.status_bar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #bbb;
-    z-index: 20;
-    padding: .1em;
-    height: 1.2em;
-}
-
-div.latency {
-    color: #333;
-    flex: 0 0 10em;
-    position: fixed;
-    left: 1em;
-    width: 10em;
-    box-sizing: border-box;
-    text-align: center;
-    padding: .2em 0;
-    border-radius: 6px;
-    background-color: hsl(0, 0%, 30%);
-    font-size: .8em;
-    font-weight: normal;
-    color: #eee;
-    /*margin-left: 11em;*/
-    margin-right: auto;
-}
-
-div.offset {
-    color: #333;
-    flex: 0 0 10em;
-    position: fixed;
-    left: 12em;
-    width: 10em;
-    box-sizing: border-box;
-    text-align: center;
-    padding: .2em 0;
-    border-radius: 6px;
-    background-color: hsl(0, 0%, 30%);
-    font-size: .8em;
-    font-weight: normal;
-    color: #eee;
-    /*margin-left: 1em;*/
-    margin-right: auto;
-}
-
-
-.lyrics_banner {
-    /*position: fixed;*/
-    vertical-align: middle;
-    color: blue;
-    font-size: 2em;
-    font-weight: bold;
-    /*top: 2em;*/
-    background: transparent;
-    text-align: center;
-    width: 100%;
-}
-
-
-.song_title {
-    margin: 0;
-    flex: 1 1 auto;
-    min-width: 0;
-    color: #bbb;
-    font-size: 1.6em;
-    line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-
-.loader {
-    position: absolute;
-    visibility: hidden;
-    top: 50%;
-    left: 50%;
-}
-
-
-
-.play_state.stop {
-    background-color: hsl(0, 0%, 40%);
-}
-
-.play_state.play {
-    background-color:  hsl(120, 25%, 35%);
-}
-
-.play_state.rec {
-    background-color: hsl(0, 30%, 40%);
-}
-
-
-
-
-
-.chords_table, .lyrics_table {
-    background-color: black;
-    font-size: 150%;
-    /* border-collapse: collapse; */
-    transform: translateY(-1px);
-
-}
-
-
-
-
-
-
-/* BIG CLOCK SECTION */
 .big_clock_section {
-    position: fixed;
-
-    width: 40vw;
+    /*position: fixed;*/
+    width: 100%;
     height: 40vh;
-
     left: 50%;
     top: 40%;
-
-    transform: translate(-50%, -50%);
+    /*transform: translate(-50%, -50%);*/
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -649,6 +505,295 @@ div.offset {
 }
 
 
+/************************/
+/*  BIG CLOCK  SECTION  */
+/************************/
+
+
+.marker_row {
+    grid-row: span 1;
+    grid-column: 1 / -1;
+}
+
+
+.marker {
+    display: flex;
+    width: fit-content;
+    align-content: center;
+    position: relative;
+    margin: .2em;
+    margin-top: .5em;
+    background: black;
+    border-radius: 4px;
+    align-items: center;
+    color: white;
+    text-align: left;
+    font-size: 1.2em;
+    height: 32px;
+    padding: 2px 8px 2px 8px ;
+    border: 1px solid;
+    border-color: var(--marker-border-color, rgba(200,200,200,.3));
+    background-color: var(--marker-bg-color, rgba(200,200,200,.2));
+}
+
+.clock_marker{
+    display: flex;
+    width: 90%; /* TODO, must be 100% */
+    align-content: center;
+    position: relative;
+    margin: .2em;
+    margin-top: .5em;
+    background: black;
+    border-radius: 4px;
+    align-items: center;
+    color: white;
+    text-align: left;
+    height: 32px;
+    padding: 5px 8px 5px 8px ;
+    border: 1px solid;
+    border-color: var(--marker-border-color, rgba(200,200,200,.3));
+    background-color: var(--marker-bg-color, rgba(200,200,200,.2));
+}
+
+.clock_marker_dot {
+    width:8px;
+    height:8px;
+    border-radius:4px;
+    background-color: var(--marker-bg-color);
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+        
+}
+
+
+.clock_marker[data-mode="passed"] {
+    background-color: rgba(100,100,100,.05);
+    border-color: rgba(200,200,200,.1);
+}
+
+.clock_marker[data-mode="future"] {
+    --marker-bg-color: rgba(255,255,255,.3);
+    --marker-border-color: rgba(255,255,255,.5);
+}
+
+
+/*
+.lyric_marker_row .marker {
+    top:-1.2em;
+    left:0;
+}*/
+
+.marker_text {
+    color: f2f2f7;
+    display: flex;
+    height:26px;
+    text-align: center;
+    align-items: center;
+     line-height: 1;
+}
+
+
+#clock_markers {
+    /*font-size: 1em;*/
+    overflow: clip;
+    align-content: center;
+    /*overflow-y: auto;  Vertical scroll */
+}
+
+
+
+#clock_markers_list {
+    transition: transform 1s;
+    position: relative;
+}
+/* OTHER   */
+
+
+
+p.bpm {
+    margin-top: .3em;
+    margin-bottom: 0;
+    font-size: 70%;
+    font-weight: normal;
+}
+
+
+
+.title_bar {
+    display: flex;
+    /*position: fixed;*/
+    /*top: 4.5em;*/
+    left: 0;
+    right: 0;
+
+    /*align-items: flex-start;*/
+    padding-left: 1em;
+    padding-top: .6em;
+    padding-bottom: .6em;
+    background: #000;
+    width: 100%;
+    z-index: 20;
+    height: 2em;
+
+}
+
+
+.lock_button {
+    width: var(--lock-size);
+    height: var(--lock-size);
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font-family: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols 2", system-ui, sans-serif;
+    font-size: calc(var(--lock-size) * 0.45);
+    line-height: 1;
+    border-radius: 20px;
+    border: 1px solid;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: background-color .15s, border-color .15s, color .15s, transform .08s;
+
+}
+
+.lock_button::before {
+    content: "\1F513\FE0E";
+}              /* lucchetto aperto */
+.lock_button[aria-pressed="true"]::before {
+    content: "\1F512\FE0E";
+}  /* chiuso */
+
+.lock_button[aria-pressed="false"] {
+    color: var(--danger);
+    border-color: var(--danger);
+    background: rgba(251, 113, 133, .16);
+}
+
+button.lock_button[aria-pressed="true"] {
+    color: #e6e6ee;
+    border-color: #4a4a58;
+    background: var(--surface-selected);
+}
+
+.lock-btn:active {
+    transform: scale(.97);
+}
+
+.lock-btn:focus-visible {
+    outline: 2px solid #8a8a99;
+    outline-offset: 3px;
+}
+
+
+
+.status_bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #bbb;
+    z-index: 20;
+    padding: .1em;
+    height: 1.2em;
+}
+
+div.latency {
+    color: #333;
+    flex: 0 0 10em;
+    position: fixed;
+    left: 1em;
+    width: 10em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: .2em 0;
+    border-radius: 6px;
+    background-color: hsl(0, 0%, 30%);
+    font-size: .8em;
+    font-weight: normal;
+    color: #eee;
+    /*margin-left: 11em;*/
+    margin-right: auto;
+}
+
+div.offset {
+    color: #333;
+    flex: 0 0 10em;
+    position: fixed;
+    left: 12em;
+    width: 10em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: .2em 0;
+    border-radius: 6px;
+    background-color: hsl(0, 0%, 30%);
+    font-size: .8em;
+    font-weight: normal;
+    color: #eee;
+    /*margin-left: 1em;*/
+    margin-right: auto;
+}
+
+
+/*.lyrics_banner {
+    position: fixed;
+    vertical-align: middle;
+    color: blue;
+    font-size: 2em;
+    font-weight: bold;
+    top: 2em;
+    background: transparent;
+    text-align: center;
+    width: 100%;
+}*/
+
+
+.song_title {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: #bbb;
+    font-size: 1.6em;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+.loader {
+    position: absolute;
+    visibility: hidden;
+    top: 50%;
+    left: 50%;
+}
+
+
+
+.play_state.stop {
+    background-color: hsl(0, 0%, 40%);
+}
+
+.play_state.play {
+    background-color:  hsl(120, 25%, 35%);
+}
+
+.play_state.rec {
+    background-color: hsl(0, 30%, 40%);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 .bar {
     position: relative;
@@ -743,105 +888,21 @@ div.offset {
     height: 10%;
 }
 
-@media (orientation: portrait) {
-    .song {
-        width: 90%;
-    }
-    .big_clock {
-        top: 30%;
-        width: 80vw;
-        height: 30vh;
-    }
-}
-
-
-.lyric {
-    font-size: 120%;
-    color: #666;
-    border: none;
-    text-align: center;
-    padding: .5em;
-    background-color: black;
-    font-weight: bold;
-    /*height: 1.2em;*/
-    z-index: 10;
-    margin-top: 2px;
-    border-radius: 4px;
-    transition-property: color;
-    transition-duration: 1s;
-}
 
 
 
-.marker_row {
-    grid-row: span 1;
-    grid-column: 1 / -1;
-}
-.marker, .clock_marker{
-    display: flex;
-    align-content: center;
-    position: relative;
-    margin: .2em;
-    margin-top: .5em;
-    background: black;
-    border-radius: 4px;
-    align-items: center;
-    color: white;
-    text-align: left;
-    font-size: 1em;
-    height: 32px;
-    padding: 5px 8px 5px 8px ;
-    border: 1px solid;
-    border-color: var(--marker-border-color, rgba(200,200,200,.3));
-    background-color: var(--marker-bg-color, rgba(200,200,200,.2));
-}
 
-.clock_marker {
-    width: 90%;
-    
-    font-size: 1em;
-}
 
-.clock_marker_dot {
-    width:8px;
-    height:8px;
-    border-radius:4px;
-    background-color: var(--marker-bg-color);
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-        
-}
 
-.marker_text {
-    color: f2f2f7;
-    display: flex;
-    height:26px;
-    text-align: center;
-    align-items: center;
-     line-height: 1;
-}
-.clock_marker[data-mode="passed"] {
-    background-color: rgba(100,100,100,.05);
-    border-color: rgba(200,200,200,.1);
-}
 
-.clock_marker[data-mode="future"] {
-    --marker-bg-color: rgba(255,255,255,.3);
-    --marker-border-color: rgba(255,255,255,.5);
-}
+
+
+
 
 .command-button {
     position: absolute;
     /*z-index: 30;*/
 }
-
-.lyric_marker_row .marker {
-    top:-1.2em;
-    left:0;
-}
-
-
 
 .chord_playing {
     border-color: darkgreen;
