@@ -1,8 +1,10 @@
 body {
     margin: 0;
     min-height: 100vh;
+    background-color: black;
+    font-family: arial;
+    color: #bbb;
 }
-
 
 
 :root {
@@ -193,6 +195,31 @@ html {
 }
 
 /************************/
+/*     TITLE BAR        */
+/************************/
+
+
+.title_bar {
+    display: flex;
+    /*position: fixed;*/
+    /*top: 4.5em;*/
+    left: 0;
+    right: 0;
+
+    /*align-items: flex-start;*/
+    padding-left: 1em;
+    padding-top: .6em;
+    padding-bottom: .6em;
+    background: #000;
+    width: 100%;
+    z-index: 20;
+    height: 2em;
+
+}
+
+
+
+/************************/
 /*      SECTIONS        */
 /************************/
 
@@ -214,11 +241,6 @@ html {
     #sections_container {
         width: 95%;
     }
-/*    .big_clock {
-        top: 30%;
-        width: 80vw;
-        height: 30vh;
-    }*/
 }
 /************************/
 /*    LYRICS SECTION    */
@@ -231,22 +253,20 @@ html {
 
 .lyrics_table {
     background-color: black;
-    /*font-size: 150%;*/
-    /* border-collapse: collapse; */
     transform: translateY(-1px);
+    padding: 10px;
 
 }
 
 .song_lyrics {
-    /*width: 70%;*/
-    margin: 20px auto;
+
 }
 
 .lyric {
     font-size: 1.5em;
     color: #666;
     border: none;
-    text-align: center;
+    text-align: left;
     padding: .5em;
     background-color: black;
     font-weight: bold;
@@ -258,16 +278,7 @@ html {
     transition-duration: 1s;
 }
 
-/*.top_curtain_lyrics {
-    position: fixed;
-    top: 7.5em;
-    left: 0;
-    right: 0;
-    height: 6em;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-    z-index: 20;
-    pointer-events: none;
-}*/
+
 
 
 
@@ -300,7 +311,7 @@ body:has(.bottom_bar) .bottom_curtain {
 
 .chords_table {
     background-color: black;
-    font-size: 150%;
+    /*font-size: 150%;*/
     /* border-collapse: collapse; */
     transform: translateY(-1px);
 
@@ -310,9 +321,6 @@ body:has(.bottom_bar) .bottom_curtain {
     z-index: 1;
 }
 .song_chords {
-    display: block;
-    /*width: 70%;*/
-    margin: 20px auto;
 }
 
 .top_curtain_chords {
@@ -343,6 +351,7 @@ body:has(.bottom_bar) .bottom_curtain {
 
 .bar_row {
     display: grid;
+    font-size: 1.5em;
     justify-content: start;
     grid-template-columns: repeat(var(--maxbeats), 1fr);
     padding:2px;
@@ -364,6 +373,19 @@ body:has(.bottom_bar) .bottom_curtain {
     height: 3em;
     padding-top: 1em;
     padding-bottom: .2em;
+}
+
+
+.lyrics_banner {
+    /*position: fixed;*/
+    vertical-align: middle;
+    color: blue;
+    font-size: 2em;
+    font-weight: bold;
+    top: 2em;
+    background: transparent;
+    text-align: center;
+    width: 100%;
 }
 
 /************************/
@@ -459,7 +481,12 @@ body:has(.bottom_bar) .bottom_curtain {
     transition: background-color 0.08s, transform 0.08s;
 }
 
-
+p.bpm {
+    margin-top: .3em;
+    margin-bottom: 0;
+    font-size: 70%;
+    font-weight: normal;
+}
 
 
 .progress {
@@ -505,8 +532,38 @@ body:has(.bottom_bar) .bottom_curtain {
 }
 
 
+
+.lock_button::before {
+    content: "\1F513\FE0E";
+}              /* lucchetto aperto */
+.lock_button[aria-pressed="true"]::before {
+    content: "\1F512\FE0E";
+}  /* chiuso */
+
+.lock_button[aria-pressed="false"] {
+    color: var(--danger);
+    border-color: var(--danger);
+    background: rgba(251, 113, 133, .16);
+}
+
+button.lock_button[aria-pressed="true"] {
+    color: #e6e6ee;
+    border-color: #4a4a58;
+    background: var(--surface-selected);
+}
+
+.lock-btn:active {
+    transform: scale(.97);
+}
+
+.lock-btn:focus-visible {
+    outline: 2px solid #8a8a99;
+    outline-offset: 3px;
+}
+
+
 /************************/
-/*  BIG CLOCK  SECTION  */
+/*    MARKERS SECTION   */
 /************************/
 
 
@@ -529,8 +586,8 @@ body:has(.bottom_bar) .bottom_curtain {
     color: white;
     text-align: left;
     font-size: 1.2em;
-    height: 32px;
-    padding: 2px 8px 2px 8px ;
+    /*height: 32px;*/
+    padding: 4px 8px 4px 8px ;
     border: 1px solid;
     border-color: var(--marker-border-color, rgba(200,200,200,.3));
     background-color: var(--marker-bg-color, rgba(200,200,200,.2));
@@ -611,32 +668,9 @@ body:has(.bottom_bar) .bottom_curtain {
 
 
 
-p.bpm {
-    margin-top: .3em;
-    margin-bottom: 0;
-    font-size: 70%;
-    font-weight: normal;
-}
 
 
 
-.title_bar {
-    display: flex;
-    /*position: fixed;*/
-    /*top: 4.5em;*/
-    left: 0;
-    right: 0;
-
-    /*align-items: flex-start;*/
-    padding-left: 1em;
-    padding-top: .6em;
-    padding-bottom: .6em;
-    background: #000;
-    width: 100%;
-    z-index: 20;
-    height: 2em;
-
-}
 
 
 .lock_button {
@@ -655,34 +689,6 @@ p.bpm {
     user-select: none;
     transition: background-color .15s, border-color .15s, color .15s, transform .08s;
 
-}
-
-.lock_button::before {
-    content: "\1F513\FE0E";
-}              /* lucchetto aperto */
-.lock_button[aria-pressed="true"]::before {
-    content: "\1F512\FE0E";
-}  /* chiuso */
-
-.lock_button[aria-pressed="false"] {
-    color: var(--danger);
-    border-color: var(--danger);
-    background: rgba(251, 113, 133, .16);
-}
-
-button.lock_button[aria-pressed="true"] {
-    color: #e6e6ee;
-    border-color: #4a4a58;
-    background: var(--surface-selected);
-}
-
-.lock-btn:active {
-    transform: scale(.97);
-}
-
-.lock-btn:focus-visible {
-    outline: 2px solid #8a8a99;
-    outline-offset: 3px;
 }
 
 
@@ -735,17 +741,7 @@ div.offset {
 }
 
 
-/*.lyrics_banner {
-    position: fixed;
-    vertical-align: middle;
-    color: blue;
-    font-size: 2em;
-    font-weight: bold;
-    top: 2em;
-    background: transparent;
-    text-align: center;
-    width: 100%;
-}*/
+
 
 
 .song_title {
@@ -919,9 +915,4 @@ div.offset {
 }
 
 
-body {
-    background-color: black;
-    font-family: arial;
-    color: #bbb;
-    margin: 0;
-}
+
