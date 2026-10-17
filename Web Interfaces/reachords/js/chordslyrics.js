@@ -393,7 +393,7 @@ class Song {
     bars = [];
     chords = [];
     lyrics = [];
-    markers = [];
+    markers = new Map();
     networkBuf = [];
     paintBuf = [];
     songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
@@ -433,10 +433,10 @@ class Song {
 
     constructor(type) {
         this.type = type;
+//        this.markers = new Map();
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.calculatePosition.bind(this), 50);
         this.loaderDiv = document.getElementById('loader');
-//        this.playStateDiv = document.getElementById('play_state');
         this.clockDiv = document.getElementById('clock_div');
     }
 
@@ -659,7 +659,7 @@ class Song {
         this.chords = [];
         this.bars = [];
         this.lyrics = [];
-        this.markers = [];
+        this.markers = new Map();
         this.playingChord = null;
     }
 
@@ -704,7 +704,8 @@ class Song {
     }
 
     appendMarker(marker) {
-        this.markers[marker.barNumber] = marker;
+//        this.markers[marker.barNumber] = marker;
+        this.markers.set(marker.barNumber, marker);
     }
 
     appendLyric(lyric) {
@@ -794,7 +795,7 @@ class Song {
         let maxBeatPerRow = 0;
         let beatPerRow = 0;
         let barInRow = 0;
-        for (let j in bars) {
+        for (let j in bars) {   // ToDo move to a dedicated functions that updates the maximum number of beats in a row
             barInRow++;
             const b = bars[j];
             const bar = new Bar(b);
@@ -921,10 +922,11 @@ class LyricsView {
         for (let lyric of this.song.lyrics)
         {
             let row;
-            for (let marker of this.song.markers)
+            for (let [bar, marker] of this.song.markers)
             {
                 if (marker !== undefined && marker.position >= lastEnd && marker.position < lyric.endTime)
                 {
+                    
                     const markerRow = new Row(this, Row.LYRICS_MARKER);
                     markerRow.append(marker);
                     this.rows.push(markerRow);
@@ -1006,10 +1008,10 @@ class ChordsView {
                 row = new Row(this);
                 this.rows.push(row);
             }
-            if (this.song.markers[bar.number] !== undefined)
+            if (this.song.markers.get(bar.number) !== undefined)
             {
                 const markerRow = new Row(this, Row.MARKER);
-                markerRow.append(this.song.markers[bar.number]);
+                markerRow.append(this.song.markers.get(bar.number));
                 this.rows.push(markerRow);
                 columnCount = 1;
                 row = new Row(this);  // Needed to create a new line when there is a marker 
