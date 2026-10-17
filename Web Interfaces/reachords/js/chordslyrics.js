@@ -185,6 +185,7 @@ class Marker {
         this.div.textContent = this.text;
         this.div.classList.add('marker');
         this.div.style.border = "1px solid rgb(" + this.color + ")";
+        this.div.style.color = "rgb(" + this.color + ")";
         this.div.style.background = "rgba(" + this.color + ", .3)";
         if (this.row && this.row.div)
             this.row.div.append(this.div);
@@ -1274,16 +1275,14 @@ class ClockView {
         }
 
 
-        if (this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
-            this.lastMarkerContainer.innerHTML = "";
-//            this.lastMarkerContainer.append(this.renderMarker(this.lastMarker));
-            this.lastMarkerIndex = this.lastMarker.index;
-        }
-        if (this.lastMarker === null) {
-            this.lastMarkerContainer.innerHTML = "";
-        } else {
-//            this.setProgress(this.lastMarker, position);
-        }
+//        if (this.lastMarker && this.lastMarker.index !== this.lastMarkerIndex) {
+//            this.lastMarkerIndex = this.lastMarker.index;
+//        }
+//        if (this.lastMarker === null) {
+////            this.lastMarkerContainer.innerHTML = "";
+//        } else {
+////            this.setProgress(this.lastMarker, position);
+//        }
     }
 
 }
