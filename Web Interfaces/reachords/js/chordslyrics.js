@@ -1180,7 +1180,7 @@ class ClockView {
         this.song.clockDiv.style.visibility = "hidden";
         document.title = this.song.project + " - Clock";
         const markersDiv = document.getElementById("clock_markers_list");
-        for (let marker of this.song.markers) {
+        for (let [bar, marker]  of this.song.markers) {
 
             if (marker)
                 markersDiv.append(this.renderMarker(marker));
@@ -1251,7 +1251,7 @@ class ClockView {
 
 //      TODO Bar number
         let lastMarker = false;
-        for (let marker of this.song.markers) {
+        for (let [bar, marker]  of this.song.markers) {
             //TODO, the search of last marker can be done in the song.
             
             if (!marker)
