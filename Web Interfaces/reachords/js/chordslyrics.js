@@ -1267,7 +1267,8 @@ class ClockView {
                     
                     this.moveMarkerToTop(marker);
                     this.lastMarker = marker;
-                    
+                    document.getElementById('clock_markers').scrollTop = 0;
+
 //                    console.log(this.lastMarker?.index);
                 }  
                 
