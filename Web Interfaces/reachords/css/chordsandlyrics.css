@@ -6,6 +6,10 @@ body {
     color: #bbb;
 }
 
+@font-face {
+    font-family: "MySymbols";
+    src: url("fonts/my-symbols.woff2") format("woff2");
+}
 
 :root {
     --line:      #1f1f27;
@@ -201,6 +205,9 @@ html {
 
 .title_bar {
     display: flex;
+    flex-direction: column; 
+        
+        
     /*position: fixed;*/
     /*top: 4.5em;*/
     left: 0;
@@ -213,11 +220,36 @@ html {
     background: #000;
     width: 100%;
     z-index: 20;
-    height: 2em;
+    height: 3em;
 
 }
 
 
+
+
+.song_name {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: #bbb;
+    font-size: 1.6em;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song_title {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: #bbb;
+    font-size: 1em;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 /************************/
 /*      SECTIONS        */
@@ -463,7 +495,8 @@ body:has(.bottom_bar) .bottom_curtain {
 
 .transport_button {
 
-
+font-family: "Noto Sans Symbols 2";
+    font-variant-emoji: text;
     width:84px;
     height:84px;
     border:1px solid #33333d;
@@ -531,13 +564,16 @@ p.bpm {
 
 
 .lock_button::before {
+    font-variant-emoji: text;
     content: "\1F513\FE0E";
 }              /* lucchetto aperto */
 .lock_button[aria-pressed="true"]::before {
+    font-variant-emoji: text;
     content: "\1F512\FE0E";
 }  /* chiuso */
 
 .lock_button[aria-pressed="false"] {
+    font-variant-emoji: text;
     color: var(--danger);
     border-color: var(--danger);
     background: rgba(251, 113, 133, .16);
@@ -661,6 +697,7 @@ button.lock_button[aria-pressed="true"] {
 #clock_markers_list {
     transition: transform 1s;
     position: relative;
+    padding-bottom: 100vh;
 }
 /* OTHER   */
 
@@ -740,19 +777,6 @@ div.offset {
 
 
 
-
-
-.song_title {
-    margin: 0;
-    flex: 1 1 auto;
-    min-width: 0;
-    color: #bbb;
-    font-size: 1.6em;
-    line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 
 

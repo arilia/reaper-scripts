@@ -16,6 +16,7 @@
 reaper.set_action_options(1|4)
 reaper.ClearConsole()
 
+
 local lastChangeCount = -1 
 
 local version = 0
@@ -148,7 +149,7 @@ local function getMarkersJson()
       end
       local bar = reaper.format_timestr_pos( pos, '', 2 )
       bar, _, _ = bar:match("^(%-?%d+)%.(%d+)%.(%d+)")
-      mark = mark .. '"' .. bar .. '": {' 
+      mark = mark .. '"' .. i .. '": {' 
       
       mark = mark .. '"barNumber":' .. bar
       mark = mark .. ', "position":' .. pos 
@@ -164,6 +165,56 @@ local function getMarkersJson()
   return mark
 end
 
+
+
+
+
+
+-------------------
+-- SONGS LIST    
+-------------------
+local function getSongsCount()
+  local songsCount = 0;  
+  local projects = {}
+  while true do
+    local project = reaper.EnumProjects(songsCount)
+    if not project or projects[project] then
+      break
+    end
+    projects[project] = true
+    songsCount = songsCount + 1
+  end
+  return songsCount
+end
+
+local function getSongsJson() 
+  local songs = "{";
+  local songsCount = getSongsCount()
+   
+  for i=0, songsCount - 1 do 
+    local project = reaper.EnumProjects(i)
+    local projectName = reaper.GetProjectName(project)
+    local _, projectTitle  = reaper.GetSetProjectInfo_String(project, "PROJECT_TITLE", "", false)
+    local length = reaper.GetProjectLength(project)
+    local position = reaper.GetCursorPositionEx(project)
+    songs = songs .. '' .. i .. ': {' 
+    songs = songs .. '"number":' .. i
+    songs = songs .. ', "name": "' .. jsonEscape(projectName) .. '"'
+    songs = songs .. ', "title": "' .. jsonEscape(projectTitle) .. '"'
+    songs = songs .. ', "length":' .. length
+    -- songs = songs .. ', "position":' .. position
+    songs = songs .. '}'
+    if i<songsCount-1 then
+       songs = songs .. ','
+     end
+  end
+    
+   
+  songs = songs .. '}'
+  return songs
+end
+
+local songsj = getSongsJson()
 
 -------------------
 -- MEASURES LIST    
@@ -246,9 +297,7 @@ local function getSongJson()
   projectName = projectName:match("(.+)%..+$") or projectName
   -- reaper.ShowConsoleMsg(projectTitle .. "\n")
   _, projectTitle  = reaper.GetSetProjectInfo_String(0, "PROJECT_TITLE", "", false)
-  if projectTitle ~= "" then
-    projectName = projectTitle
-  end
+  
   -- reaper.ShowConsoleMsg(projectName)
   local tr = findTrackByName('lyrics')
   local lyrjs = getLyricsJson(tr)
@@ -264,7 +313,8 @@ local function getSongJson()
   json = json .. ', "lyrics":' .. lyrjs
   json = json .. ', "bars":' .. measjs
   json = json .. ', "markers":' .. markjs
-  json = json .. ', "title":"' .. jsonEscape(projectName) .. '"'
+  json = json .. ', "title":"' .. jsonEscape(projectTitle) .. '"'
+  json = json .. ', "name":"' .. jsonEscape(projectName) .. '"'
   json = json .. ', "chordsOffset":' .. chordsOffset 
   json = json .. ', "lyricsOffset":' .. lyricsOffset 
   json = json .. ', "globalOffset":' .. globalOffset

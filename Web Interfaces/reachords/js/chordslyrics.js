@@ -443,6 +443,7 @@ class Song {
     play() {
         if (this.lock)
             return;
+        this.viewManager.clockView.lastScrollTime = 0;
         wwr_req("1007;TRANSPORT");
     }
 
@@ -640,7 +641,6 @@ class Song {
             case ViewManager.CHORDS :
                 this.viewManager.chordsView.createTable();
                 break;
-
         }
         this.render();
         this.complete = true;
@@ -664,7 +664,8 @@ class Song {
     }
 
     render() {
-        document.getElementById('song_title').textContent = this.project;
+        document.getElementById('song_name').textContent = this.project;
+        document.getElementById('song_title').textContent = this.title;
         this.viewManager.renderView(this.type);
     }
 
@@ -771,7 +772,8 @@ class Song {
     parseJson() {
         this.loadProjectSettings();
         const json = this.json;
-        this.project = json.title;
+        this.project = json.name;
+        this.title = json.title;
         this.chordsOffset = json.chordsOffset;
         this.lyricsOffset = json.lyricsOffset;
         this.globalOffset = json.globalOffset;
@@ -1156,6 +1158,8 @@ class ClockView {
     lastMarkerContainer = null;
     viewManager = null;
     lastClockTime = null;
+    lastScrollTime = 0;
+    SCROLLINTERVAL = 6000; //ms
     ELEMENTS = {
         big_clock_section: true,
         lyrics_section: false,
@@ -1180,11 +1184,13 @@ class ClockView {
         this.song.clockDiv.style.visibility = "hidden";
         document.title = this.song.project + " - Clock";
         const markersDiv = document.getElementById("clock_markers_list");
+        markersDiv.textContent  = '';
         for (let [bar, marker]  of this.song.markers) {
 
             if (marker)
                 markersDiv.append(this.renderMarker(marker));
         }
+        this.updateMarkersPadding();
     }
 
     renderMarker(marker) {
@@ -1226,16 +1232,42 @@ class ClockView {
     }
     
     moveMarkerToTop(marker) {
+        
+         for (let [bar, m]  of this.song.markers) {
+            const mDiv =  document.getElementById("clock_marker_" + m.index);
+            if(m !== marker) {
+                mDiv.dataset.mode = "passed";
+            }
+        }
         const markerDiv =  document.getElementById("clock_marker_" + marker.index);
         markerDiv.dataset.mode = "";
         const containerDiv =  document.getElementById("clock_markers");
         const contentDiv =  document.getElementById("clock_markers_list");
         const markerBox = markerDiv.getBoundingClientRect();
         const contentBox = contentDiv.getBoundingClientRect();
-        const targetPosition = - markerBox.top + contentBox.top;
+        const targetScroll = contentBox.top - markerBox.top;
         
-        contentDiv.style.transform = "translateY(" + (targetPosition - 7) + "px)";
+//        containerDiv.scrollTop = -targetScroll ;
+        containerDiv.scrollTo({
+            top: markerDiv.offsetTop,
+            behavior: "smooth"
+        });
         
+    }
+    
+    updateMarkersPadding() {
+        const containerDiv = document.getElementById("clock_markers");
+        const contentDiv = document.getElementById("clock_markers_list");
+        const lastMarker = contentDiv.lastElementChild;
+
+        if (!lastMarker) return;
+
+        const padding = Math.max(
+            0,
+            containerDiv.clientHeight - lastMarker.offsetHeight - 3
+        );
+
+        contentDiv.style.paddingBottom = padding + "px";
     }
 
     update(position) {
@@ -1253,23 +1285,18 @@ class ClockView {
         let lastMarker = false;
         for (let [bar, marker]  of this.song.markers) {
             //TODO, the search of last marker can be done in the song.
-            
-            if (!marker)
-                continue;
-//            console.log(marker.index + " - " + this.lastMarker?.index);
+            console.log
             let isOver = marker.isOver(position);
             this.setProgress(marker, position);
             if (!isOver && !lastMarker) {
                 lastMarker = marker;
-//                console.log(marker.index);
-
-                if(marker !== this.lastMarker) {
+                const now = Date.now();
+                const elapsed = now - this.lastScrollTime;
+                if(marker !== this.lastMarker || elapsed > this.SCROLLINTERVAL)  {
                     
                     this.moveMarkerToTop(marker);
                     this.lastMarker = marker;
-                    document.getElementById('clock_markers').scrollTop = 0;
-
-//                    console.log(this.lastMarker?.index);
+                    this.lastScrollTime = now;
                 }  
                 
             }
@@ -1325,24 +1352,25 @@ class ViewManager {
         this.song.repaint();
     }
 
-    createTable() { // TODO, at the moment not used
-        document.getElementById('change_to_chords').ariaSelected = (this.active === ViewManager.CHORDS);
-        document.getElementById('change_to_lyrics').ariaSelected = (this.active === ViewManager.LYRICS);
-        document.getElementById('change_to_clock').ariaSelected = (this.active === ViewManager.CLOCK);
-        this.instantPositioning = true;
-        switch (this.active) {
-            case ViewManager.LYRICS:
-                this.lyricsView.createTable();
-                break;
-            case ViewManager.CHORDS :
-                this.chordsView.createTable();
-                break;
-
-        }
-        this.song.render();
-        this.song.complete = true;
-
-    }
+//    createTable() { // TODO, at the moment not used
+//        document.getElementById('change_to_chords').ariaSelected = (this.active === ViewManager.CHORDS);
+//        document.getElementById('change_to_lyrics').ariaSelected = (this.active === ViewManager.LYRICS);
+//        document.getElementById('change_to_clock').ariaSelected = (this.active === ViewManager.CLOCK);
+//        this.instantPositioning = true;
+//        switch (this.active) {
+//            case ViewManager.LYRICS:
+//                this.lyricsView.createTable();
+//                break;
+//            case ViewManager.CHORDS :
+//                this.chordsView.createTable();
+//                break;
+//            
+//
+//        }
+//        this.song.render();
+//        this.song.complete = true;
+//
+//    }
 
     updateView(type, position) {
 
