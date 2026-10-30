@@ -13,7 +13,7 @@
             <button class="tab" role="tab" aria-selected="true" data-page="chords" id="change_to_chords" >Chords</button>
             <button class="tab" role="tab" aria-selected="false" data-page="lyrics" id="change_to_lyrics" >Lyrics</button>
             <button class="tab" role="tab" aria-selected="false" data-page="clock" id="change_to_clock" >Clock</button>
-            <button class="tab" role="tab" aria-selected="false" data-page="clock" id="change_to_setlist" >Setlist</button>
+            <button class="tab" role="tab" aria-selected="false" data-page="setlist" id="change_to_setlist" >Setlist</button>
         </nav>
         
         
@@ -84,15 +84,16 @@
                         <button class="lock_button" id="lock" title="Lock" ></button>
                     </div>
                     <div id="clock_markers" class="clock_markers">
-
                         <div id="clock_markers_list">
-
                         </div>
                     </div>
 
                 </section>  
                 <section class="setlist_section" id="setlist_section" hidden>
-                    
+                    <div id="setlist_songs" class="setlist_songs">
+                        <div id="setlist_song_list">
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
@@ -104,23 +105,25 @@
     </body>
     <script>
 
-        const song = new Song(ViewManager.CHORDS);
+        const song = new Song();
+        const setList = new SetList();
+        const viewManagerView = new ViewManager(song, setList);
         
-        const viewManagerView = new ViewManager(song);
-        document.getElementById("increase_bars").addEventListener("click",  function f() {song.viewManager.chordsView.increaseBars()});
-        document.getElementById("decrease_bars").addEventListener("click",  function f() {song.viewManager.chordsView.decreaseBars()});
-        document.getElementById("decorated_chords").addEventListener("click",  function f() {song.viewManager.chordsView.toggleDecoratedChords()});
-        document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.LYRICS)});
-        document.getElementById("change_to_chords").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CHORDS)});
-        document.getElementById("change_to_clock").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CLOCK)});
-        document.getElementById("play_button").addEventListener("click",  function f() {song.play()});
-        document.getElementById("pause_button").addEventListener("click",  function f() {song.pause()});
-        document.getElementById("stop_button").addEventListener("click",  function f() {song.stop()});
-        document.getElementById("prev_bar_button").addEventListener("click",  function f() {song.prevBar()});
-        document.getElementById("rewind_button").addEventListener("click",  function f() {song.rewind()});
-        document.getElementById("forward_button").addEventListener("click",  function f() {song.forward()});
-        document.getElementById("lock").addEventListener("click",  function f() {song.toggleLock()});
-        document.getElementById("scriptstatus_div").addEventListener("click",  function f() {wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad")});
+        document.getElementById("increase_bars").addEventListener("click",  function f() {song.viewManager.chordsView.increaseBars();});
+        document.getElementById("decrease_bars").addEventListener("click",  function f() {song.viewManager.chordsView.decreaseBars();});
+        document.getElementById("decorated_chords").addEventListener("click",  function f() {song.viewManager.chordsView.toggleDecoratedChords();});
+        document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.LYRICS);});
+        document.getElementById("change_to_chords").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CHORDS);});
+        document.getElementById("change_to_clock").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CLOCK);});
+        document.getElementById("change_to_setlist").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.SETLIST);});
+        document.getElementById("play_button").addEventListener("click",  function f() {song.play();});
+        document.getElementById("pause_button").addEventListener("click",  function f() {song.pause();});
+        document.getElementById("stop_button").addEventListener("click",  function f() {song.stop();});
+        document.getElementById("prev_bar_button").addEventListener("click",  function f() {song.prevBar();});
+        document.getElementById("rewind_button").addEventListener("click",  function f() {song.rewind();});
+        document.getElementById("forward_button").addEventListener("click",  function f() {song.forward();});
+        document.getElementById("lock").addEventListener("click",  function f() {song.toggleLock();});
+        document.getElementById("scriptstatus_div").addEventListener("click",  function f() {wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad");});
         
     </script>
 </html>

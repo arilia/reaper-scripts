@@ -699,6 +699,28 @@ button.lock_button[aria-pressed="true"] {
     position: relative;
     padding-bottom: 100vh;
 }
+
+
+/************************/
+/*    SETLIST SECTION   */
+/************************/
+
+#setlist_songs {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    align-content: center;
+    scrollbar-width: none;
+    overscroll-behavior-y: contain;
+}
+
+
+
+#setlist_songs_list {
+    transition: transform 1s;
+    position: relative;
+    padding-bottom: 100vh;
+}
 /* OTHER   */
 
 

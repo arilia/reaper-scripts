@@ -27,6 +27,9 @@ local lastCheckProjectId = ""
 local globalOffset = 0
 local projectName = ""
 local projectTitle  = ""
+local setListJson = ""
+local lastSetListJson = ""
+
 
 local function jsonEscape(str)
     if str == nil then return "" end
@@ -171,7 +174,7 @@ end
 
 
 -------------------
--- SONGS LIST    
+--   SETLIST    
 -------------------
 local function getSongsCount()
   local songsCount = 0;  
@@ -187,7 +190,7 @@ local function getSongsCount()
   return songsCount
 end
 
-local function getSongsJson() 
+local function getSetListJson() 
   local songs = "{";
   local songsCount = getSongsCount()
    
@@ -197,8 +200,10 @@ local function getSongsJson()
     local _, projectTitle  = reaper.GetSetProjectInfo_String(project, "PROJECT_TITLE", "", false)
     local length = reaper.GetProjectLength(project)
     local position = reaper.GetCursorPositionEx(project)
-    songs = songs .. '' .. i .. ': {' 
+    local proj = tostring(project):match("userdata: (%x+)")
+    songs = songs .. '"' .. i .. '": {' 
     songs = songs .. '"number":' .. i
+    songs = songs .. ', "proj": "' .. proj .. '"'
     songs = songs .. ', "name": "' .. jsonEscape(projectName) .. '"'
     songs = songs .. ', "title": "' .. jsonEscape(projectTitle) .. '"'
     songs = songs .. ', "length":' .. length
@@ -214,7 +219,6 @@ local function getSongsJson()
   return songs
 end
 
-local songsj = getSongsJson()
 
 -------------------
 -- MEASURES LIST    
@@ -335,10 +339,13 @@ local function loop()
     
     -- Check the project just one time a second,
     
-    if (now - lastCheckTime >= 0)then
+    if (now - lastCheckTime >= 1)then
         -- reaper.ShowConsoleMsg(reaper.time_precise() ..  "\n");
         lastCheckTime = now
-
+        setListJson = getSetListJson()
+        if setListJson ~= lastSetListJson then
+            reaper.SetExtState("reachords", "setlist", setListJson, false)
+        end
         -- Use the saved project's file path as its id whenever possible: it's a
         -- pure read, so it never marks the project as modified. TODO: fall back to
         -- a generated GUID (stored via ProjExtState) for unsaved projects, which
