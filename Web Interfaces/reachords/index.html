@@ -105,24 +105,24 @@
     </body>
     <script>
 
-        const song = new Song();
+//        let song = new Song();
         const setList = new SetList();
-        const viewManagerView = new ViewManager(song, setList);
+        const viewManagerView = new ViewManager(setList);
         
-        document.getElementById("increase_bars").addEventListener("click",  function f() {song.viewManager.chordsView.increaseBars();});
-        document.getElementById("decrease_bars").addEventListener("click",  function f() {song.viewManager.chordsView.decreaseBars();});
-        document.getElementById("decorated_chords").addEventListener("click",  function f() {song.viewManager.chordsView.toggleDecoratedChords();});
-        document.getElementById("change_to_lyrics").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.LYRICS);});
-        document.getElementById("change_to_chords").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CHORDS);});
-        document.getElementById("change_to_clock").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.CLOCK);});
-        document.getElementById("change_to_setlist").addEventListener("click",  function f() {song.viewManager.changeLayout(ViewManager.SETLIST);});
-        document.getElementById("play_button").addEventListener("click",  function f() {song.play();});
-        document.getElementById("pause_button").addEventListener("click",  function f() {song.pause();});
-        document.getElementById("stop_button").addEventListener("click",  function f() {song.stop();});
-        document.getElementById("prev_bar_button").addEventListener("click",  function f() {song.prevBar();});
-        document.getElementById("rewind_button").addEventListener("click",  function f() {song.rewind();});
-        document.getElementById("forward_button").addEventListener("click",  function f() {song.forward();});
-        document.getElementById("lock").addEventListener("click",  function f() {song.toggleLock();});
+        document.getElementById("increase_bars").addEventListener("click",  function f() {setList.viewManager.chordsView.increaseBars();});
+        document.getElementById("decrease_bars").addEventListener("click",  function f() {setList.viewManager.chordsView.decreaseBars();});
+        document.getElementById("decorated_chords").addEventListener("click",  function f() {setList.viewManager.chordsView.toggleDecoratedChords();});
+        document.getElementById("change_to_lyrics").addEventListener("click",  function f() {setList.viewManager.changeLayout(ViewManager.LYRICS);});
+        document.getElementById("change_to_chords").addEventListener("click",  function f() {setList.viewManager.changeLayout(ViewManager.CHORDS);});
+        document.getElementById("change_to_clock").addEventListener("click",  function f() {setList.viewManager.changeLayout(ViewManager.CLOCK);});
+        document.getElementById("change_to_setlist").addEventListener("click",  function f() {setList.viewManager.changeLayout(ViewManager.SETLIST);});
+        document.getElementById("play_button").addEventListener("click",  function f() {setList.activeSong.play();});
+        document.getElementById("pause_button").addEventListener("click",  function f() {setList.activeSong.pause();});
+        document.getElementById("stop_button").addEventListener("click",  function f() {setList.activeSong.stop();});
+        document.getElementById("prev_bar_button").addEventListener("click",  function f() {setList.activeSong.prevBar();});
+        document.getElementById("rewind_button").addEventListener("click",  function f() {setList.activeSong.rewind();});
+        document.getElementById("forward_button").addEventListener("click",  function f() {setList.activeSong.forward();});
+        document.getElementById("lock").addEventListener("click",  function f() {setList.activeSong.toggleLock();});
         document.getElementById("scriptstatus_div").addEventListener("click",  function f() {wwr_req("_RSaf4c87ad0fe018f26bac592d415077460ebe7aad");});
         
     </script>

@@ -421,7 +421,7 @@ class Song {
     lock = true;
     lastTimestamp = null;
     targetPosition = null;
-    loaderDiv = null;
+//    loaderDiv = null; TODO remove
     playStateDiv = null;
     playingChord = null;
     bpm = 0;
@@ -680,7 +680,7 @@ class Song {
     hideSong(hide) {
         if (hide)
             this.viewManager.hideAll();
-        this.loaderDiv.hidden = !hide;
+        this.viewManager.loaderDiv.hidden = !hide;
     }
 
     appendChord(chord) {
@@ -764,7 +764,7 @@ class Song {
         let formattedTime = this.formatTime(position);
         if (formattedTime !== this.lastClockTime)
         {
-            this.clockDiv.innerHTML = formattedTime;// + "<p class ='bpm'>" + this.bpm + " bpm</p>";
+            this.viewManager.clockDiv.innerHTML = formattedTime;// + "<p class ='bpm'>" + this.bpm + " bpm</p>";
             this.lastClockTime = formattedTime;
         }
         this.viewManager.updateView(this.type, position);
@@ -952,7 +952,7 @@ class LyricsView {
             row.table = table;
             row.render();
         }
-        this.song.clockDiv.style.visibility = "visible";
+        this.viewManager.clockDiv.style.visibility = "visible";
         table.classList.add("lyrics_table");
         document.title = this.song.name + " - Lyrics";
         let content = document.getElementById('song_content_lyrics');
@@ -1064,7 +1064,7 @@ class ChordsView {
 //        this.songs.table = table;
         this.table = table;
         table.id = 'song_content_chords';
-        this.song.clockDiv.style.visibility = "visible";
+        this.viewManager.clockDiv.style.visibility = "visible";
         document.getElementById('decorated_chords').ariaPressed = this.decoratedChords;
         table.classList.add("chords_table");
         document.getElementById('lyrics_banner').textContent = "";
@@ -1179,7 +1179,6 @@ class SetListView {
         songsDiv.textContent  = '';
         for (const [proj, s]  of this.setList.songs) {
             if (s) {
-                console.log(s);
                 songsDiv.append(this.renderSong(s));
             }
         }
@@ -1256,7 +1255,7 @@ class ClockView {
         Object.entries(this.ELEMENTS).forEach(([key, value]) => {
             document.getElementById(key).hidden = !value;
         });
-        this.song.clockDiv.style.visibility = "hidden";
+        this.viewManager.clockDiv.style.visibility = "hidden";
         document.title = this.song.name + " - Clock";
         const markersDiv = document.getElementById("clock_markers_list");
         markersDiv.textContent  = '';
@@ -1406,9 +1405,12 @@ class ViewManager {
     chordsView = null;
     lyricsView = null;
     setListView = null;
+    loaderDiv = null;
+    clockDiv =  null;
     
-    constructor(song, setList) {
-        this.song = song;
+    constructor(setList) {
+        this.song = setList.activeSong;
+        const song = this.song;
         song.viewManager = this;
         this.setList = setList;
         setList.viewManager = this;
@@ -1422,8 +1424,8 @@ class ViewManager {
         this.setListView.viewManager = this;
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.song.calculatePosition.bind(this.song), 50);
-        this.song.loaderDiv = document.getElementById('loader');
-        this.song.clockDiv = document.getElementById('clock_div');
+        this.loaderDiv = document.getElementById('loader');
+        this.clockDiv = document.getElementById('clock_div');
     }
 
     hideAll() {
@@ -1591,14 +1593,40 @@ class SongSettingsManager {
 class SetList {
     songs = new Map();
     viewManager = null;
+    activeSong = null;
+    
+    
+    constructor() {
+        this.activeSong = new Song();
+        this.activeSong.viewManager = this.viewManager;
+    }
     
     parseJson(json) {
         for (let j in json) {
             const s = json[j];
-            let parsedSong = new Song(s);
+            let parsedSong = this.getSong(s.proj);
+            if(!parsedSong) {
+                console.log(s.proj);
+                parsedSong = new Song(s);
+            }
+            parsedSong.viewManager = this.viewManager;
             this.songs.set(s.proj, parsedSong);
         }
         
+    }
+    
+    setActiveSong(proj)
+    {
+        if(this.getSong(proj))
+        {
+            this.activeSong = this.getSong(proj);
+            this.activeSong.viewManager = this.viewManager;
+        }
+    }
+    
+    getSong(proj)
+    {
+        return this.songs.get(proj);
     }
     
 }
@@ -1616,6 +1644,7 @@ function trimmedMean(arr, trimPct = 0.1) {
 
 function wwr_onreply(results, t0) {
     const ar = results.split("\n");
+    let song = setList.activeSong;
     for (let i = 0; i < ar.length; i++) {
         const tok = ar[i].split("\t");          // split a responded line into its individual fields into the array "tok"
         if (tok && tok.length > 0) {
@@ -1638,6 +1667,7 @@ function wwr_onreply(results, t0) {
                             song.setScriptActive(false);
                             break;
                         }
+                        setList.setActiveSong(status.proj); 
                         song.bpm = status.bpm;
                         song.lock = status.lock * 1;
                         document.getElementById('lock').ariaPressed = song.lock === 1;
@@ -1657,8 +1687,9 @@ function wwr_onreply(results, t0) {
                                 song.version = status.version;
 
                                 song.id = status.projectid;
-                                wwr_req("GET/EXTSTATE/reachords/song");
                                 wwr_req("GET/EXTSTATE/reachords/setlist");
+                                wwr_req("GET/EXTSTATE/reachords/song");
+                                
                             }
                         }
                     }
@@ -1669,12 +1700,14 @@ function wwr_onreply(results, t0) {
                             json = JSON.parse(simple_unescape(tok[3]));
                         }
                         if (json) {
-
-                            song.json = json;
-                            song.clear();
-                            song.parseJson();
-                            song.createTable();
-                            song.songReady = true;
+//                            song = setList.getSong(json.proj);
+                            if(song) {
+                                song.json = json;
+                                song.clear();
+                                song.parseJson();
+                                song.createTable();
+                                song.songReady = true;
+                            }
                         }
 
 
@@ -1687,11 +1720,8 @@ function wwr_onreply(results, t0) {
                         }
                         if (json) {
                             setList.json = json;
-//                            song.clear();
                             setList.parseJson(json);
-                            song.createTable();
 //                            song.createTable();
-//                            song.songReady = true;
                         }
 
 

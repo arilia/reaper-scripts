@@ -310,19 +310,22 @@ local function getSongJson()
   local markjs = getMarkersJson()
   local measjs = getMeasuresJson()
   local length = reaper.GetProjectLength(0)
-  
-  
+  local project = reaper.EnumProjects(-1)
+  local proj = tostring(project):match("userdata: (%x+)")
+ 
   local json = "{"
-  json = json .. '"chords":' .. chordjs
-  json = json .. ', "lyrics":' .. lyrjs
-  json = json .. ', "bars":' .. measjs
-  json = json .. ', "markers":' .. markjs
-  json = json .. ', "title":"' .. jsonEscape(projectTitle) .. '"'
-  json = json .. ', "name":"' .. jsonEscape(projectName) .. '"'
-  json = json .. ', "chordsOffset":' .. chordsOffset 
-  json = json .. ', "lyricsOffset":' .. lyricsOffset 
-  json = json .. ', "globalOffset":' .. globalOffset
-  json = json .. ', "length":' .. length
+  json = json .. '"name": "' .. jsonEscape(projectName) .. '"'
+  json = json .. ', "title": "' .. jsonEscape(projectTitle) .. '"'
+  json = json .. ', "proj": "' .. jsonEscape(proj) .. '"'
+  json = json .. ', "length": ' .. length
+  json = json .. ', "chordsOffset": ' .. chordsOffset 
+  json = json .. ', "lyricsOffset": ' .. lyricsOffset 
+  json = json .. ', "globalOffset": ' .. globalOffset
+  json = json .. ', "chords": ' .. chordjs
+  json = json .. ', "lyrics": ' .. lyrjs
+  json = json .. ', "bars": ' .. measjs
+  json = json .. ', "markers": ' .. markjs
+  
   
   json = json .. '}'
   return json
@@ -386,12 +389,16 @@ local function loop()
         end
         
         -- Write into status
+
+        local project = reaper.EnumProjects(-1)
+        local proj = tostring(project):match("userdata: (%x+)")
         local lock = reaper.GetExtState("reachords", "lock")
         local playPosition = reaper.GetPlayPosition()
         local bpm = reaper.TimeMap2_GetDividedBpmAtTime(0, playPosition)
         local statusJson = '{"bpm":' .. bpm
         statusJson = statusJson .. ', "version":' .. version
         statusJson = statusJson  .. ', "timestamp":' .. reaper.time_precise() 
+        statusJson = statusJson  .. ', "proj": "'  ..  jsonEscape(proj) .. '"'
         statusJson = statusJson  .. ', "projectid": "'  ..  jsonEscape(projectId) .. '"'
         statusJson = statusJson  .. ', "lock": "'  ..  lock
         statusJson = statusJson  ..  '"}'  -- placeholder
