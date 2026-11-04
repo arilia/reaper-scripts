@@ -714,6 +714,9 @@ button.lock_button[aria-pressed="true"] {
     overscroll-behavior-y: contain;
 }
 
+.setlist_song[data-mode="inactive"] {
+    opacity: 50% ;
+}
 
 
 #setlist_songs_list {
@@ -721,6 +724,61 @@ button.lock_button[aria-pressed="true"] {
     position: relative;
     padding-bottom: 100vh;
 }
+
+
+.setlist_song{
+    display: flex;
+    
+    align-content: center;
+    position: relative;
+    margin: .2em;
+    margin-top: .5em;
+    background: red;
+    border-radius: 4px;
+    align-items: center;
+    color: white;
+    text-align: left;
+    height: 38px;
+    padding: 5px 8px 5px 8px ;
+    border: 1px solid;
+    border-color: var(--marker-border-color, rgba(200,200,200,.3));
+    background-color: var(--marker-bg-color, rgba(200,200,200,.2));
+}
+
+.setlist_song_nametitle {
+    display: flex;
+    flex-direction: column;
+}
+
+.setlist_song_name {
+    color: f2f2f7;
+    display: flex;
+    height:26px;
+    text-align: center;
+    align-items: center;
+    line-height: 1;
+}
+
+.setlist_song_duration {
+    margin-left: auto;
+    color: f2f2f7;
+    display: flex;
+    height:26px;
+    text-align: center;
+    align-items: center;
+    line-height: 1;
+}
+
+.setlist_song_title {
+    color: f2f2f7;
+    display: flex;
+    height: 1em;
+    text-align: center;
+    align-items: center;
+    line-height: 1;
+    font-size: 80%;
+}
+
 /* OTHER   */
 
 

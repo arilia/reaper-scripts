@@ -433,17 +433,17 @@ class Song {
     static DEFAULT_CHORDS_STYLE = "EN";
     static DEFAULT_TYPE = "chords";
 
-    constructor(s) {
-        if(s) {
-            this.length = s.length;
-            this.name = s.name;
-            this.title = s.title;
-            this.proj = s.proj;
+    
+
+
+    patchJson(json) {
+        if(json) {
+            this.length = json.length;
+            this.name = json.name;
+            this.title = json.title;
+            this.proj = json.proj;
         }
     }
-
-
-    
 
     play() {
         if (this.lock)
@@ -774,6 +774,7 @@ class Song {
     parseJson() {
         this.loadProjectSettings();
         const json = this.json;
+        this.proj = json.proj;
         this.name = json.name;
         this.title = json.title;
         this.chordsOffset = json.chordsOffset;
@@ -1154,6 +1155,7 @@ class ChordsView {
 
 
 class SetListView {
+    
     setList = null;
     
     constructor(setList) {
@@ -1187,26 +1189,40 @@ class SetListView {
     
     
     renderSong(s) {
+        const active = this.setList.activeSong.proj === s.proj;
         const progressDiv = document.createElement("div");
         const dotSpan = document.createElement("span");
-        const markerSpan = document.createElement("span");
-        markerSpan.classList.add('marker_text');
+        const songSpan = document.createElement("span");
+        const nameSpan = document.createElement("span");
+        const titleSpan = document.createElement("span");
+        const durationSpan = document.createElement("span");
+        songSpan.classList.add('setlist_song_nametitle');
+        
+        titleSpan.classList.add('setlist_song_title');
+        nameSpan.classList.add('setlist_song_name');
         dotSpan.classList.add('clock_marker_dot');
+         durationSpan.classList.add('setlist_song_duration');
         progressDiv.id = "marker_" + s.proj + "_progress";
         progressDiv.classList.add('marker_progress');
         progressDiv.style.background = "rgba(" + s.color + ", .8)";
         const div = document.createElement("div");
         div.id = "clock_marker_" + s.proj;
-        div.dataset.mode = "passed";
-        markerSpan.textContent = s.name;
-        div.append(markerSpan); 
-        div.classList.add('clock_marker');
+        if(!active) div.dataset.mode = "inactive";
+//        div.dataset.mode = "passed";
+        nameSpan.textContent = s.name;
+        titleSpan.textContent = s.title;
+        durationSpan.textContent = s.formatTime(s.length);
+        songSpan.append(nameSpan); 
+        songSpan.append(titleSpan);
+        div.append(songSpan); 
+        div.append(durationSpan); 
+        div.classList.add('setlist_song');
 //        const songTmp = this.song; 
 //        div.addEventListener("click",  function f() {songTmp.jumpToMarker(song);});
         
 //        div.style.setProperty("--marker-border-color", "rgba(" + marker.color + ", 0)");
 //        div.style.setProperty("--marker-bg-color", "rgba(" + marker.color + ", .1)");
-//        dotSpan.style.setProperty("--marker-bg-color", "rgba(" + marker.color + ", 1)");
+        dotSpan.style.setProperty("--marker-bg-color", "rgba(255,255,255, 1)");
 //        div.style.border = "1px solid rgb(255, 255, 255, .3)";
 //        div.style.color = "rgba(" + marker.color + ", 1)";
 //        div.style.background = "rgba(255, 255,255, .05)";
@@ -1591,37 +1607,41 @@ class SongSettingsManager {
 }
 
 class SetList {
+    
+    
     songs = new Map();
-    viewManager = null;
     activeSong = null;
+    viewManager = null;
+    
     
     
     constructor() {
-        this.activeSong = new Song();
+        this.activeSong = new Song(); // TODO if we move viewmanager in setlist we can remove this two lines
         this.activeSong.viewManager = this.viewManager;
     }
     
     parseJson(json) {
         for (let j in json) {
             const s = json[j];
-            let parsedSong = this.getSong(s.proj);
-            if(!parsedSong) {
-                console.log(s.proj);
-                parsedSong = new Song(s);
-            }
-            parsedSong.viewManager = this.viewManager;
-            this.songs.set(s.proj, parsedSong);
+            let song = this.getSong(s.proj) || new Song();
+            
+            song.patchJson(s);
+            song.viewManager = this.viewManager;
+            this.songs.set(s.proj, song);
         }
         
     }
     
     setActiveSong(proj)
     {
+        
         if(this.getSong(proj))
         {
             this.activeSong = this.getSong(proj);
             this.activeSong.viewManager = this.viewManager;
         }
+        console.log(this.activeSong );
+        return this.activeSong;
     }
     
     getSong(proj)
@@ -1655,7 +1675,6 @@ function wwr_onreply(results, t0) {
                     break;
                 case "EXTSTATE":
                     if (tok[2] === "status") {
-
                         song.calculateNetwordDelay(t0);
                         let status = null;
                         try {
@@ -1667,7 +1686,10 @@ function wwr_onreply(results, t0) {
                             song.setScriptActive(false);
                             break;
                         }
-                        setList.setActiveSong(status.proj); 
+                        if(song !==  setList.activeSong) {
+                            console.log('attivo song');
+                            song = setList.setActiveSong(status.proj); 
+                        }
                         song.bpm = status.bpm;
                         song.lock = status.lock * 1;
                         document.getElementById('lock').ariaPressed = song.lock === 1;
@@ -1679,6 +1701,7 @@ function wwr_onreply(results, t0) {
                         if (isActive) {
                             if (status.version !== song.version || status.projectid !== song.id)
                             {
+                                console.log("chiedo song");
                                 // Hide immediately on detecting a change, before the "song" data has
                                 // even been fetched — avoids a brief window where the old song is shown
                                 // with a playhead position that already belongs to the new one.
@@ -1694,11 +1717,12 @@ function wwr_onreply(results, t0) {
                         }
                     }
                     if (tok[2] === "song") {
-
+                        console.log("faccio song");
                         let json = "";
                         if (tok[3] !== "") {
                             json = JSON.parse(simple_unescape(tok[3]));
                         }
+                        //setList.setActiveSong(json.proj); 
                         if (json) {
 //                            song = setList.getSong(json.proj);
                             if(song) {
