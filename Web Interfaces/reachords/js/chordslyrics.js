@@ -402,6 +402,7 @@ class Song {
     songReady = false; // stays false while a song rebuild is pending so the old song is never briefly shown before the new one is ready
     json = "";
     maxBeats = 16;
+    tabIndex = null;
     internalChordsOffset = 0;
     internallyricsOffset = 0;
     networkOffset = 0;
@@ -438,6 +439,7 @@ class Song {
 
     patchJson(json) {
         if(json) {
+            this.tabIndex = json.number;
             this.length = json.length;
             this.name = json.name;
             this.title = json.title;
@@ -487,6 +489,12 @@ class Song {
         wwr_req("SET/POS/" + marker.position + ";TRANSPORT");
     }
 
+
+    openTab() {
+        console.log(this);
+        wwr_req("SET/EXTSTATE/reachords/tabIndex/" + this.tabIndex + ";40042;GET/EXTSTATE/reachords/status");
+    }
+    
     prevBar() {
         if (this.lock)
             return;
@@ -772,9 +780,12 @@ class Song {
     }
 
     parseJson() {
+        
         this.loadProjectSettings();
         const json = this.json;
+        console.log(json.tabIndex);
         this.proj = json.proj;
+        this.tabIndex = json.tabIndex;
         this.name = json.name;
         this.title = json.title;
         this.chordsOffset = json.chordsOffset;
@@ -1218,7 +1229,7 @@ class SetListView {
         div.append(durationSpan); 
         div.classList.add('setlist_song');
 //        const songTmp = this.song; 
-//        div.addEventListener("click",  function f() {songTmp.jumpToMarker(song);});
+        div.addEventListener("click",  function f() {s.openTab();});
         
 //        div.style.setProperty("--marker-border-color", "rgba(" + marker.color + ", 0)");
 //        div.style.setProperty("--marker-bg-color", "rgba(" + marker.color + ", .1)");

@@ -69,6 +69,18 @@ local function findTrackByName(name)
 end
 
 
+local function getProjectTabIndex()
+  local i, project = 0, reaper.EnumProjects(-1, '')
+  
+  while true do
+    if reaper.EnumProjects(i, '') == project then
+      return i
+    else
+     i = i + 1
+    end
+  end
+end
+
 -------------------
 -- CHORDS LIST    
 -------------------
@@ -312,12 +324,14 @@ local function getSongJson()
   local length = reaper.GetProjectLength(0)
   local project = reaper.EnumProjects(-1)
   local proj = tostring(project):match("userdata: (%x+)")
+  local tabIndex =  getProjectTabIndex()
  
   local json = "{"
   json = json .. '"name": "' .. jsonEscape(projectName) .. '"'
   json = json .. ', "title": "' .. jsonEscape(projectTitle) .. '"'
   json = json .. ', "proj": "' .. jsonEscape(proj) .. '"'
   json = json .. ', "length": ' .. length
+  json = json .. ', "tabIndex": ' .. tabIndex
   json = json .. ', "chordsOffset": ' .. chordsOffset 
   json = json .. ', "lyricsOffset": ' .. lyricsOffset 
   json = json .. ', "globalOffset": ' .. globalOffset
@@ -338,6 +352,12 @@ end
 
 
 local function loop()
+    local tabIndex = reaper.GetExtState('reachords', 'tabIndex')
+    if tabIndex ~= nil and tabIndex ~= '' then
+      local projIdx = reaper.EnumProjects(tabIndex)
+      reaper.SelectProjectInstance( projIdx )
+      reaper.SetExtState('reachords', 'tabIndex', '', true)
+    end
     local now = reaper.time_precise()
     
     -- Check the project just one time a second,
