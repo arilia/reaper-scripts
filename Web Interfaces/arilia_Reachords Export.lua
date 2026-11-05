@@ -209,6 +209,7 @@ local function getSetListJson()
   for i=0, songsCount - 1 do 
     local project = reaper.EnumProjects(i)
     local projectName = reaper.GetProjectName(project)
+    projectName = projectName:match("(.+)%..+$") or projectName
     local _, projectTitle  = reaper.GetSetProjectInfo_String(project, "PROJECT_TITLE", "", false)
     local length = reaper.GetProjectLength(project)
     local position = reaper.GetCursorPositionEx(project)
