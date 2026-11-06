@@ -1169,6 +1169,7 @@ class SetListView {
     
     setList = null;
     
+    
     constructor(setList) {
         this.setList = setList;
     }
@@ -1458,8 +1459,8 @@ class ViewManager {
     hideAll() {
         document.getElementById('chords_section').hidden = true;
         document.getElementById('lyrics_section').hidden = true;
-        document.getElementById('big_clock_section').hidden = true;
-        document.getElementById('setlist_section').hidden = true;
+//        document.getElementById('big_clock_section').hidden = true;
+//        document.getElementById('setlist_section').hidden = true;
     }
 
     changeLayout(layoutType) {  // TODO Move to Layout Manager
@@ -1619,7 +1620,7 @@ class SongSettingsManager {
 
 class SetList {
     
-    
+    version = -1;
     songs = new Map();
     activeSong = null;
     viewManager = null;
@@ -1632,10 +1633,10 @@ class SetList {
     }
     
     parseJson(json) {
+        this.songs.clear()
         for (let j in json) {
             const s = json[j];
-            let song = this.getSong(s.proj) || new Song();
-            
+            let song =  new Song();
             song.patchJson(s);
             song.viewManager = this.viewManager;
             this.songs.set(s.proj, song);
@@ -1709,7 +1710,14 @@ function wwr_onreply(results, t0) {
                         song.lastTimestamp = status.timestamp;
                         song.setScriptActive(isActive);
                         status.projectid = simple_unescape(status.projectid);
+                        
                         if (isActive) {
+                            if (status.setListVersion !== setList.version) {
+                                console.log("chiedo setlist");
+                                setList.version = status.setListVersion;
+                                wwr_req("GET/EXTSTATE/reachords/setlist");
+                                
+                            }
                             if (status.version !== song.version || status.projectid !== song.id)
                             {
                                 console.log("chiedo song");
@@ -1719,9 +1727,7 @@ function wwr_onreply(results, t0) {
                                 song.hideSong(true);
                                 song.songReady = false;
                                 song.version = status.version;
-
                                 song.id = status.projectid;
-                                wwr_req("GET/EXTSTATE/reachords/setlist");
                                 wwr_req("GET/EXTSTATE/reachords/song");
                                 
                             }
