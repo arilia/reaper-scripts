@@ -444,6 +444,11 @@ body:has(.bottom_bar) .bottom_curtain {
     color:#8a8a99
 }
 
+#big_clock_bar {
+    text-align: center;
+    color:#8a8a99
+}
+
 .bar_adjust[hidden] {
     visibility: hidden;
 }

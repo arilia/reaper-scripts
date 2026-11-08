@@ -56,8 +56,10 @@ class Bar {
         }
     }
 
+    
     set playing(val) {
-        if (val) {
+        if(!this.div) return;
+        if (val &&  this.div) {
             this.div.classList.add('playing');
         } else {
             this.div.classList.remove('playing');
@@ -78,7 +80,9 @@ class Bar {
     }
 
     checkPlaying(position) {
-        this.playing = (position >= this.startTime && position < this.endTime);
+        const playing = (position >= this.startTime && position < this.endTime);
+        this.playing = playing
+        return playing;
     }
 
     get width() {
@@ -417,7 +421,7 @@ class Song {
     globalOffset = 0;
     version = -1;
     timestamp = -1;
-    
+    playingBar = null;
     type = 'lyrics';
     complete = false;
     lock = true;
@@ -779,6 +783,16 @@ class Song {
         if (!this.complete) {
             return;
         }
+        for (let bar of this.bars) {
+            if(bar) {
+                const p = bar.checkPlaying(position);
+                if(p) {
+                    this.playingBar = bar;
+//                    console.log(bar)
+                }
+                
+            }
+        }
         let formattedTime = this.formatTime(position);
         if (formattedTime !== this.lastClockTime)
         {
@@ -1136,9 +1150,9 @@ class ChordsView {
         this.song.findPlayingChord(position);
         let foundLyric = false;
 
-        for (let bar of this.song.bars) {
-            bar.checkPlaying(position);
-        }
+//        for (let bar of this.song.bars) {
+//            bar.checkPlaying(position);
+//        }
         for (let lyric of this.song.lyrics) {
             foundLyric = foundLyric || lyric.checkPlayingChords(position);
         }
@@ -1282,7 +1296,8 @@ class ClockView {
 
     constructor(song) {
         this.song = song;
-        this.bigClockDiv = document.getElementById('big_clock_bpm');
+        this.bigClockBPMDiv = document.getElementById('big_clock_bpm');
+        this.bigClockBarDiv = document.getElementById('big_clock_bar');
         this.progressDiv = document.getElementById('progress_fill');
         this.bigTimeDiv = document.getElementById('big_time');
         this.lastMarkerContainer = document.getElementById('last_marker');
@@ -1387,7 +1402,8 @@ class ClockView {
         if (formattedTime !== this.lastClockTime)
         {
             this.bigTimeDiv.textContent = formattedTime;
-            this.bigClockDiv.textContent = this.song.bpm + "bpm";
+            this.bigClockBPMDiv.textContent = this.song.bpm + "bpm";
+            this.bigClockBarDiv.textContent = "bar: " + this.song.playingBar.number;
             this.progressDiv.style.width = 100 * this.song.calculatedPosition / this.song.length + "%";
             this.lastClockTime = formattedTime;
         }
