@@ -413,6 +413,7 @@ class Song {
     playState = -1;
     lastPlayState = -1;
     viewManager = null;
+    setList = null;
     globalOffset = 0;
     version = -1;
     timestamp = -1;
@@ -469,7 +470,10 @@ class Song {
     forward() {
         if (this.lock)
             return;
-        wwr_req("1016;40861;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
+        wwr_req("1016;40861;40042;TRANSPORT");
+        setTimeout(() => {
+            wwr_req("TRANSPORT;GET/EXTSTATE/reachords/status");
+        }, 200);
     }
 
     rewind() {
@@ -477,7 +481,10 @@ class Song {
             return;
         if (this.playState === 0 && this.lastRecordedPosition === 0)
         {
-            wwr_req("1016;40862;40042;TRANSPORT;GET/EXTSTATE/reachords/status");
+            wwr_req("1016;40862;40042;TRANSPORT");
+            setTimeout(() => {
+                wwr_req("TRANSPORT;GET/EXTSTATE/reachords/status");
+            }, 100);
         } else
         {
             wwr_req("1016;40042;TRANSPORT");
@@ -491,8 +498,11 @@ class Song {
 
 
     openTab() {
-        console.log(this);
-        wwr_req("SET/EXTSTATE/reachords/tabIndex/" + this.tabIndex + ";40042;GET/EXTSTATE/reachords/status");
+        this.setList.version = -1;
+        wwr_req("SET/EXTSTATE/reachords/tabIndex/" + this.tabIndex + ";40042");
+        setTimeout(() => {
+            wwr_req("TRANSPORT;GET/EXTSTATE/reachords/status");
+        }, 100);
     }
     
     prevBar() {
@@ -783,7 +793,6 @@ class Song {
         
         this.loadProjectSettings();
         const json = this.json;
-        console.log(json.tabIndex);
         this.proj = json.proj;
         this.tabIndex = json.tabIndex;
         this.name = json.name;
@@ -1387,7 +1396,6 @@ class ClockView {
         let lastMarker = false;
         for (let [bar, marker]  of this.song.markers) {
             //TODO, the search of last marker can be done in the song.
-            console.log
             let isOver = marker.isOver(position);
             this.setProgress(marker, position);
             if (!isOver && !lastMarker) {
@@ -1638,6 +1646,7 @@ class SetList {
             const s = json[j];
             let song =  new Song();
             song.patchJson(s);
+            song.setList = this;
             song.viewManager = this.viewManager;
             this.songs.set(s.proj, song);
         }
@@ -1652,7 +1661,6 @@ class SetList {
             this.activeSong = this.getSong(proj);
             this.activeSong.viewManager = this.viewManager;
         }
-        console.log(this.activeSong );
         return this.activeSong;
     }
     
@@ -1699,7 +1707,6 @@ function wwr_onreply(results, t0) {
                             break;
                         }
                         if(song !==  setList.activeSong) {
-                            console.log('attivo song');
                             song = setList.setActiveSong(status.proj); 
                         }
                         song.bpm = status.bpm;
@@ -1713,14 +1720,12 @@ function wwr_onreply(results, t0) {
                         
                         if (isActive) {
                             if (status.setListVersion !== setList.version) {
-                                console.log("chiedo setlist");
                                 setList.version = status.setListVersion;
                                 wwr_req("GET/EXTSTATE/reachords/setlist");
                                 
                             }
                             if (status.version !== song.version || status.projectid !== song.id)
                             {
-                                console.log("chiedo song");
                                 // Hide immediately on detecting a change, before the "song" data has
                                 // even been fetched — avoids a brief window where the old song is shown
                                 // with a playhead position that already belongs to the new one.
@@ -1734,7 +1739,6 @@ function wwr_onreply(results, t0) {
                         }
                     }
                     if (tok[2] === "song") {
-                        console.log("faccio song");
                         let json = "";
                         if (tok[3] !== "") {
                             json = JSON.parse(simple_unescape(tok[3]));
@@ -1762,6 +1766,7 @@ function wwr_onreply(results, t0) {
                         if (json) {
                             setList.json = json;
                             setList.parseJson(json);
+                            setList.viewManager.setListView.render()
 //                            song.createTable();
                         }
 

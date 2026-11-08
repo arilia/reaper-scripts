@@ -29,6 +29,7 @@ local projectName = ""
 local projectTitle  = ""
 local setListJson = ""
 local lastSetListJson = ""
+local setListVersion = 0
 
 
 local function jsonEscape(str)
@@ -354,21 +355,25 @@ end
 
 local function loop()
     local tabIndex = reaper.GetExtState('reachords', 'tabIndex')
+    local now = reaper.time_precise()
     if tabIndex ~= nil and tabIndex ~= '' then
       local projIdx = reaper.EnumProjects(tabIndex)
       reaper.SelectProjectInstance( projIdx )
       reaper.SetExtState('reachords', 'tabIndex', '', true)
+      lastCheckTime = 0
     end
-    local now = reaper.time_precise()
+    
     
     -- Check the project just one time a second,
     
     if (now - lastCheckTime >= 1)then
-        -- reaper.ShowConsoleMsg(reaper.time_precise() ..  "\n");
+        
         lastCheckTime = now
         setListJson = getSetListJson()
         if setListJson ~= lastSetListJson then
+            setListVersion = setListVersion + 1 
             reaper.SetExtState("reachords", "setlist", setListJson, false)
+            lastSetListJson = setListJson
         end
         -- Use the saved project's file path as its id whenever possible: it's a
         -- pure read, so it never marks the project as modified. TODO: fall back to
@@ -398,6 +403,7 @@ local function loop()
         -- increments on ANY project edit, including unrelated ones like adjusting
         -- a fader, so this avoids needless rebuilds.
         if changeCount ~= lastChangeCount then
+        
             lastChangeCount = changeCount
 
             local json = getSongJson()
@@ -418,6 +424,7 @@ local function loop()
         local bpm = reaper.TimeMap2_GetDividedBpmAtTime(0, playPosition)
         local statusJson = '{"bpm":' .. bpm
         statusJson = statusJson .. ', "version":' .. version
+        statusJson = statusJson .. ', "setListVersion":' .. setListVersion
         statusJson = statusJson  .. ', "timestamp":' .. reaper.time_precise() 
         statusJson = statusJson  .. ', "proj": "'  ..  jsonEscape(proj) .. '"'
         statusJson = statusJson  .. ', "projectid": "'  ..  jsonEscape(projectId) .. '"'
