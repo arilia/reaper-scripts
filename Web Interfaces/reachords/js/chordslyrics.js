@@ -904,14 +904,18 @@ class LyricsView {
         decrease_bars: false
     };
 
-    constructor(song) {
-        this.song = song;
+    constructor(viewManager) {
+        this.viewManager = viewManager;
+    }
 
+
+    get song() {
+        return this.viewManager.song;
     }
 
     createTable() {
         let lastEnd = 0;
-
+        console.log(this.song);
         for (let lyric of this.song.lyrics)
         {
             let row;
@@ -967,7 +971,6 @@ class LyricsView {
 
 class ChordsView {
 
-    song = null;
     translateY = 0;
     decoratedChords = false;
     viewManager = null;
@@ -988,10 +991,15 @@ class ChordsView {
         decrease_bars: true
     };
 
-    constructor(song) {
-        this.song = song;
+    constructor(viewManager) {
+        this.viewManager = viewManager;
     }
 
+
+    get song() {
+        return this.viewManager.song;
+    }
+    
     createTable() {
         let columnCount = 0;
         let row = null;
@@ -1246,8 +1254,8 @@ class ClockView {
         decrease_bars: false
     };
 
-    constructor(song) {
-        this.song = song;
+    constructor(viewManager) {
+        this.viewManager = viewManager;
         this.bigClockBPMDiv = document.getElementById('big_clock_bpm');
         this.bigClockBarDiv = document.getElementById('big_clock_bar');
         this.progressDiv = document.getElementById('progress_fill');
@@ -1255,6 +1263,11 @@ class ClockView {
         this.lastMarkerContainer = document.getElementById('last_marker');
     }
 
+
+    get song() {
+        return this.viewManager.song;
+    }
+    
     render() {
         Object.entries(this.ELEMENTS).forEach(([key, value]) => {
             document.getElementById(key).hidden = !value;
@@ -1355,7 +1368,7 @@ class ClockView {
         {
             this.bigTimeDiv.textContent = formattedTime;
             this.bigClockBPMDiv.textContent = this.song.bpm + "bpm";
-            this.bigClockBarDiv.textContent = "bar: " + this.song.playingBar.number;
+            this.bigClockBarDiv.textContent = "bar: " + this.song.playingBar?.number;
             this.progressDiv.style.width = 100 * this.song.calculatedPosition / this.song.length + "%";
             this.lastClockTime = formattedTime;
         }
@@ -1403,7 +1416,6 @@ class ViewManager {
     static SETLIST = "setlist";
     active = "lyrics";
     instantPositioning = false;
-    song = null;
     setList = null;
     clockView = null;
     chordsView = null;
@@ -1413,23 +1425,25 @@ class ViewManager {
     clockDiv =  null;
     
     constructor(setList) {
-        this.song = setList.activeSong;
-        const song = this.song;
-        song.viewManager = this;
+//        this.song = setList.activeSong;
+//        const song = this.song;
+//        song.viewManager = this;
         this.setList = setList;
         setList.viewManager = this;
-        this.clockView = new ClockView(song);
-        this.clockView.viewManager = this;
-        this.chordsView = new ChordsView(song);
-        this.chordsView.viewManager = this;
-        this.lyricsView = new LyricsView(song);
-        this.lyricsView.viewManager = this;
+        this.setList.activeSong.viewManager = this;
+        this.clockView = new ClockView(this);
+        this.chordsView = new ChordsView(this);
+        this.lyricsView = new LyricsView(this);
         this.setListView = new SetListView(setList);
         this.setListView.viewManager = this;
         wwr_req_recur("TRANSPORT;GET/EXTSTATE/reachords/status", Song.STATUSPOLLING); //Get a JSON string containing the transport and the state of the project . If something changes it rebuild the Song
         setInterval(this.song.calculatePosition.bind(this.song), 50);
         this.loaderDiv = document.getElementById('loader');
         this.clockDiv = document.getElementById('clock_div');
+    }
+    
+    get song() {
+        return this.setList.activeSong;
     }
 
     hideAll() {
@@ -1674,9 +1688,9 @@ function wwr_onreply(results, t0) {
                             song.setScriptActive(false);
                             break;
                         }
-                        if(song !==  setList.activeSong) {
-                            song = setList.setActiveSong(status.proj); 
-                        }
+//                        if(song !==  setList.activeSong) {
+//                            song = setList.setActiveSong(status.proj); 
+//                        }
                         song.bpm = status.bpm;
                         song.lock = status.lock * 1;
                         document.getElementById('lock').ariaPressed = song.lock === 1;
