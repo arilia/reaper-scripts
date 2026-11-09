@@ -499,9 +499,6 @@ body:has(.bottom_bar) .bottom_curtain {
 }
 
 .transport_button {
-
-font-family: "Noto Sans Symbols 2";
-    font-variant-emoji: text;
     width:84px;
     height:84px;
     border:1px solid var(--btn-line);
@@ -569,12 +566,12 @@ p.bpm {
 
 
 .lock_button::before {
-    font-variant-emoji: text;
-    content: "\1F513\FE0E";
+    /*font-variant-emoji: text;*/
+    /*content: url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100"><title>unlock</title><path fill="currentColor" d="M82.105 45.587H41.236V34.945c0-5.207 4.372-9.437 9.747-9.437c5.372 0 9.744 4.23 9.746 9.437c0 1.051.881 1.904 1.966 1.904h10.086c1.087 0 1.965-.853 1.965-1.904a1.8 1.8 0 0 0-.056-.457c-.253-12.456-10.79-22.513-23.707-22.513c-13.074 0-23.71 10.305-23.71 22.97v10.642h-9.377c-1.449 0-2.621 1.135-2.621 2.539v37.361c0 1.403 1.172 2.539 2.621 2.539h64.21c1.449 0 2.621-1.136 2.621-2.539V48.125c-.001-1.403-1.173-2.538-2.622-2.538"/></svg>');*/
 }              /* lucchetto aperto */
 .lock_button[aria-pressed="true"]::before {
-    font-variant-emoji: text;
-    content: "\1F512\FE0E";
+    /*font-variant-emoji: text;*/
+    /*content: url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100"><title>lock</title><path fill="currentColor" d="M82.105 44.218h-8.858v-8.431q.004-.055.003-.102c0-13.073-10.636-23.71-23.713-23.71c-13.073 0-23.71 10.637-23.71 23.71v8.533h-7.931a2.62 2.62 0 0 0-2.621 2.621v38.565a2.62 2.62 0 0 0 2.621 2.621h64.21a2.62 2.62 0 0 0 2.621-2.621V46.839a2.62 2.62 0 0 0-2.622-2.621m-42.314-8.533c0-5.375 4.371-9.741 9.746-9.741c5.341 0 9.695 4.32 9.747 9.649l-.003.031h.003v8.594H39.791z"/></svg>');*/
 }  /* chiuso */
 
 .lock_button[aria-pressed="false"] {
