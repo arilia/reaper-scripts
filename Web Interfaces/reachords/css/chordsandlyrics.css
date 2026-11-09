@@ -43,7 +43,7 @@ html {
     display: grid;
     width: 100%;
     grid-auto-flow: column;
-    grid-auto-columns: 1fr; 
+    grid-auto-columns: 1fr;
     gap: 6px;
     padding: 5px;
     background: var(--surface);
@@ -205,9 +205,9 @@ html {
 
 .title_bar {
     display: flex;
-    flex-direction: column; 
-        
-        
+    flex-direction: column;
+
+
     /*position: fixed;*/
     /*top: 4.5em;*/
     left: 0;
@@ -493,15 +493,21 @@ body:has(.bottom_bar) .bottom_curtain {
     align-items:center;
     justify-content:
         space-between;
+    gap: 4px;
+    min-width: 0;
     margin:12px 6px 40px;
 
 
 }
 
 .transport_button {
-    width:84px;
-    height:84px;
-    border:1px solid var(--btn-line);
+    width: min(84px, 18vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    flex: 0 1 84px;
+    min-width: 0;
+    box-sizing: border-box;
+
     border-radius:50%;
     display:flex;
     align-items:center;
@@ -544,8 +550,11 @@ p.bpm {
 }
 
 #play_button {
-    width:132px;
-    height:132px;
+    /*width:132px;*/
+    width: min(132px, 18vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    flex: 0 1 132px;
 }
 
 #stop_button {
@@ -654,7 +663,7 @@ button.lock_button[aria-pressed="true"] {
     display: flex;
     align-items: center;
     margin-right: 10px;
-        
+
 }
 
 
@@ -681,7 +690,7 @@ button.lock_button[aria-pressed="true"] {
     height:26px;
     text-align: center;
     align-items: center;
-     line-height: 1;
+    line-height: 1;
 }
 
 
@@ -738,7 +747,7 @@ button.lock_button[aria-pressed="true"] {
     align-items: center;
     color: var(--text);
     text-align: left;
-    height: 38px;
+    height: 44px;
     padding: 5px 8px 5px 8px ;
     border: 1px solid;
     border-color: var(--marker-border-color, rgba(200,200,200,.3));
@@ -779,6 +788,18 @@ button.lock_button[aria-pressed="true"] {
     line-height: 1;
     font-size: 80%;
 }
+
+
+
+.song_progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 10%;
+    background:#ddd;
+}
+
 
 /* OTHER   */
 

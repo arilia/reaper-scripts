@@ -366,7 +366,7 @@ local function loop()
     
     -- Check the project just one time a second,
     
-    if (now - lastCheckTime >= 1)then
+    if (now - lastCheckTime >= 0)then
         
         lastCheckTime = now
         setListJson = getSetListJson()

@@ -705,8 +705,10 @@ class Song {
     {
         let formattedTime = "";
         const time = (position - this.chordsOffset - this.lyricsOffset + this.globalOffset);
-        if (time)
+        
+        if (time !== null)
         {
+            
             formattedTime = new Date(Math.abs(time) * 1000).toISOString().slice(14, 22);
         }
         if (time < 0)
@@ -1192,8 +1194,8 @@ class SetListView {
         nameSpan.classList.add('setlist_song_name');
         dotSpan.classList.add('clock_marker_dot');
          durationSpan.classList.add('setlist_song_duration');
-        progressDiv.id = "marker_" + s.proj + "_progress";
-        progressDiv.classList.add('marker_progress');
+        progressDiv.id = "song_" + s.proj + "_progress";
+        progressDiv.classList.add('song_progress');
         progressDiv.style.background = "rgba(" + s.color + ", .8)";
         const div = document.createElement("div");
         div.id = "clock_marker_" + s.proj;
@@ -1224,6 +1226,21 @@ class SetListView {
 
     }
     
+    get song() {
+        return this.setList.activeSong;
+    }
+    
+    update(position) {
+        
+//        const formattedTime = this.song.formatTime(position);
+//        this.lastMarker = null;
+        const progressDiv =  document.getElementById("song_" + this.song.proj+'_progress');
+//        console.log(progressDiv);
+//        if (formattedTime !== this.lastClockTime)
+//        {
+            progressDiv.style.width = 100 * this.song.calculatedPosition / this.song.length + "%";
+//        }
+    }
     
 }
 
@@ -1485,6 +1502,9 @@ class ViewManager {
                 break;
             case ViewManager.CLOCK :
                 this.clockView.update(position);
+                break;
+            case ViewManager.SETLIST :
+                this.setListView.update(position);
                 break;
         }
     }
