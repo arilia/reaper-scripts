@@ -355,7 +355,6 @@ class Song {
     proj = "";
     title = "";
     length = 0;
-//    table = null;
     lastInsertedLyric = null;
     bars = [];
     chords = [];
@@ -386,8 +385,6 @@ class Song {
     complete = false;
     lock = true;
     lastTimestamp = null;
-//    targetPosition = null;
-//    loaderDiv = null; TODO remove
     playingChord = null;
     bpm = 0;
     lastClockTime = ""; //TODO Move to ClockView 
@@ -462,9 +459,9 @@ class Song {
 
     openTab() {
         this.setList.version = -1;
-        wwr_req("SET/EXTSTATE/reachords/tabIndex/" + this.tabIndex + ";40042");
+        wwr_req("SET/EXTSTATE/reachords/tabIndex/" + this.tabIndex + "");
         setTimeout(() => {
-            wwr_req("TRANSPORT;GET/EXTSTATE/reachords/status");
+            wwr_req("40042;TRANSPORT;GET/EXTSTATE/reachords/status");
         }, 100);
     }
     
@@ -888,7 +885,6 @@ class Song {
 
 class LyricsView {
 
-//    song = null;
     table = null; // TODO
     viewManager = null;
     translateY = 0;
@@ -915,7 +911,6 @@ class LyricsView {
 
     createTable() {
         let lastEnd = 0;
-        console.log(this.song);
         for (let lyric of this.song.lyrics)
         {
             let row;
@@ -1611,7 +1606,7 @@ class SetList {
     
     version = -1;
     songs = new Map();
-    activeSong = null;
+    activeSong = null; //Not a song in the Map list
     viewManager = null;
     
     
@@ -1687,9 +1682,6 @@ function wwr_onreply(results, t0) {
                             song.setScriptActive(false);
                             break;
                         }
-//                        if(song !==  setList.activeSong) {
-//                            song = setList.setActiveSong(status.proj); 
-//                        }
                         song.bpm = status.bpm;
                         song.lock = status.lock * 1;
                         document.getElementById('lock').ariaPressed = song.lock === 1;

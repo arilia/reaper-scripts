@@ -19,11 +19,12 @@ body {
     --border-selected: #6b6b78;
     --btn-line:  #33333d;
     --text:      #fff;   /* main text */
-
+    --text-secondary: #bbb;
     --text-btn:  #b8b8c6;
     --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --danger:    #fb7185;
     --lock-size: 84px;
+    --background: #000;
 }
 
 html {
@@ -120,7 +121,6 @@ html {
     padding: 8px 18px;
     font-size: 17px;
     font-weight: 500;
-    color: var(--state);
     border: 1px solid var(--line);
     border-radius: 999px;
     user-select: none;
@@ -231,7 +231,7 @@ html {
     margin: 0;
     flex: 1 1 auto;
     min-width: 0;
-    color: #bbb;
+    color: var(--text-secondary);
     font-size: 1.6em;
     line-height: 1;
     white-space: nowrap;
@@ -243,7 +243,7 @@ html {
     margin: 0;
     flex: 1 1 auto;
     min-width: 0;
-    color: #bbb;
+    color: var(--text-secondary);
     font-size: 1em;
     line-height: 1;
     white-space: nowrap;
@@ -284,7 +284,7 @@ html {
 }
 
 .lyrics_table {
-    background-color: black;
+    background-color: var(--background);
     transform: translateY(-1px);
     padding: 10px;
 
@@ -432,7 +432,7 @@ body:has(.bottom_bar) .bottom_curtain {
     display: flex;
     flex-direction: column;
     background-color: transparent;
-    color: white;
+    color: var(--text);
 }
 
 .big_clock_section[hidden] {
@@ -441,12 +441,12 @@ body:has(.bottom_bar) .bottom_curtain {
 
 #big_clock_bpm {
     text-align: center;
-    color:#8a8a99
+    color: var(--text-dim);
 }
 
 #big_clock_bar {
     text-align: center;
-    color:#8a8a99
+    color: var(--text-dim);
 }
 
 .bar_adjust[hidden] {
@@ -504,12 +504,12 @@ font-family: "Noto Sans Symbols 2";
     font-variant-emoji: text;
     width:84px;
     height:84px;
-    border:1px solid #33333d;
+    border:1px solid var(--btn-line);
     border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
-    color:#b8b8c6;
+    color: var(--text-btn);
     font-size:32px;
     line-height:1;
     background: transparent;
@@ -595,7 +595,7 @@ button.lock_button[aria-pressed="true"] {
 }
 
 .lock-btn:focus-visible {
-    outline: 2px solid #8a8a99;
+    outline: 2px solid var(--text-dim);
     outline-offset: 3px;
 }
 
@@ -618,10 +618,10 @@ button.lock_button[aria-pressed="true"] {
     position: relative;
     margin: .2em;
     margin-top: .5em;
-    background: black;
+    background: var(--background);
     border-radius: 4px;
     align-items: center;
-    color: white;
+    color: var(--text);
     text-align: left;
     font-size: 1.2em;
     /*height: 32px;*/
@@ -637,10 +637,10 @@ button.lock_button[aria-pressed="true"] {
     position: relative;
     margin: .2em;
     margin-top: .5em;
-    background: black;
+    background: var(--background);
     border-radius: 4px;
     align-items: center;
-    color: white;
+    color: var(--text);
     text-align: left;
     height: 32px;
     padding: 5px 8px 5px 8px ;
@@ -679,7 +679,7 @@ button.lock_button[aria-pressed="true"] {
 }*/
 
 .marker_text {
-    color: f2f2f7;
+    color: #f2f2f7;
     display: flex;
     height:26px;
     text-align: center;
@@ -733,21 +733,20 @@ button.lock_button[aria-pressed="true"] {
 
 .setlist_song{
     display: flex;
-    
     align-content: center;
     position: relative;
     margin: .2em;
     margin-top: .5em;
-    background: red;
     border-radius: 4px;
     align-items: center;
-    color: white;
+    color: var(--text);
     text-align: left;
     height: 38px;
     padding: 5px 8px 5px 8px ;
     border: 1px solid;
     border-color: var(--marker-border-color, rgba(200,200,200,.3));
     background-color: var(--marker-bg-color, rgba(200,200,200,.2));
+
 }
 
 .setlist_song_nametitle {
@@ -756,7 +755,7 @@ button.lock_button[aria-pressed="true"] {
 }
 
 .setlist_song_name {
-    color: f2f2f7;
+    color: #f2f2f7;
     display: flex;
     height:26px;
     text-align: center;
@@ -766,7 +765,7 @@ button.lock_button[aria-pressed="true"] {
 
 .setlist_song_duration {
     margin-left: auto;
-    color: f2f2f7;
+    color: #f2f2f7;
     display: flex;
     height:26px;
     text-align: center;
@@ -775,7 +774,7 @@ button.lock_button[aria-pressed="true"] {
 }
 
 .setlist_song_title {
-    color: f2f2f7;
+    color: #f2f2f7;
     display: flex;
     height: 1em;
     text-align: center;
@@ -825,7 +824,6 @@ button.lock_button[aria-pressed="true"] {
 }
 
 div.latency {
-    color: #333;
     flex: 0 0 10em;
     position: fixed;
     left: 1em;
@@ -843,7 +841,6 @@ div.latency {
 }
 
 div.offset {
-    color: #333;
     flex: 0 0 10em;
     position: fixed;
     left: 12em;
@@ -948,7 +945,7 @@ div.offset {
 }
 
 .lyric_row {
-    color: #fff;
+    color: var(--text);
 }
 
 .position_row {
@@ -986,7 +983,6 @@ div.offset {
     position: absolute;
     left: 0;
     bottom: 0;
-    bottom: 0;
     width: 0%;
     height: 10%;
 }
@@ -1016,7 +1012,7 @@ div.offset {
     /*background-color: #222;*/
     font-weight: bold;
     /*font-size: 120%;*/
-    color: white;
+    color: var(--text);
     transition-property: color;
     transition-duration: 2s;
 }
