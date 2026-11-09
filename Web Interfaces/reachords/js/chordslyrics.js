@@ -888,7 +888,7 @@ class Song {
 
 class LyricsView {
 
-    song = null;
+//    song = null;
     table = null; // TODO
     viewManager = null;
     translateY = 0;
@@ -1237,7 +1237,6 @@ class ClockView {
     bigClockDiv = null;
     progressDiv = null;
     bigTimeDiv = null;
-    song = null;
     lastMarker = null;
     lastMarkerContainer = null;
     viewManager = null;
