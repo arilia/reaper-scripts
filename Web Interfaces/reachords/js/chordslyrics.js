@@ -8,11 +8,7 @@ class Beat {
     }
 
     set playing(val) {
-        if (val) {
-            this.div.classList.add('beat_playing');
-        } else {
-            this.div.classList.remove('beat_playing');
-        }
+        this.div.classList.toggle('beat_playing', val);
     }
 
     render() {
@@ -39,7 +35,6 @@ class Bar {
 
     constructor(b) {
         this.number = Number(b.number);
-        this.song = null;
         this.startTime = roundTime(b.startTime);
         this.endTime = roundTime(b.endTime);
         this.beatDuration = b.numOfBeats;
@@ -59,22 +54,13 @@ class Bar {
     
     set playing(val) {
         if(!this.div) return;
-        if (val &&  this.div) {
-            this.div.classList.add('playing');
-        } else {
-            this.div.classList.remove('playing');
-        }
+        this.div.classList.toggle('playing', val);
         if (val && !this.isPlaying) {
-
-
-//            const targetPosition = this.song.targetPosition;
             const rowBox = document.getElementById('position_row_chords').getBoundingClientRect();
             const targetPosition = rowBox.top + rowBox.height / 2;
             const positionInfo = this.div.getBoundingClientRect();
             const top = positionInfo.top + positionInfo.height / 2;
-//            this.song.translate(targetPosition - top);
             this.song.viewManager.chordsView.translate(targetPosition - top);
-//            console.log(top);
         }
         this.isPlaying = val;
     }
@@ -100,14 +86,11 @@ class Bar {
         timeDiv.classList.add('time');
         timeDiv.textContent = this.number;
         this.div.appendChild(timeDiv);
-        if (this.row.div)
+        if (this.row.div) {
             this.row.div.append(this.div);
-        else
-            console.log(this);
-        for (let beat of this.beats)
-        {
-            beat.render();
         }
+        this.beats.forEach(function(beat) {beat.render();});
+
     }
 }
 
@@ -116,7 +99,6 @@ class Row {
     div = null;
     type = "";
     view = "";
-//    table = "";
     number = 0;
     elements = [];
     static MARKER = "marker";
@@ -191,16 +173,13 @@ class Marker {
         this.div.style.border = "1px solid rgb(" + this.color + ")";
         this.div.style.color = "rgb(" + this.color + ")";
         this.div.style.background = "rgba(" + this.color + ", .3)";
-        if (this.row && this.row.div)
-            this.row.div.append(this.div);
-
+        this.row?.div?.append(this.div);
     }
 
     updateProgress(position) {
         let progress = 0;
         progress = 1 * (position - this.position) / this.duration;
-        if (progress < 0) progress = 0;
-        if (progress > 1) progress = 1;
+        progress = Math.max(0, Math.min(1, progress));
         this.progress = progress;
         return progress;
     }
@@ -226,7 +205,7 @@ class Chord {
     beatStart = 1; //beat inside the bar
     startTime;  //in seconds
     endTime; //in seconds
-    duration; //in seconds
+//    duration; //in seconds, TODO not used?
     isPlaying = false;
     div = null;
     song = null;
@@ -310,7 +289,7 @@ class Lyric {
     top = 0;
     div = null;
     song = null;
-    row = null;
+//    row = null; // TODO unused? Remove?
     nextLyric = null;
 
     constructor(c) {
@@ -321,20 +300,12 @@ class Lyric {
     }
 
     set playing(val) {
-
-        if (val) {
-            this.div.classList.add('lyric_playing');
-        } else {
-            this.div.classList.remove('lyric_playing');
-        }
+        this.div.classList.toggle('lyric_playing', val);
         if (val) {
             this.calculateHeight();
             const rowBox = document.getElementById('position_row_lyrics').getBoundingClientRect();
             const targetPosition = rowBox.top + rowBox.height / 2;
-
             const progress = this.height * (this.song.calculatedPosition - this.startTime) / this.duration;
-
-//            this.song.moveTo(targetPosition - this.top - progress);
             this.song.viewManager.lyricsView.moveTo(targetPosition - this.top - progress);
         }
         this.isPlaying = val;
@@ -346,10 +317,6 @@ class Lyric {
         this.div = document.createElement('div');
         this.div.classList.add('lyric');
         this.div.textContent = this.text;
-        if (this.isPlaying)
-        {
-            this.div.classList.add('playing');
-        }
         this.row.div.append(this.div);
 
     }
@@ -367,18 +334,11 @@ class Lyric {
     }
 
     checkPlaying(position) {
-        if (position >= this.startTime && position < this.endTime) {
-            this.playing = true;
-
-
-        } else {
-            this.playing = false;
-
-        }
+        this.playing  = (position >= this.startTime && position < this.endTime)
         return this.isPlaying;
     }
 
-    checkPlayingChords(position) {
+    checkPlayingChords(position) { // TODO, move in view?
 
         if (position >= this.startTime && position < this.endTime) {
             const lyrics_banner = document.getElementById("lyrics_banner");
@@ -395,7 +355,7 @@ class Song {
     proj = "";
     title = "";
     length = 0;
-    table = null;
+//    table = null;
     lastInsertedLyric = null;
     bars = [];
     chords = [];
@@ -426,9 +386,8 @@ class Song {
     complete = false;
     lock = true;
     lastTimestamp = null;
-    targetPosition = null;
+//    targetPosition = null;
 //    loaderDiv = null; TODO remove
-    playStateDiv = null;
     playingChord = null;
     bpm = 0;
     lastClockTime = ""; //TODO Move to ClockView 
@@ -780,17 +739,11 @@ class Song {
     }
 
     checkPlaying(position) {  // TODO Move to View? Ii is used both in lyrics and chords
-        if (!this.complete) {
-            return;
-        }
+        if (!this.complete)  return;
         for (let bar of this.bars) {
-            if(bar) {
-                const p = bar.checkPlaying(position);
-                if(p) {
-                    this.playingBar = bar;
-//                    console.log(bar)
-                }
-                
+            const p = bar.checkPlaying(position);
+            if(p) {
+                this.playingBar = bar;
             }
         }
         let formattedTime = this.formatTime(position);
@@ -1096,7 +1049,6 @@ class ChordsView {
             document.getElementById(key).hidden = !value;
         });
         const table = document.createElement('div');
-//        this.songs.table = table;
         this.table = table;
         table.id = 'song_content_chords';
         this.viewManager.clockDiv.style.visibility = "visible";
@@ -1759,9 +1711,7 @@ function wwr_onreply(results, t0) {
                         if (tok[3] !== "") {
                             json = JSON.parse(simple_unescape(tok[3]));
                         }
-                        //setList.setActiveSong(json.proj); 
                         if (json) {
-//                            song = setList.getSong(json.proj);
                             if(song) {
                                 song.json = json;
                                 song.clear();
@@ -1774,7 +1724,6 @@ function wwr_onreply(results, t0) {
 
                     }
                     if (tok[2] === "setlist") {
-
                         let json = "";
                         if (tok[3] !== "") {
                             json = JSON.parse(simple_unescape(tok[3]));
@@ -1783,10 +1732,7 @@ function wwr_onreply(results, t0) {
                             setList.json = json;
                             setList.parseJson(json);
                             setList.viewManager.setListView.render()
-//                            song.createTable();
                         }
-
-
                     }
                     break;
             }
