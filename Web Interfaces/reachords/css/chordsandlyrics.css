@@ -507,7 +507,7 @@ body:has(.bottom_bar) .bottom_curtain {
     flex: 0 1 84px;
     min-width: 0;
     box-sizing: border-box;
-
+    border: 1px solid var(--btn-line);
     border-radius:50%;
     display:flex;
     align-items:center;
@@ -603,6 +603,7 @@ button.lock_button[aria-pressed="true"] {
 .lock-btn:focus-visible {
     outline: 2px solid var(--text-dim);
     outline-offset: 3px;
+    aspect-ratio: 1 / 1;
 }
 
 
@@ -747,8 +748,8 @@ button.lock_button[aria-pressed="true"] {
     align-items: center;
     color: var(--text);
     text-align: left;
-    height: 44px;
-    padding: 5px 8px 5px 8px ;
+    height: 48px;
+    padding: 0px 8px 5px 8px ;
     border: 1px solid;
     border-color: var(--marker-border-color, rgba(200,200,200,.3));
     background-color: var(--marker-bg-color, rgba(200,200,200,.2));
@@ -796,7 +797,7 @@ button.lock_button[aria-pressed="true"] {
     left: 0;
     bottom: 0;
     width: 0%;
-    height: 10%;
+    height: 4px;
     background:#ddd;
 }
 
