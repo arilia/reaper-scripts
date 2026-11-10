@@ -412,7 +412,14 @@ class Song {
         if (this.lock)
             return;
         this.viewManager.clockView.lastScrollTime = 0;
-        wwr_req("1007;TRANSPORT");
+        if(this.playState === 1) {
+            this.pause();
+            return;
+        }
+        wwr_req("1007");
+        setTimeout(() => {
+            wwr_req("TRANSPORT");
+        }, 200);
     }
 
     pause() {
@@ -462,7 +469,7 @@ class Song {
         wwr_req("SET/EXTSTATE/reachords/tabIndex/" + this.tabIndex + "");
         setTimeout(() => {
             wwr_req("40042;TRANSPORT;GET/EXTSTATE/reachords/status");
-        }, 100);
+        }, 200);
     }
     
     prevBar() {
@@ -553,45 +560,42 @@ class Song {
     }
 
     set recordedPosition(position) {
-        this.lastRecordedTime = Date.now();
-        this.calculatedPosition = position = this.lastRecordedPosition = position + this.chordsOffset + this.lyricsOffset;
+        this.calculatePosition(); 
+        this.lastRecordedTime = performance.now();
+        this.calculatedPosition = this.lastRecordedPosition = position;// + this.chordsOffset + this.lyricsOffset;
 
     }
 
     calculatePosition() {
 
         let position = this.lastRecordedPosition;
-        if (this.playState === 1) {
-            const elapsedTime = Date.now() - this.lastRecordedTime;
+        if (this.playState === 1 || this.playState === 5) {
+            const elapsedTime = performance.now() - this.lastRecordedTime;
             position += elapsedTime / 1000;
             this.calculatedPosition = position;
         }
-//        if(this.playState !== this.lastPlayState) //TODO Move from Song.
-//        {
-//            let content ="Stopped";
-//            let className = "play_state stop";
-//            switch(this.playState) {
-//                case 1:
-//                    content  = "Playing";
-//                    className  = "play_state play";
-//                    break;
-//                case 2:
-//                    content  = "Paused";
-//                    className  = "play_state stop";
-//                    break;
-//                case 5:
-//                    content  = "Recording";
-//                    className  = "play_state rec";
-//                    break;
-//                case 6:
-//                    content  = "Recording Paused";
-//                    className  = "play_state rec";
-//                    break;
-//            }
-//            this.playStateDiv.textContent = content;
-//            this.playStateDiv.className = className;
-//            this.lastPlayState = this.playState;
-//        }
+        if(this.playState !== this.lastPlayState) {
+            const play_button = document.getElementById('play_button');
+            switch(this.playState) {
+                case 1:
+                    play_button.dataset.mode = "playing";
+                    break;
+                case 0:
+                    play_button.dataset.mode = "stopped";
+                    break;
+                case 2:
+                    play_button.dataset.mode = "paused";
+                    break;
+                case 5:
+                    play_button.dataset.mode = "recording";
+                    break;
+                case 6:
+                    play_button.dataset.mode = "recording";
+                    break;
+            }
+            this.lastPlayState = this.playState;
+         }
+        
         position = roundTime(position);
         const t0 = performance.now();
         this.checkPlaying(position);
@@ -1381,10 +1385,10 @@ class ClockView {
             this.bigClockBPMDiv.textContent = this.song.bpm + "bpm";
             this.bigClockBarDiv.textContent = "bar: " + this.song.playingBar?.number;
             this.progressDiv.style.width = 100 * this.song.calculatedPosition / this.song.length + "%";
+            
             this.lastClockTime = formattedTime;
         }
-
-//      TODO Bar number
+        
         let lastMarker = false;
         for (let [bar, marker]  of this.song.markers) {
             //TODO, the search of last marker can be done in the song.

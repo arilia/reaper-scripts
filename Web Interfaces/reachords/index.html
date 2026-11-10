@@ -81,12 +81,12 @@
                                 <path fill="currentColor" d="M87.06 26.291c-.483 0-.918.2-1.23.521L57.41 43.22V28.009a1.718 1.718 0 0 0-2.948-1.197L21.144 46.049V22.667h-.013c.002-.039.012-.075.012-.114a2.537 2.537 0 0 0-2.532-2.536h-4.852v.024a2.537 2.537 0 0 0-2.537 2.537c0 .045.011.086.013.131v54.967h.024a2.53 2.53 0 0 0 2.513 2.296c.03 0 .058-.008.087-.009h4.569c.071.006.14.021.213.021c1.4 0 2.537-1.136 2.537-2.537c0-.117-.019-.23-.035-.343V53.962l33.341 19.25a1.715 1.715 0 0 0 2.92-1.172h.005V56.791l28.443 16.422a1.715 1.715 0 0 0 2.92-1.172h.005V28.009a1.717 1.717 0 0 0-1.717-1.718"/>
                             </svg>
                         </button>
-                        <button id="pause_button" class="transport_button">
+<!--                        <button id="pause_button" class="transport_button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100">
                                 <title>pause</title>
                                 <path fill="currentColor" d="M40.531 19.959c-.097 0-.19.016-.283.029v-.029H29.911a2.163 2.163 0 0 0-2.163 2.163v.005h-.001V77.87h.001l-.001.009c0 1.194.969 2.162 2.163 2.162h10.62a2.16 2.16 0 0 0 2.162-2.162l-.001-.009h.001V22.127l.001-.005a2.163 2.163 0 0 0-2.162-2.163m31.72 57.911V22.127l.001-.005a2.163 2.163 0 0 0-2.162-2.163c-.097 0-.19.016-.283.029v-.029H59.47a2.163 2.163 0 0 0-2.163 2.163v.005h-.001V77.87h.001l-.001.009c0 1.194.969 2.162 2.163 2.162h10.618a2.16 2.16 0 0 0 2.162-2.162q.002-.004.002-.009"/>
                             </svg>
-                        </button>
+                        </button>-->
                         <button id="stop_button" class="transport_button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100">
                                 <title>stop</title>
@@ -100,9 +100,13 @@
                             </svg>
                         </button>
                         <button id="play_button" class="transport_button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100">
-                            <title>play</title>
-                            <path fill="currentColor" d="M76.982 50c0-.847-.474-1.575-1.167-1.957L26.541 19.595a2.23 2.23 0 0 0-1.279-.404a2.244 2.244 0 0 0-2.244 2.243c0 .087.016.169.026.253h-.026v57.131h.026a2.235 2.235 0 0 0 2.218 1.99a2.2 2.2 0 0 0 1.117-.308l.02.035L75.875 51.97l-.02-.035A2.23 2.23 0 0 0 76.982 50"/>
+                            <svg id="play_svg" xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 100 100">
+                                <title>play</title>
+                                <path fill="currentColor" d="M76.982 50c0-.847-.474-1.575-1.167-1.957L26.541 19.595a2.23 2.23 0 0 0-1.279-.404a2.244 2.244 0 0 0-2.244 2.243c0 .087.016.169.026.253h-.026v57.131h.026a2.235 2.235 0 0 0 2.218 1.99a2.2 2.2 0 0 0 1.117-.308l.02.035L75.875 51.97l-.02-.035A2.23 2.23 0 0 0 76.982 50"/>
+                            </svg>
+                            <svg id="pause_svg"  xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 100 100">
+                                <title>pause</title>
+                                <path fill="currentColor" d="M40.531 19.959c-.097 0-.19.016-.283.029v-.029H29.911a2.163 2.163 0 0 0-2.163 2.163v.005h-.001V77.87h.001l-.001.009c0 1.194.969 2.162 2.163 2.162h10.62a2.16 2.16 0 0 0 2.162-2.162l-.001-.009h.001V22.127l.001-.005a2.163 2.163 0 0 0-2.162-2.163m31.72 57.911V22.127l.001-.005a2.163 2.163 0 0 0-2.162-2.163c-.097 0-.19.016-.283.029v-.029H59.47a2.163 2.163 0 0 0-2.163 2.163v.005h-.001V77.87h.001l-.001.009c0 1.194.969 2.162 2.163 2.162h10.618a2.16 2.16 0 0 0 2.162-2.162q.002-.004.002-.009"/>
                             </svg>
                         </button>
                         <button id="forward_button" class="transport_button">
@@ -112,7 +116,8 @@
                             </svg>
                         </button>
                         <button class="lock_button" id="lock" title="Lock" >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100"><title>lock</title><path fill="currentColor" d="M82.105 44.218h-8.858v-8.431q.004-.055.003-.102c0-13.073-10.636-23.71-23.713-23.71c-13.073 0-23.71 10.637-23.71 23.71v8.533h-7.931a2.62 2.62 0 0 0-2.621 2.621v38.565a2.62 2.62 0 0 0 2.621 2.621h64.21a2.62 2.62 0 0 0 2.621-2.621V46.839a2.62 2.62 0 0 0-2.622-2.621m-42.314-8.533c0-5.375 4.371-9.741 9.746-9.741c5.341 0 9.695 4.32 9.747 9.649l-.003.031h.003v8.594H39.791z"/></svg>
+                            <svg id="lock_svg"  xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100"><title>lock</title><path fill="currentColor" d="M82.105 44.218h-8.858v-8.431q.004-.055.003-.102c0-13.073-10.636-23.71-23.713-23.71c-13.073 0-23.71 10.637-23.71 23.71v8.533h-7.931a2.62 2.62 0 0 0-2.621 2.621v38.565a2.62 2.62 0 0 0 2.621 2.621h64.21a2.62 2.62 0 0 0 2.621-2.621V46.839a2.62 2.62 0 0 0-2.622-2.621m-42.314-8.533c0-5.375 4.371-9.741 9.746-9.741c5.341 0 9.695 4.32 9.747 9.649l-.003.031h.003v8.594H39.791z"/></svg>
+                            <svg id="unlock_svg"  xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 100 100"><title>unlock</title><path fill="currentColor" d="M82.105 45.587H41.236V34.945c0-5.207 4.372-9.437 9.747-9.437c5.372 0 9.744 4.23 9.746 9.437c0 1.051.881 1.904 1.966 1.904h10.086c1.087 0 1.965-.853 1.965-1.904a1.8 1.8 0 0 0-.056-.457c-.253-12.456-10.79-22.513-23.707-22.513c-13.074 0-23.71 10.305-23.71 22.97v10.642h-9.377c-1.449 0-2.621 1.135-2.621 2.539v37.361c0 1.403 1.172 2.539 2.621 2.539h64.21c1.449 0 2.621-1.136 2.621-2.539V48.125c-.001-1.403-1.173-2.538-2.622-2.538"/></svg>
                         </button>
                     </div>
                     <div id="clock_markers" class="clock_markers">
@@ -137,7 +142,7 @@
             
     </body>
     <script>
-
+wwr_req_recur("TRANSPORT", 50);
 //        let song = new Song();
         const setList = new SetList();
         const viewManagerView = new ViewManager(setList);
@@ -150,7 +155,7 @@
         document.getElementById("change_to_clock").addEventListener("click",  function f() {setList.viewManager.changeLayout(ViewManager.CLOCK);});
         document.getElementById("change_to_setlist").addEventListener("click",  function f() {setList.viewManager.changeLayout(ViewManager.SETLIST);});
         document.getElementById("play_button").addEventListener("click",  function f() {setList.activeSong.play();});
-        document.getElementById("pause_button").addEventListener("click",  function f() {setList.activeSong.pause();});
+//        document.getElementById("pause_button").addEventListener("click",  function f() {setList.activeSong.pause();});
         document.getElementById("stop_button").addEventListener("click",  function f() {setList.activeSong.stop();});
         document.getElementById("prev_bar_button").addEventListener("click",  function f() {setList.activeSong.prevBar();});
         document.getElementById("rewind_button").addEventListener("click",  function f() {setList.activeSong.rewind();});
