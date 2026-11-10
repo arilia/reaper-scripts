@@ -165,6 +165,10 @@ class Marker {
         this.position = roundTime(m.position);
     }
 
+    get endTime() {
+        return roundTime(this.position + this.duration)
+    }
+    
     render() {
         this.div = document.createElement("div");
         this.div.id = "marker_" + this.index;
@@ -185,9 +189,10 @@ class Marker {
     }
 
     isOver(position) {
-        if (position >= this.position + this.duration) {
+        if (position >= this.endTime) {
             return true;
         }
+        return false;
     }
 
 }
@@ -560,13 +565,13 @@ class Song {
     }
 
     set recordedPosition(position) {
-        this.calculatePosition(); 
+        this.calculatePosition(false); 
         this.lastRecordedTime = performance.now();
-        this.calculatedPosition = this.lastRecordedPosition = position;// + this.chordsOffset + this.lyricsOffset;
+        this.calculatedPosition = this.lastRecordedPosition = position + this.chordsOffset + this.lyricsOffset;
 
     }
 
-    calculatePosition() {
+    calculatePosition(update = true) {
 
         let position = this.lastRecordedPosition;
         if (this.playState === 1 || this.playState === 5) {
@@ -574,6 +579,7 @@ class Song {
             position += elapsedTime / 1000;
             this.calculatedPosition = position;
         }
+        if(!update) return;
         if(this.playState !== this.lastPlayState) {
             const play_button = document.getElementById('play_button');
             switch(this.playState) {
