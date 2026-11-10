@@ -557,6 +557,37 @@ p.bpm {
     flex: 0 1 132px;
 }
 
+#play_button[data-mode="playing"] {
+    border-color: green;
+    background-color: rgba(113, 251, 133, .16);
+}
+
+[data-mode="playing"] #play_svg {
+    display: none;
+}
+
+[data-mode="playing"] #pause_svg {
+    display: block;
+}
+
+#play_button[data-mode="paused"] {
+    border-color: yellow;
+    background-color: rgba(251, 251, 133, .16);
+}
+
+[data-mode="paused"] #play_svg, [data-mode="stopped"] #play_svg  {
+    display: block;
+}
+
+[data-mode="paused"] #pause_svg, [data-mode="stopped"] #pause_svg {
+    display: none;
+}
+
+#play_button[data-mode="recording"] {
+    border-color: red;
+    background-color: rgba(251, 133, 133, .16);
+}
+
 #stop_button {
 }
 
@@ -595,6 +626,17 @@ button.lock_button[aria-pressed="true"] {
     border-color: #4a4a58;
     background: var(--surface-selected);
 }
+
+button.lock_button[aria-pressed="true"] #lock_svg,
+button.lock_button[aria-pressed="false"] #unlock_svg {
+    display: block;
+} 
+
+button.lock_button[aria-pressed="false"] #lock_svg,
+button.lock_button[aria-pressed="true"] #unlock_svg {
+    display: none;
+}
+
 
 .lock-btn:active {
     transform: scale(.97);
